@@ -9,7 +9,7 @@
 * Bootstrap
 
 ## Processes
-WIP #2
+WIP [#2][i2]
 
 ## Modules
 * web-externalApp
@@ -18,10 +18,10 @@ WIP #2
 #### Module: web-externalApp
 ##### Pages
 * [ ] Welcome page
-* [ ] Registration page
-* [ ] Login
+* [ ] Registration page: [#1][i1]
+* [ ] Login: [#1][i1]
 * [ ] Reset password
-* [ ] Logoff
+* [ ] Logoff: [#1][i1]
 * [ ] Profile / Settings (change Personal info, password)
 * [ ] Repairs
   * [ ] New (with status: pending)
@@ -29,3 +29,6 @@ WIP #2
   * [ ] View
   * [ ] Delete (only mine repairs and with status: pending)
   * [ ] Confirm repair (if need confirm order)
+
+[i1]: https://github.com/ivanevla/VCS_final-project/pull/1
+[i2]: https://github.com/ivanevla/VCS_final-project/issues/2
