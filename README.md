@@ -15,8 +15,9 @@ WIP [#2][i2]
 * web-externalApp
 * web-internalApp
 
-#### Module: web-externalApp
-##### Pages
+
+### Module: web-externalApp
+#### Pages
 * [ ] Welcome page
 * [ ] Registration page: [#1][i1]
 * [ ] Login: [#1][i1]
@@ -29,6 +30,15 @@ WIP [#2][i2]
   * [ ] View
   * [ ] Delete (only mine repairs and with status: pending)
   * [ ] Confirm repair (if need confirm order)
+
+
+### Module: web-internalApp
+#### Roles
+* ADMIN
+* MANAGER
+* TECHNICAN
+
+#### Pages
 
 [i1]: https://github.com/ivanevla/VCS_final-project/pull/1
 [i2]: https://github.com/ivanevla/VCS_final-project/issues/2
