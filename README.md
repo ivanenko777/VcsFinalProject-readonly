@@ -1,13 +1,17 @@
 # Repair Service App (Vilnius Codind School Final Project)
+  > Buitinės technikos ir elektronikos serviso webapp'sas
 
-### Technologies
+## Technologies
 * Java 14
 * Spring Framework
   * Spring Security
 * SQL (MySQL)
 * Bootstrap
 
-### Modules
+## Processes
+WIP #2
+
+## Modules
 * web-externalApp
 * web-internalApp
 
