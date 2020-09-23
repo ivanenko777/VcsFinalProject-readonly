@@ -4,7 +4,7 @@
 ## Technologies
 * Java 14
 * Spring Framework
-  * Spring Security
+  * Spring Security - WebSecurityConfigurerAdapter, UserDetails, UserDetailsService
 * SQL (MySQL)
 * Bootstrap
 
