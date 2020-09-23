@@ -29,7 +29,7 @@ public class AuthController {
     @PostMapping("/registration")
     public String register(Customer customer, Model model) {
         try {
-            customerService.create(customer);
+            customerService.createFromRegistrationForm(customer);
         } catch (UsernameExistsInDatabaseException e) {
             model.addAttribute("message", e.getMessage());
             return "registration";

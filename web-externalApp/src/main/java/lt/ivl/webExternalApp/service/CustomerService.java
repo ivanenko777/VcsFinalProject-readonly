@@ -11,7 +11,7 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    public void create(Customer customer) throws UsernameExistsInDatabaseException {
+    public void createFromRegistrationForm(Customer customer) throws UsernameExistsInDatabaseException {
         Customer customerFromDb = customerRepository.findByEmail(customer.getEmail());
         if (customerFromDb != null) throw new UsernameExistsInDatabaseException("User exists in DB");
 
