@@ -12,10 +12,13 @@ public class CustomerService {
     private CustomerRepository customerRepository;
 
     public void createFromRegistrationForm(Customer customer) throws UsernameExistsInDatabaseException {
-        Customer customerFromDb = customerRepository.findByEmail(customer.getEmail());
-        if (customerFromDb != null) throw new UsernameExistsInDatabaseException("User exists in DB");
+        if (emailExist(customer.getEmail())) throw new UsernameExistsInDatabaseException("User exists in DB");
 
         customer.setActive(true);
         customerRepository.save(customer);
+    }
+
+    private boolean emailExist(String email) {
+        return customerRepository.findByEmail(email) != null;
     }
 }
