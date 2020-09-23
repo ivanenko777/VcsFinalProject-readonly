@@ -19,10 +19,10 @@ WIP [#2][i2]
 ### Module: web-externalApp
 #### Pages
 * [ ] Welcome page
-* [ ] Registration page: [#1][i1]
-* [ ] Login: [#1][i1]
+* [x] Registration page: [#1][i1]
+* [x] Login: [#1][i1]
 * [ ] Reset password
-* [ ] Logoff: [#1][i1]
+* [x] Logoff: [#1][i1]
 * [ ] Profile / Settings (change Personal info, password)
 * [ ] Repairs
   * [ ] New (with status: pending)
