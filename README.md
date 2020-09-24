@@ -20,6 +20,7 @@ WIP [#2][i2]
 #### Pages
 * [ ] Welcome page
 * [x] Registration page: [#1][i1]
+  * [x] Validation (fields not empty, email unique, passwords match) [#4][i4]
 * [x] Login: [#1][i1]
 * [ ] Reset password
 * [x] Logoff: [#1][i1]
@@ -42,3 +43,4 @@ WIP [#2][i2]
 
 [i1]: https://github.com/ivanevla/VCS_final-project/pull/1
 [i2]: https://github.com/ivanevla/VCS_final-project/issues/2
+[i4]: https://github.com/ivanevla/VCS_final-project/pull/4
