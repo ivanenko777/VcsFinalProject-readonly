@@ -5,15 +5,45 @@
     <title>Title</title>
 </head>
 <body>
-<div th:if="${message}" th:text="${message}"></div>
+<div style="color: red" th:if="${message}" th:text="${message}"></div>
 Add new user
-<form action="#" th:action="@{/registration}" method="post">
-    <div><label> Email : <input type="email" name="email"/> </label></div>
-    <div><label> Password: <input type="password" name="password"/> </label></div>
-    <div><label> First name: <input type="text" name="firstName"/> </label></div>
-    <div><label> Last name: <input type="text" name="lastName"/> </label></div>
-    <div><label> Phone: <input type="text" name="phone"/> </label></div>
-    <div><input type="submit" value="Sign In"/></div>
+<form action="#" method="post" th:action="@{/registration}" th:object="${customer}">
+    <div>
+        <label>First name</label>
+        <input th:field="*{firstName}"/>
+        <span style="color: red" th:each="error: ${#fields.errors('firstName')}"
+              th:text="${error}">Validation error</span>
+    </div>
+    <div>
+        <label>Last name</label>
+        <input th:field="*{lastName}"/>
+        <span style="color: red" th:each="error: ${#fields.errors('lastName')}"
+              th:text="${error}">Validation error</span>
+    </div>
+    <div>
+        <label>Phone</label>
+        <input th:field="*{phone}"/>
+        <span style="color: red" th:each="error: ${#fields.errors('phone')}" th:text="${error}">Validation error</span>
+    </div>
+    <div>
+        <label>Email</label>
+        <input th:field="*{email}" type="email"/>
+        <span style="color: red" th:each="error: ${#fields.errors('email')}" th:text="${error}">Validation error</span>
+    </div>
+    <div>
+        <label>Password</label>
+        <input th:field="*{password}" type="password"/>
+        <span style="color: red" th:each="error: ${#fields.errors('password')}"
+              th:text="${error}">Validation error</span>
+    </div>
+    <div>
+        <label>Confirm password</label>
+        <input th:field="*{passwordVerify}" type="password"/>
+    </div>
+    <div>
+        <input type="submit" value="Sign In"/>
+        <a th:href="@{/login}">Login</a>
+    </div>
 </form>
 </body>
 </html>

@@ -1,24 +1,29 @@
-package lt.ivl.webExternalApp.domain;
+package lt.ivl.webExternalApp.dto;
 
-import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
-@Entity
-public class Customer {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private int id;
-    @Column(unique = true)
+public class CustomerDto {
+    @NotNull
+    @NotEmpty
     private String email;
+
+    @NotNull
+    @NotEmpty
     private String password;
-    private boolean active;
+    private String passwordVerify;
 
+    @NotNull
+    @NotEmpty
     private String firstName;
-    private String lastName;
-    private String phone;
 
-    public int getId() {
-        return id;
-    }
+    @NotNull
+    @NotEmpty
+    private String lastName;
+
+    @NotNull
+    @NotEmpty
+    private String phone;
 
     public String getEmail() {
         return email;
@@ -36,12 +41,12 @@ public class Customer {
         this.password = password;
     }
 
-    public boolean isActive() {
-        return active;
+    public String getPasswordVerify() {
+        return passwordVerify;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
+    public void setPasswordVerify(String passwordVerify) {
+        this.passwordVerify = passwordVerify;
     }
 
     public String getFirstName() {
