@@ -1,6 +1,7 @@
 package lt.ivl.webExternalApp.service;
 
 import lt.ivl.webExternalApp.domain.Customer;
+import lt.ivl.webExternalApp.dto.CustomerDto;
 import lt.ivl.webExternalApp.exception.UsernameExistsInDatabaseException;
 import lt.ivl.webExternalApp.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +12,12 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    public void createFromRegistrationForm(Customer customer) throws UsernameExistsInDatabaseException {
-        if (emailExist(customer.getEmail())) throw new UsernameExistsInDatabaseException("User exists in DB");
+    public void createFromRegistrationForm(CustomerDto customerDto) throws UsernameExistsInDatabaseException {
+        if (emailExist(customerDto.getEmail())) throw new UsernameExistsInDatabaseException("User exists in DB");
 
+        Customer customer = new Customer();
+        customer.setFirstName(customerDto.getFirstName());
+        customer.setLastName(customerDto.getLastName());
         customer.setActive(true);
         customerRepository.save(customer);
     }
