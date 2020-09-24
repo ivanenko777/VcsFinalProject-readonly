@@ -1,6 +1,10 @@
 package lt.ivl.webExternalApp.controller;
 
 import lt.ivl.webExternalApp.dto.RepairDto;
+import lt.ivl.webExternalApp.security.CustomerPrincipal;
+import lt.ivl.webExternalApp.service.RepairService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,6 +18,9 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("/repair")
 public class RepairController {
+    @Autowired
+    private RepairService repairService;
+
     @GetMapping("/index")
     public String index() {
         return "repair/index";
@@ -27,6 +34,7 @@ public class RepairController {
 
     @PostMapping("/add")
     public String create(
+            @AuthenticationPrincipal CustomerPrincipal customerPrincipal,
             @ModelAttribute("repair") @Valid RepairDto repairDto,
             BindingResult bindingResult,
             Model model
@@ -35,7 +43,7 @@ public class RepairController {
             model.addAttribute("message", "Form has errors");
             return "repair/add";
         }
-        //TODO: implement create new repair
+        repairService.createNewRepairItemFromCustomer(customerPrincipal.getCustomer(), repairDto);
 
         return "redirect:/repair/index";
     }
