@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registruoti naują remontą</title>
+</head>
+<body>
+<h1>Registruoti naują remontą</h1>
+<a th:href="@{/repair/index}">Atgal</a>
+<div style="color: red" th:if="${message}" th:text="${message}"></div>
+
+<form action="#" method="post" th:action="@{/repair/add}" th:object="${repair}">
+    <div>
+        <label>Įrenginio tipas</label>
+        <input th:field="*{deviceType}"/>
+    </div>
+    <div>
+        <label>Gamintojas</label>
+        <input th:field="*{deviceManufacturer}"/>
+    </div>
+    <div>
+        <label>Modelis</label>
+        <input th:field="*{deviceModel}"/>
+    </div>
+    <div>
+        <label>Serijinis numeris</label>
+        <input th:field="*{deviceSerialNo}"/>
+    </div>
+    <textarea th:field="*{description}">
+    </textarea>
+    <div>
+        <input type="submit" value="Save"/>
+    </div>
+</form>
+
+</body>
