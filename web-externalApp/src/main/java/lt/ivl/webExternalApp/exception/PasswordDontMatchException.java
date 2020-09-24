@@ -1,11 +1,11 @@
 package lt.ivl.webExternalApp.exception;
 
-public class PasswordNotMatchException extends Exception {
-    public PasswordNotMatchException(String message) {
+public class PasswordDontMatchException extends Exception {
+    public PasswordDontMatchException(String message) {
         super(message);
     }
 
-    public PasswordNotMatchException(String message, Throwable cause) {
+    public PasswordDontMatchException(String message, Throwable cause) {
         super(message, cause);
     }
 }

@@ -1,7 +1,7 @@
 package lt.ivl.webExternalApp.controller;
 
 import lt.ivl.webExternalApp.dto.CustomerDto;
-import lt.ivl.webExternalApp.exception.PasswordNotMatchException;
+import lt.ivl.webExternalApp.exception.PasswordDontMatchException;
 import lt.ivl.webExternalApp.exception.UsernameExistsInDatabaseException;
 import lt.ivl.webExternalApp.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +44,7 @@ public class AuthController {
         }
         try {
             customerService.createFromRegistrationForm(customerDto);
-        } catch (UsernameExistsInDatabaseException | PasswordNotMatchException e) {
+        } catch (UsernameExistsInDatabaseException | PasswordDontMatchException e) {
             model.addAttribute("message", e.getMessage());
             return "registration";
         }
