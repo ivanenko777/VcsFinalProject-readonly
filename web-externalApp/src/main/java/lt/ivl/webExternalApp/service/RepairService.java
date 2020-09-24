@@ -2,6 +2,7 @@ package lt.ivl.webExternalApp.service;
 
 import lt.ivl.webExternalApp.domain.Customer;
 import lt.ivl.webExternalApp.domain.Repair;
+import lt.ivl.webExternalApp.domain.RepairStatus;
 import lt.ivl.webExternalApp.dto.RepairDto;
 import lt.ivl.webExternalApp.repository.RepairRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +17,14 @@ public class RepairService {
 
     public void createNewRepairItemFromCustomer(Customer customer, RepairDto repairDto) {
         Repair repair = new Repair();
+        repair.setCreatedByCustomer(customer);
+        repair.setStatus(RepairStatus.PENDING);
+
         repair.setDeviceType(repairDto.getDeviceType());
         repair.setDeviceManufacturer(repairDto.getDeviceManufacturer());
         repair.setDeviceModel(repairDto.getDeviceModel());
         repair.setDeviceSerialNo(repairDto.getDeviceSerialNo());
         repair.setDescription(repairDto.getDescription());
-        repair.setCreatedByCustomer(customer);
         Timestamp timeNow = new Timestamp(System.currentTimeMillis());
         repair.setCreatedAt(timeNow);
         repair.setUpdatedAt(timeNow);
