@@ -1,6 +1,7 @@
 package lt.ivl.webExternalApp.domain;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Customer {
@@ -15,6 +16,9 @@ public class Customer {
     private String firstName;
     private String lastName;
     private String phone;
+
+    @OneToMany(mappedBy = "created_by_customer")
+    private List<Repair> repairs;
 
     public int getId() {
         return id;
@@ -66,5 +70,13 @@ public class Customer {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public List<Repair> getRepairs() {
+        return repairs;
+    }
+
+    public void setRepairs(List<Repair> repairs) {
+        this.repairs = repairs;
     }
 }
