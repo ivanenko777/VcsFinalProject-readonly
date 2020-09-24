@@ -1,10 +1,27 @@
 package lt.ivl.webExternalApp.dto;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 public class RepairDto {
+    @NotNull
+    @NotEmpty
     private String deviceType;
+
+    @NotNull
+    @NotEmpty
     private String deviceManufacturer;
+
+    @NotNull
+    @NotEmpty
     private String deviceModel;
+
+    @NotNull
+    @NotEmpty
     private String deviceSerialNo;
+
+    @NotNull
+    @NotEmpty
     private String description;
 
     public String getDeviceType() {

@@ -13,21 +13,31 @@
     <div>
         <label>Įrenginio tipas</label>
         <input th:field="*{deviceType}"/>
+        <span style="color: red" th:each="error: ${#fields.errors('deviceType')}"
+              th:text="${error}">Validation error</span>
     </div>
     <div>
         <label>Gamintojas</label>
         <input th:field="*{deviceManufacturer}"/>
+        <span style="color: red" th:each="error: ${#fields.errors('deviceManufacturer')}"
+              th:text="${error}">Validation error</span>
     </div>
     <div>
         <label>Modelis</label>
         <input th:field="*{deviceModel}"/>
+        <span style="color: red" th:each="error: ${#fields.errors('deviceModel')}"
+              th:text="${error}">Validation error</span>
     </div>
     <div>
         <label>Serijinis numeris</label>
         <input th:field="*{deviceSerialNo}"/>
+        <span style="color: red" th:each="error: ${#fields.errors('deviceSerialNo')}"
+              th:text="${error}">Validation error</span>
     </div>
     <textarea th:field="*{description}">
     </textarea>
+    <span style="color: red" th:each="error: ${#fields.errors('deviceSerialNo')}"
+          th:text="${error}">Validation error</span>
     <div>
         <input type="submit" value="Save"/>
     </div>
