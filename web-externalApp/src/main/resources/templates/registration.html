@@ -40,7 +40,10 @@ Add new user
         <label>Confirm password</label>
         <input th:field="*{passwordVerify}" type="password"/>
     </div>
-    <div><input type="submit" value="Sign In"/></div>
+    <div>
+        <input type="submit" value="Sign In"/>
+        <a th:href="@{/login}">Login</a>
+    </div>
 </form>
 </body>
 </html>
