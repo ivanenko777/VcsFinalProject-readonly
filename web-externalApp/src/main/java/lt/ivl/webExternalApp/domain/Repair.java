@@ -10,6 +10,12 @@ public class Repair {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;
+    
+    private String deviceType;
+    private String deviceManufacturer;
+    private String deviceModel;
+    private String deviceSerialNo;
+    private String description;
 
     @ManyToOne
     @JoinColumn(name = "created_by_customer_id", nullable = false)
@@ -17,15 +23,6 @@ public class Repair {
 
     private Timestamp createdAt;
     private Timestamp updatedAt;
-
-    // TODO: create enum RepairStatus
-    // private RepairStatus status;
-
-    private String deviceType;
-    private String deviceManufacturer;
-    private String deviceModel;
-    private String deviceSerialNo;
-    private String description;
 
     public int getId() {
         return id;
