@@ -2,6 +2,7 @@ package lt.ivl.webExternalApp.domain;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(indexes = {@Index(name = "repair__created_by_customer_id__index", columnList = "created_by_customer_id")})
@@ -12,10 +13,13 @@ public class Repair {
 
     @ManyToOne
     @JoinColumn(name = "created_by_customer_id", nullable = false)
-    private Customer created_by_customer;
+    private Customer createdByCustomer;
 
-    private Timestamp created_at;
-    private Timestamp updated_at;
+    private Timestamp createdAt;
+    private Timestamp updatedAt;
+
+    // TODO: create enum RepairStatus
+    // private RepairStatus status;
 
     private String deviceType;
     private String deviceManufacturer;
@@ -27,28 +31,28 @@ public class Repair {
         return id;
     }
 
-    public Customer getCreated_by_customer() {
-        return created_by_customer;
+    public Customer getCreatedByCustomer() {
+        return createdByCustomer;
     }
 
-    public void setCreated_by_customer(Customer created_by_customer) {
-        this.created_by_customer = created_by_customer;
+    public void setCreatedByCustomer(Customer createdByCustomer) {
+        this.createdByCustomer = createdByCustomer;
     }
 
-    public Timestamp getCreated_at() {
-        return created_at;
+    public Timestamp getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated_at(Timestamp created_at) {
-        this.created_at = created_at;
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public Timestamp getUpdated_at() {
-        return updated_at;
+    public Timestamp getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setUpdated_at(Timestamp updated_at) {
-        this.updated_at = updated_at;
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public String getDeviceType() {

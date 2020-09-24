@@ -21,10 +21,10 @@ public class RepairService {
         repair.setDeviceModel(repairDto.getDeviceModel());
         repair.setDeviceSerialNo(repairDto.getDeviceSerialNo());
         repair.setDescription(repairDto.getDescription());
-        repair.setCreated_by_customer(customer);
+        repair.setCreatedByCustomer(customer);
         Timestamp timeNow = new Timestamp(System.currentTimeMillis());
-        repair.setCreated_at(timeNow);
-        repair.setUpdated_at(timeNow);
+        repair.setCreatedAt(timeNow);
+        repair.setUpdatedAt(timeNow);
 
         repairRepository.save(repair);
     }

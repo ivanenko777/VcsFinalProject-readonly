@@ -17,7 +17,7 @@ public class Customer {
     private String lastName;
     private String phone;
 
-    @OneToMany(mappedBy = "created_by_customer")
+    @OneToMany(mappedBy = "createdByCustomer")
     private List<Repair> repairs;
 
     public int getId() {
