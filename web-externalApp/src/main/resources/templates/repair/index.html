@@ -9,6 +9,28 @@
 <a th:href="@{/repair/add}">Registruoti naują remontą</a>
 
 <h4>Nepatvirtintos registracijos (status: pending)</h4>
+<table>
+    <thead>
+    <tr>
+        <th>Status</th>
+        <th>Created at</th>
+        <th>Type</th>
+        <th>Manufacturer</th>
+        <th>Model</th>
+        <th>Serial</th>
+    </tr>
+    </thead>
+    <tbody th:each="repair : ${pendingRepairs}">
+    <tr>
+        <td th:text="${repair.status}">...</td>
+        <td th:text="${repair.createdAt}">...</td>
+        <td th:text="${repair.deviceType}">...</td>
+        <td th:text="${repair.deviceManufacturer}">...</td>
+        <td th:text="${repair.deviceModel}">...</td>
+        <td th:text="${repair.deviceSerialNo}">...</td>
+    </tr>
+    </tbody>
+</table>
 <h4>Nepatvirtinti mokėjimai (status: all extept pending and completed)</h4>
 <h4>Vykdomi remontai (status: all extept pending and completed)</h4>
 <h4>Įvykdyti remontai (status: completed)</h4>

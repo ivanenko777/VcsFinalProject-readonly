@@ -1,5 +1,6 @@
 package lt.ivl.webExternalApp.controller;
 
+import lt.ivl.webExternalApp.domain.RepairStatus;
 import lt.ivl.webExternalApp.dto.RepairDto;
 import lt.ivl.webExternalApp.security.CustomerPrincipal;
 import lt.ivl.webExternalApp.service.RepairService;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
+import java.util.Arrays;
 
 @Controller
 @RequestMapping("/repair")
@@ -22,7 +24,13 @@ public class RepairController {
     private RepairService repairService;
 
     @GetMapping("/index")
-    public String index() {
+    public String index(
+            @AuthenticationPrincipal CustomerPrincipal customerPrincipal,
+            Model model
+    ) {
+        model.addAttribute("pendingRepairs", repairService.findCustomerRepairsWithSpecificStatus(
+                customerPrincipal.getCustomer(), Arrays.asList(RepairStatus.PENDING)
+        ));
         return "repair/index";
     }
 

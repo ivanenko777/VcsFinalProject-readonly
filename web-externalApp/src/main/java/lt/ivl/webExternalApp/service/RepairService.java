@@ -31,4 +31,8 @@ public class RepairService {
 
         repairRepository.save(repair);
     }
+
+    public Iterable<Repair> findCustomerRepairsWithSpecificStatus(Customer customer, Iterable<RepairStatus> statuses) {
+        return repairRepository.findAllByCreatedByCustomerAndStatusInOrderByCreatedAtDesc(customer, statuses);
+    }
 }
