@@ -21,8 +21,11 @@ public class CustomerService {
         if (emailExist(customerDto.getEmail())) throw new UsernameExistsInDatabaseException("User exists in DB");
 
         Customer customer = new Customer();
+        customer.setEmail(customerDto.getEmail());
+        customer.setPassword(customerDto.getPassword());
         customer.setFirstName(customerDto.getFirstName());
         customer.setLastName(customerDto.getLastName());
+        customer.setPhone(customerDto.getPhone());
         customer.setActive(true);
         customerRepository.save(customer);
     }
