@@ -18,6 +18,7 @@
         <th>Manufacturer</th>
         <th>Model</th>
         <th>Serial</th>
+        <th>Actions</th>
     </tr>
     </thead>
     <tbody th:each="repair : ${pendingRepairs}">
@@ -28,6 +29,9 @@
         <td th:text="${repair.deviceManufacturer}">...</td>
         <td th:text="${repair.deviceModel}">...</td>
         <td th:text="${repair.deviceSerialNo}">...</td>
+        <td>
+            <a th:href="@{/repair/{id}/delete(id=${repair.id})}">Delete</a>
+        </td>
     </tr>
     </tbody>
 </table>
