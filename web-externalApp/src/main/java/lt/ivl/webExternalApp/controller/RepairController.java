@@ -32,7 +32,7 @@ public class RepairController {
         Customer customer = customerPrincipal.getCustomer();
 
         List<RepairStatus> statusPending = Collections.singletonList(RepairStatus.PENDING);
-        Iterable<Repair> repairsWithStatusPending = repairService.findRepairsWithSpecificStatusByCustomer(customer, statusPending);
+        Iterable<Repair> repairsWithStatusPending = repairService.findCustomerRepairsWithStatuses(customer, statusPending);
 
         model.addAttribute("pendingRepairs", repairsWithStatusPending);
         return "repair/index";
@@ -70,7 +70,7 @@ public class RepairController {
         try {
             int repairId = Integer.parseInt(id);
             Customer customer = customerPrincipal.getCustomer();
-            Repair repair = repairService.findRepairToDelete(customer, repairId).get();
+            Repair repair = repairService.findCustomerRepairToDelete(customer, repairId).get();
 
             model.addAttribute("repair", repair);
         } catch (ItemNotFoundException | NumberFormatException e) {
@@ -89,7 +89,7 @@ public class RepairController {
         try {
             int repairId = Integer.parseInt(id);
             Customer customer = customerPrincipal.getCustomer();
-            repairService.deleteRepairItemByCustomer(customer, repairId);
+            repairService.deleteCustomerRepairItem(customer, repairId);
         } catch (ItemNotFoundException e) {
             model.addAttribute("message", e.getMessage());
             return "repair/delete";
