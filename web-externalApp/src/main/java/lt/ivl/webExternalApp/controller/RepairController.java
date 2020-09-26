@@ -51,7 +51,7 @@ public class RepairController {
             model.addAttribute("message", "Form has errors");
             return "repair/add";
         }
-        repairService.createNewRepairItemFromCustomer(customerPrincipal.getCustomer(), repairDto);
+        repairService.createNewRepairItemByCustomer(customerPrincipal.getCustomer(), repairDto);
 
         return "redirect:/repair/index";
     }

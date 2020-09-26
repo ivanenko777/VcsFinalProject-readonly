@@ -15,7 +15,7 @@ public class RepairService {
     @Autowired
     private RepairRepository repairRepository;
 
-    public void createNewRepairItemFromCustomer(Customer customer, RepairDto repairDto) {
+    public void createNewRepairItemByCustomer(Customer customer, RepairDto repairDto) {
         Repair repair = new Repair();
         repair.setCreatedByCustomer(customer);
         repair.setStatus(RepairStatus.PENDING);
