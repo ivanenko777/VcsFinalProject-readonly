@@ -15,7 +15,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 @Controller
 @RequestMapping("/repair")
@@ -28,9 +29,12 @@ public class RepairController {
             @AuthenticationPrincipal CustomerPrincipal customerPrincipal,
             Model model
     ) {
-        model.addAttribute("pendingRepairs", repairService.findRepairsWithSpecificStatusByCustomer(
-                customerPrincipal.getCustomer(), Arrays.asList(RepairStatus.PENDING)
-        ));
+        Customer customer = customerPrincipal.getCustomer();
+
+        List<RepairStatus> statusPending = Collections.singletonList(RepairStatus.PENDING);
+        Iterable<Repair> repairsWithStatusPending = repairService.findRepairsWithSpecificStatusByCustomer(customer, statusPending);
+
+        model.addAttribute("pendingRepairs", repairsWithStatusPending);
         return "repair/index";
     }
 
@@ -51,7 +55,8 @@ public class RepairController {
             model.addAttribute("message", "Form has errors");
             return "repair/add";
         }
-        repairService.createNewRepairItemByCustomer(customerPrincipal.getCustomer(), repairDto);
+        Customer customer = customerPrincipal.getCustomer();
+        repairService.createNewRepairItemByCustomer(customer, repairDto);
 
         return "redirect:/repair/index";
     }
@@ -64,7 +69,9 @@ public class RepairController {
     ) {
         try {
             int repairId = Integer.parseInt(id);
-            Repair repair = repairService.findRepairToDelete(customerPrincipal.getCustomer(), repairId).get();
+            Customer customer = customerPrincipal.getCustomer();
+            Repair repair = repairService.findRepairToDelete(customer, repairId).get();
+
             model.addAttribute("repair", repair);
         } catch (ItemNotFoundException | NumberFormatException e) {
             model.addAttribute("message", e.getMessage());
@@ -82,7 +89,6 @@ public class RepairController {
         try {
             int repairId = Integer.parseInt(id);
             Customer customer = customerPrincipal.getCustomer();
-
             repairService.deleteRepairItemByCustomer(customer, repairId);
         } catch (ItemNotFoundException e) {
             model.addAttribute("message", e.getMessage());
