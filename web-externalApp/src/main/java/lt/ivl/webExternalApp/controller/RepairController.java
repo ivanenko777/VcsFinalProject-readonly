@@ -28,7 +28,7 @@ public class RepairController {
             @AuthenticationPrincipal CustomerPrincipal customerPrincipal,
             Model model
     ) {
-        model.addAttribute("pendingRepairs", repairService.findCustomerRepairsWithSpecificStatus(
+        model.addAttribute("pendingRepairs", repairService.findRepairsWithSpecificStatusByCustomer(
                 customerPrincipal.getCustomer(), Arrays.asList(RepairStatus.PENDING)
         ));
         return "repair/index";
