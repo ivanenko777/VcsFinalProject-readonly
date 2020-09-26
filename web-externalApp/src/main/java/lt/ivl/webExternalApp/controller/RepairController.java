@@ -1,5 +1,6 @@
 package lt.ivl.webExternalApp.controller;
 
+import lt.ivl.webExternalApp.domain.Customer;
 import lt.ivl.webExternalApp.domain.Repair;
 import lt.ivl.webExternalApp.domain.RepairStatus;
 import lt.ivl.webExternalApp.dto.RepairDto;
@@ -78,11 +79,14 @@ public class RepairController {
             @PathVariable("id") String id,
             Model model
     ) {
-        int repairId = Integer.parseInt(id);
         try {
-            repairService.deleteRepairItemByCustomer(customerPrincipal.getCustomer(), repairId);
+            int repairId = Integer.parseInt(id);
+            Customer customer = customerPrincipal.getCustomer();
+
+            repairService.deleteRepairItemByCustomer(customer, repairId);
         } catch (ItemNotFoundException e) {
             model.addAttribute("message", e.getMessage());
+            return "repair/delete";
         }
 
         return "redirect:/repair/index";
