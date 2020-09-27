@@ -40,7 +40,6 @@ public class CustomerVerificationToken {
         return id;
     }
 
-
     public String getToken() {
         return token;
     }
@@ -70,5 +69,10 @@ public class CustomerVerificationToken {
         calendar.setTime(new Timestamp(calendar.getTime().getTime()));
         calendar.add(Calendar.MINUTE, expityTimeInMinutes);
         return new Timestamp(calendar.getTime().getTime());
+    }
+
+    public void updateToken(String token) {
+        this.token = token;
+        this.expiryDate = calculateExpiryDate(EXPIRATION);
     }
 }
