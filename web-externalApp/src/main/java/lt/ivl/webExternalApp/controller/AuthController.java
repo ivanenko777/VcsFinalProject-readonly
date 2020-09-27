@@ -43,7 +43,7 @@ public class AuthController {
             return "registration";
         }
         try {
-            customerService.createFromRegistrationForm(customerDto);
+            customerService.registerNewCustomerAccount(customerDto);
         } catch (UsernameExistsInDatabaseException | PasswordDontMatchException e) {
             model.addAttribute("message", e.getMessage());
             return "registration";

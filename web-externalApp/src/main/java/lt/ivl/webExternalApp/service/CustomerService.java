@@ -17,7 +17,7 @@ public class CustomerService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public void createFromRegistrationForm(CustomerDto customerDto) throws UsernameExistsInDatabaseException, PasswordDontMatchException {
+    public void registerNewCustomerAccount(CustomerDto customerDto) throws UsernameExistsInDatabaseException, PasswordDontMatchException {
         String customerPassword = customerDto.getPassword();
         String customerPasswordVerify = customerDto.getPasswordVerify();
         if (!customerPassword.equals(customerPasswordVerify)) throw new PasswordDontMatchException("Passwords are not match!");
