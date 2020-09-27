@@ -21,6 +21,8 @@ WIP [#2][i2]
 * [ ] Welcome page
 * [x] Registration page -> [#1][i1]
   * [x] Validation (fields not empty, email unique, passwords match) -> [#4][i4]
+  * [x] Account verification (email + token) -> [#8][i8]
+  * [x] Account activation (tocken: notfound, expired, valid) -> [#8][i8]
 * [x] Login -> [#1][i1]
 * [x] Logoff -> [#1][i1]
 * [ ] Reset password
@@ -46,3 +48,4 @@ WIP [#2][i2]
 [i2]: https://github.com/ivanevla/VCS_final-project/issues/2
 [i4]: https://github.com/ivanevla/VCS_final-project/pull/4
 [i5]: https://github.com/ivanevla/VCS_final-project/pull/5
+[i8]: https://github.com/ivanevla/VCS_final-project/pull/8
