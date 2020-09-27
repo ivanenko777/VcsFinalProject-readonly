@@ -30,7 +30,7 @@ public class CustomerService {
     @Autowired
     private MailSender mailSender;
 
-    public Customer registerNewCustomerAccount(CustomerDto customerDto) throws UsernameExistsInDatabaseException, PasswordDontMatchException {
+    public void registerNewCustomerAccount(CustomerDto customerDto) throws UsernameExistsInDatabaseException, PasswordDontMatchException {
         String password = customerDto.getPassword();
         String passwordVerify = customerDto.getPasswordVerify();
         if (!verifyPasswordPass(password, passwordVerify)) throw new PasswordDontMatchException("Passwords are not match!");
@@ -44,7 +44,8 @@ public class CustomerService {
         customer.setPhone(customerDto.getPhone());
         saveCustomer(customer);
 
-        return customer;
+        confirmNewCustomerRegistration(customer);
+    }
     }
 
     public void confirmNewCustomerRegistration(Customer customer) {
