@@ -69,7 +69,7 @@ public class CustomerService {
         return tokenRepository.save(token);
     }
 
-    public void validateVerificationToken(String token) throws TokenInvalidException, TokenExpiredException {
+    public void activateByVerificationToken(String token) throws TokenInvalidException, TokenExpiredException {
         // jei tokenas nerastas ismetame klaida
         CustomerVerificationToken verificationToken = tokenRepository.findByToken(token);
         if (verificationToken == null) throw new TokenInvalidException("Patvirtinimo tokenas nerastas.");

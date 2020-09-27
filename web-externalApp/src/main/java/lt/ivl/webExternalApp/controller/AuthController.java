@@ -58,7 +58,7 @@ public class AuthController {
     ) {
         if (token != null && !token.isEmpty()) {
             try {
-                customerService.validateVerificationToken(token);
+                customerService.activateByVerificationToken(token);
             } catch (TokenInvalidException | TokenExpiredException e) {
                 model.addAttribute("message", e.getMessage());
                 return "/activation";
