@@ -28,6 +28,7 @@ WIP [#2][i2]
 * [ ] Repairs
   * [x] List -> [#5][i5]
   * [x] New (with status: pending) -> [#5][i5]
+    * [x] Validation (fields not empty) -> [#5][i5]
   * [x] Delete (only mine repairs and with status: pending) -> [#5][i5]
   * [x] View -> [#5][i5]
   * [ ] Confirm repair (if need confirm order)
