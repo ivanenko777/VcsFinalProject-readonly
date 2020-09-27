@@ -24,7 +24,6 @@ public class MailSender {
         final String recipientAddress = customer.getEmail();
         final String subject = "Registracijos patvirtinimas";
         final String appUrl = environment.getProperty("app.url");
-        // TODO: get token
         final String confirmationUrl = appUrl + "activation?token=" + token;
         final String message1 = String.format("Sveiki, %s %s,", customer.getFirstName(), customer.getLastName());
         final String message2 = "Jūs sėkmingai užsiregistravote. Prašome patvirtinti savo registraciją.";

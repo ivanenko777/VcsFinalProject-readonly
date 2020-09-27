@@ -39,7 +39,6 @@ public class CustomerService {
         customerRepository.save(customer);
     }
 
-
     private boolean emailExist(String email) {
         return customerRepository.findByEmail(email) != null;
     }
