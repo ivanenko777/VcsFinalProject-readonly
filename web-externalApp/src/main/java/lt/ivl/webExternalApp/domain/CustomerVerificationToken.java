@@ -3,6 +3,7 @@ package lt.ivl.webExternalApp.domain;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.Date;
 
 @Entity
 public class CustomerVerificationToken {
@@ -66,7 +67,7 @@ public class CustomerVerificationToken {
 
     private Timestamp calculateExpiryDate(int expiryTimeInMinutes) {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Timestamp(calendar.getTime().getTime()));
+        calendar.setTimeInMillis(new Date().getTime());
         calendar.add(Calendar.MINUTE, expiryTimeInMinutes);
         return new Timestamp(calendar.getTime().getTime());
     }
