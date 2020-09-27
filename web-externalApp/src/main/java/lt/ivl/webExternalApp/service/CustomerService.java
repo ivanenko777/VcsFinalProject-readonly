@@ -29,7 +29,6 @@ public class CustomerService {
         customer.setFirstName(customerDto.getFirstName());
         customer.setLastName(customerDto.getLastName());
         customer.setPhone(customerDto.getPhone());
-        customer.setActive(true);
         saveCustomer(customer);
 
         return customer;

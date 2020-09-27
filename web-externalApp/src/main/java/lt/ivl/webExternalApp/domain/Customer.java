@@ -20,6 +20,11 @@ public class Customer {
     @OneToMany(mappedBy = "createdByCustomer")
     private List<Repair> repairs;
 
+    public Customer() {
+        super();
+        this.active = false;
+    }
+
     public int getId() {
         return id;
     }
