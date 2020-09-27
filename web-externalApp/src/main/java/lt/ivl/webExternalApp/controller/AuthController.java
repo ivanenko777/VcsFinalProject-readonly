@@ -1,5 +1,6 @@
 package lt.ivl.webExternalApp.controller;
 
+import lt.ivl.webExternalApp.domain.Customer;
 import lt.ivl.webExternalApp.dto.CustomerDto;
 import lt.ivl.webExternalApp.exception.PasswordDontMatchException;
 import lt.ivl.webExternalApp.exception.UsernameExistsInDatabaseException;
@@ -43,7 +44,8 @@ public class AuthController {
             return "registration";
         }
         try {
-            customerService.registerNewCustomerAccount(customerDto);
+            Customer customer = customerService.registerNewCustomerAccount(customerDto);
+            customerService.confirmNewCustomerRegistration(customer);
         } catch (UsernameExistsInDatabaseException | PasswordDontMatchException e) {
             model.addAttribute("message", e.getMessage());
             return "registration";
