@@ -34,11 +34,11 @@ public class RepairService {
         repairRepository.save(repair);
     }
 
-    public Iterable<Repair> findCustomerRepairsWithStatuses(Customer customer, Iterable<RepairStatus> statuses) {
+    public Iterable<Repair> findWithStatusesByCustomer(Customer customer, Iterable<RepairStatus> statuses) {
         return repairRepository.findAllByCreatedByCustomerAndStatusInOrderByCreatedAtDesc(customer, statuses);
     }
 
-    public Optional<Repair> findCustomerRepairToDelete(Customer customer, int id) throws ItemNotFoundException {
+    public Optional<Repair> findToDeleteByCustomer(Customer customer, int id) throws ItemNotFoundException {
         Optional<Repair> repairFromDb = repairRepository.findByIdAndCreatedByCustomer(id, customer);
 
         if (repairFromDb.isEmpty() || repairFromDb.get().getStatus() != RepairStatus.PENDING) {
@@ -48,8 +48,8 @@ public class RepairService {
         return repairFromDb;
     }
 
-    public void deleteCustomerRepairItem(Customer customer, int id) throws ItemNotFoundException {
-        Repair repair = findCustomerRepairToDelete(customer, id).get();
+    public void deleteByCustomer(Customer customer, int id) throws ItemNotFoundException {
+        Repair repair = findToDeleteByCustomer(customer, id).get();
         repairRepository.delete(repair);
     }
 }
