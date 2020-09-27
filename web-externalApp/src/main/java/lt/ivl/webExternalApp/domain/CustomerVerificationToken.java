@@ -64,10 +64,10 @@ public class CustomerVerificationToken {
         this.expiryDate = expiryDate;
     }
 
-    private Timestamp calculateExpiryDate(int expityTimeInMinutes) {
+    private Timestamp calculateExpiryDate(int expiryTimeInMinutes) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Timestamp(calendar.getTime().getTime()));
-        calendar.add(Calendar.MINUTE, expityTimeInMinutes);
+        calendar.add(Calendar.MINUTE, expiryTimeInMinutes);
         return new Timestamp(calendar.getTime().getTime());
     }
 
