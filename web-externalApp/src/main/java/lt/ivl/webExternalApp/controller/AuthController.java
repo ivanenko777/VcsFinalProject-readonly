@@ -1,6 +1,5 @@
 package lt.ivl.webExternalApp.controller;
 
-import lt.ivl.webExternalApp.domain.Customer;
 import lt.ivl.webExternalApp.dto.CustomerDto;
 import lt.ivl.webExternalApp.exception.PasswordDontMatchException;
 import lt.ivl.webExternalApp.exception.TokenExpiredException;
@@ -68,5 +67,10 @@ public class AuthController {
 
         model.addAttribute("info", "Patvirtinkite registraciją. Instrukcijas rasite išsiųstame laiške.");
         return "/activation";
+    }
+
+    @GetMapping("/remember-password")
+    public String rememberPasswordForm() {
+        return "rememberPassword";
     }
 }
