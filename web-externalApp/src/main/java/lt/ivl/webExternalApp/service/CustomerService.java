@@ -46,7 +46,6 @@ public class CustomerService {
 
         confirmNewCustomerRegistration(customer);
     }
-    }
 
     public void confirmNewCustomerRegistration(Customer customer) {
         String token = UUID.randomUUID().toString();
