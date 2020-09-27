@@ -38,6 +38,24 @@ public class RepairController {
         return "repair/index";
     }
 
+    @GetMapping("/{id}/view")
+    public String view(
+            @AuthenticationPrincipal CustomerPrincipal customerPrincipal,
+            @PathVariable("id") String id,
+            Model model
+    ) {
+        try {
+            int repairId = Integer.parseInt(id);
+            Customer customer = customerPrincipal.getCustomer();
+
+            Repair repair = repairService.findByCustomer(customer, repairId);
+            model.addAttribute("repair", repair);
+        } catch (ItemNotFoundException | NumberFormatException e) {
+            model.addAttribute("message", e.getMessage());
+        }
+        return "repair/view";
+    }
+
     @GetMapping("/add")
     public String showCreateForm(Model model) {
         model.addAttribute("repair", new RepairDto());

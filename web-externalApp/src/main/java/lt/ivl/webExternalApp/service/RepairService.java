@@ -38,6 +38,15 @@ public class RepairService {
         return repairRepository.findAllByCreatedByCustomerAndStatusInOrderByCreatedAtDesc(customer, statuses);
     }
 
+    public Repair findByCustomer(Customer customer, int id) throws ItemNotFoundException {
+        Optional<Repair> repairFromDb = repairRepository.findByIdAndCreatedByCustomer(id, customer);
+        if (repairFromDb.isEmpty()) {
+            throw new ItemNotFoundException("Repair item not found!");
+        }
+
+        return repairFromDb.get();
+    }
+
     public Optional<Repair> findToDeleteByCustomer(Customer customer, int id) throws ItemNotFoundException {
         Optional<Repair> repairFromDb = repairRepository.findByIdAndCreatedByCustomer(id, customer);
 

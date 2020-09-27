@@ -30,6 +30,7 @@
         <td th:text="${repair.deviceModel}">...</td>
         <td th:text="${repair.deviceSerialNo}">...</td>
         <td>
+            <a th:href="@{/repair/{id}/view(id=${repair.id})}">Info</a>
             <a th:href="@{/repair/{id}/delete(id=${repair.id})}">Delete</a>
         </td>
     </tr>
