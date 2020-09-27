@@ -17,11 +17,10 @@ public class CustomerService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public void registerNewCustomerAccount(CustomerDto customerDto) throws UsernameExistsInDatabaseException, PasswordDontMatchException {
-        String customerPassword = customerDto.getPassword();
-        String customerPasswordVerify = customerDto.getPasswordVerify();
-        if (!customerPassword.equals(customerPasswordVerify)) throw new PasswordDontMatchException("Passwords are not match!");
-
+    public Customer registerNewCustomerAccount(CustomerDto customerDto) throws UsernameExistsInDatabaseException, PasswordDontMatchException {
+        String password = customerDto.getPassword();
+        String passwordVerify = customerDto.getPasswordVerify();
+        if (!verifyPasswordPass(password, passwordVerify)) throw new PasswordDontMatchException("Passwords are not match!");
         if (emailExist(customerDto.getEmail())) throw new UsernameExistsInDatabaseException("User exists in DB");
 
         Customer customer = new Customer();
@@ -31,10 +30,21 @@ public class CustomerService {
         customer.setLastName(customerDto.getLastName());
         customer.setPhone(customerDto.getPhone());
         customer.setActive(true);
+        saveCustomer(customer);
+
+        return customer;
+    }
+
+    private void saveCustomer(Customer customer) {
         customerRepository.save(customer);
     }
 
+
     private boolean emailExist(String email) {
         return customerRepository.findByEmail(email) != null;
+    }
+
+    private boolean verifyPasswordPass(String password, String passwordVerify) {
+        return password.equals(passwordVerify);
     }
 }
