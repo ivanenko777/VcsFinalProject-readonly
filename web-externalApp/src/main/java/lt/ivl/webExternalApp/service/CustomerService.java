@@ -79,10 +79,10 @@ public class CustomerService {
         if ((verificationToken.getExpiryDate().getTime() - calendar.getTime().getTime()) <= 0) {
             String newToken = generateNewVerificationTokenForCustomer(token).getToken();
             mailSender.sendVerificationEmailToCustomer(customer, newToken);
-            throw new TokenExpiredException("Patvirtinimo tokenas negalioja. Išsiųstas naujas į el. paštą");
+            throw new TokenExpiredException("Patvirtinimo tokenas negalioja. Naujas išsiųstas į el. paštą.");
         }
 
-        // jei tokenas galioja, aktyvuojame vartotoja, istriname tokena
+        // jei tokenas galioja, aktyvuojame vartotoja ir issiunciame email
         customer.setActive(true);
         customerRepository.save(customer);
         tokenRepository.delete(verificationToken);
