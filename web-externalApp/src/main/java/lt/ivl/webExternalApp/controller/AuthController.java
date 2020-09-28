@@ -1,11 +1,11 @@
 package lt.ivl.webExternalApp.controller;
 
+import lt.ivl.webExternalApp.domain.Customer;
+import lt.ivl.webExternalApp.domain.CustomerResetPasswordToken;
 import lt.ivl.webExternalApp.dto.CustomerDto;
-import lt.ivl.webExternalApp.exception.PasswordDontMatchException;
-import lt.ivl.webExternalApp.exception.TokenExpiredException;
-import lt.ivl.webExternalApp.exception.TokenInvalidException;
-import lt.ivl.webExternalApp.exception.UsernameExistsInDatabaseException;
+import lt.ivl.webExternalApp.exception.*;
 import lt.ivl.webExternalApp.service.CustomerService;
+import lt.ivl.webExternalApp.service.MailSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +19,9 @@ import javax.validation.Valid;
 public class AuthController {
     @Autowired
     private CustomerService customerService;
+
+    @Autowired
+    private MailSender mailSender;
 
     @GetMapping("/login")
     public String login() {
@@ -71,6 +74,25 @@ public class AuthController {
 
     @GetMapping("/remember-password")
     public String rememberPasswordForm() {
+        return "rememberPassword";
+    }
+
+    @PostMapping("/remember-password")
+    public String rememberPassword(
+            @RequestParam("email") String customerEmail,
+            Model model
+    ) {
+        try {
+            Customer customer = customerService.findCustomerByEmail(customerEmail);
+            CustomerResetPasswordToken resetPasswordToken = customerService.createPasswordResetTokenForCustomer(customer);
+            String token = resetPasswordToken.getToken();
+            mailSender.sendResetPasswordEmailToCustomer(customer, token);
+        } catch (CustomerNotFoundInDBException e) {
+            model.addAttribute("message", e.getMessage());
+            return "rememberPassword";
+        }
+
+        model.addAttribute("info", "Slaptažodio pakeitimo instrukcijas rasite laiške.");
         return "rememberPassword";
     }
 }

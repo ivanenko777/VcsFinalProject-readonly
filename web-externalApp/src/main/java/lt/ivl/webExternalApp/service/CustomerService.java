@@ -1,13 +1,12 @@
 package lt.ivl.webExternalApp.service;
 
 import lt.ivl.webExternalApp.domain.Customer;
+import lt.ivl.webExternalApp.domain.CustomerResetPasswordToken;
 import lt.ivl.webExternalApp.domain.CustomerVerificationToken;
 import lt.ivl.webExternalApp.dto.CustomerDto;
-import lt.ivl.webExternalApp.exception.PasswordDontMatchException;
-import lt.ivl.webExternalApp.exception.TokenExpiredException;
-import lt.ivl.webExternalApp.exception.TokenInvalidException;
-import lt.ivl.webExternalApp.exception.UsernameExistsInDatabaseException;
+import lt.ivl.webExternalApp.exception.*;
 import lt.ivl.webExternalApp.repository.CustomerRepository;
+import lt.ivl.webExternalApp.repository.CustomerResetPasswordTokenRepository;
 import lt.ivl.webExternalApp.repository.CustomerVerificationTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,6 +19,9 @@ import java.util.UUID;
 public class CustomerService {
     @Autowired
     CustomerVerificationTokenRepository tokenRepository;
+
+    @Autowired
+    CustomerResetPasswordTokenRepository passwordTokenRepository;
 
     @Autowired
     private CustomerRepository customerRepository;
@@ -95,5 +97,19 @@ public class CustomerService {
 
     private boolean verifyPasswordPass(String password, String passwordVerify) {
         return password.equals(passwordVerify);
+    }
+
+    public Customer findCustomerByEmail(String email) throws CustomerNotFoundInDBException {
+        Customer customer = customerRepository.findByEmail(email);
+        if (customer == null) throw new CustomerNotFoundInDBException("El. pašto adresas nerastas");
+
+        return customer;
+    }
+
+    public CustomerResetPasswordToken createPasswordResetTokenForCustomer(Customer customer) {
+        String token = UUID.randomUUID().toString();
+        CustomerResetPasswordToken myToken = new CustomerResetPasswordToken(token, customer);
+        passwordTokenRepository.save(myToken);
+        return myToken;
     }
 }
