@@ -3,6 +3,7 @@ package lt.ivl.webExternalApp.controller;
 import lt.ivl.webExternalApp.domain.Customer;
 import lt.ivl.webExternalApp.domain.CustomerResetPasswordToken;
 import lt.ivl.webExternalApp.dto.CustomerDto;
+import lt.ivl.webExternalApp.dto.ResetPasswordDto;
 import lt.ivl.webExternalApp.exception.*;
 import lt.ivl.webExternalApp.service.CustomerService;
 import lt.ivl.webExternalApp.service.MailSender;
@@ -94,5 +95,11 @@ public class AuthController {
 
         model.addAttribute("info", "Slaptažodio pakeitimo instrukcijas rasite laiške.");
         return "rememberPassword";
+    }
+
+    @GetMapping("/reset-password")
+    private String resetPasswordForm(Model model) {
+        model.addAttribute("resetPassword", new ResetPasswordDto());
+        return "resetPassword";
     }
 }
