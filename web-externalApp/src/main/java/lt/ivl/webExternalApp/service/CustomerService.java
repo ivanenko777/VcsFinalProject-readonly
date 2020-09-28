@@ -35,7 +35,8 @@ public class CustomerService {
     public void registerNewCustomerAccount(CustomerDto customerDto) throws UsernameExistsInDatabaseException, PasswordDontMatchException {
         String password = customerDto.getPassword();
         String passwordVerify = customerDto.getPasswordVerify();
-        if (!verifyPasswordPass(password, passwordVerify)) throw new PasswordDontMatchException("Passwords are not match!");
+        verifyPasswordPass(password, passwordVerify);
+
         if (emailExist(customerDto.getEmail())) throw new UsernameExistsInDatabaseException("User exists in DB");
 
         Customer customer = new Customer();
@@ -95,8 +96,10 @@ public class CustomerService {
         return customerRepository.findByEmail(email) != null;
     }
 
-    private boolean verifyPasswordPass(String password, String passwordVerify) {
-        return password.equals(passwordVerify);
+    private void verifyPasswordPass(String password, String passwordVerify) throws PasswordDontMatchException {
+        if (!password.equals(passwordVerify)) {
+            throw new PasswordDontMatchException("Passwords are not match!");
+        }
     }
 
     public Customer findCustomerByEmail(String email) throws CustomerNotFoundInDBException {
