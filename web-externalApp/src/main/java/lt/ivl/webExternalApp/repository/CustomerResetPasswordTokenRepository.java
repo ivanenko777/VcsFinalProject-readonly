@@ -9,5 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface CustomerResetPasswordTokenRepository extends CrudRepository<CustomerResetPasswordToken, Integer> {
-    CustomerVerificationToken findByToken(String token);
+    CustomerResetPasswordToken findByToken(String token);
 }
