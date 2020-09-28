@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @Controller
@@ -98,8 +99,49 @@ public class AuthController {
     }
 
     @GetMapping("/reset-password")
-    private String resetPasswordForm(Model model) {
+    private String resetPasswordForm(
+            @RequestParam(value = "token", required = false) String token,
+            Model model
+    ) {
+        try {
+            customerService.validatePasswordResetToken(token);
+        } catch (TokenInvalidException | TokenExpiredException e) {
+            model.addAttribute("message", e.getMessage());
+            return "resetPassword";
+        }
+
+        model.addAttribute("token", token);
         model.addAttribute("resetPassword", new ResetPasswordDto());
+        return "resetPassword";
+    }
+
+    @PostMapping("/reset-password")
+    private String resetPassword(
+            HttpServletRequest request,
+            @ModelAttribute("resetPassword") @Valid ResetPasswordDto resetPasswordDto,
+            BindingResult bindingResult,
+//            @RequestParam(value = "token", required = false) String token,
+            Model model
+    ) {
+        // Paimam GETparametra token, is POSTrequesto
+        String token = request.getParameter("token");
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("message", "Form has errors");
+            model.addAttribute("token", token);
+            return "resetPassword";
+        }
+
+        try {
+            CustomerResetPasswordToken resetPasswordToken = customerService.validatePasswordResetToken(token);
+            Customer customer = resetPasswordToken.getCustomer();
+            customerService.resetCustomerPassword(customer, resetPasswordDto, resetPasswordToken);
+            model.addAttribute("token", token);
+            model.addAttribute("info", "Slaptažodis pakeistas.");
+        } catch (TokenInvalidException | TokenExpiredException | PasswordDontMatchException e) {
+            model.addAttribute("message", e.getMessage());
+            return "resetPassword";
+        }
         return "resetPassword";
     }
 }

@@ -4,6 +4,7 @@ import lt.ivl.webExternalApp.domain.Customer;
 import lt.ivl.webExternalApp.domain.CustomerResetPasswordToken;
 import lt.ivl.webExternalApp.domain.CustomerVerificationToken;
 import lt.ivl.webExternalApp.dto.CustomerDto;
+import lt.ivl.webExternalApp.dto.ResetPasswordDto;
 import lt.ivl.webExternalApp.exception.*;
 import lt.ivl.webExternalApp.repository.CustomerRepository;
 import lt.ivl.webExternalApp.repository.CustomerResetPasswordTokenRepository;
@@ -114,5 +115,40 @@ public class CustomerService {
         CustomerResetPasswordToken myToken = new CustomerResetPasswordToken(token, customer);
         passwordTokenRepository.save(myToken);
         return myToken;
+    }
+
+    public CustomerResetPasswordToken validatePasswordResetToken(String token) throws TokenInvalidException, TokenExpiredException {
+        // jei tokeno nera ismetame klaida
+        if (token == null) throw new TokenInvalidException("Tokenas nerastas.");
+
+        // jei tokenas nerastas ismetame klaida
+        CustomerResetPasswordToken tokenFromDb = passwordTokenRepository.findByToken(token);
+        if (tokenFromDb == null) throw new TokenInvalidException("Tokenas nerastas.");
+
+        // jei tokenas negalioja ismetame klaida
+        Calendar calendar = Calendar.getInstance();
+        if ((tokenFromDb.getExpiryDate().getTime() - calendar.getTime().getTime()) <= 0) {
+            throw new TokenExpiredException("Tokenas negalioja.");
+        }
+
+        return tokenFromDb;
+    }
+
+    public void resetCustomerPassword(
+            Customer customer,
+            ResetPasswordDto passwordDto,
+            CustomerResetPasswordToken resetPasswordToken
+    ) throws PasswordDontMatchException {
+        // password validation
+        String password = passwordDto.getPassword();
+        String passwordVerify = passwordDto.getPasswordVerify();
+        verifyPasswordPass(password, passwordVerify);
+
+        // change password
+        customer.setPassword(passwordEncoder.encode(password));
+        customerRepository.save(customer);
+
+        // delete token
+        passwordTokenRepository.delete(resetPasswordToken);
     }
 }
