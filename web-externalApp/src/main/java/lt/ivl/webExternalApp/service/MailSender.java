@@ -66,7 +66,7 @@ public class MailSender {
         final String recipientAddress = customer.getEmail();
         final String subject = "Slaptažodžio pakeitimas";
         final String appUrl = environment.getProperty("app.url");
-        final String confirmationUrl = appUrl + "remember-password?token=" + token;
+        final String confirmationUrl = appUrl + "reset-password?token=" + token;
         final String message1 = String.format("Sveiki, %s %s,", customer.getFirstName(), customer.getLastName());
         final String message2 = "Paspauskite žemiau esančią nuorodą, kad pakeisti slaptažodį.";
 
