@@ -65,7 +65,7 @@ public class AuthController {
             return "redirect:/login";
         }
 
-        model.addAttribute("info", "Patvirtinkite registraciją. Instrukcijas rasite išsiųstame laiške.");
+        model.addAttribute("info", "Patvirtinkite registraciją. Instrukcijas rasite laiške.");
         return "/activation";
     }
 
