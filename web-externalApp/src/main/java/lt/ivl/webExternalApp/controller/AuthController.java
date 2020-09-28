@@ -63,6 +63,7 @@ public class AuthController {
         if (token != null && !token.isEmpty()) {
             try {
                 customerService.activateByVerificationToken(token);
+                model.addAttribute("info", "Patvirtinkite registraciją. Instrukcijas rasite laiške.");
             } catch (TokenInvalidException | TokenExpiredException e) {
                 model.addAttribute("message", e.getMessage());
                 return "/activation";
@@ -70,7 +71,6 @@ public class AuthController {
             return "redirect:/login";
         }
 
-        model.addAttribute("info", "Patvirtinkite registraciją. Instrukcijas rasite laiške.");
         return "/activation";
     }
 
@@ -89,12 +89,12 @@ public class AuthController {
             CustomerResetPasswordToken resetPasswordToken = customerService.createPasswordResetTokenForCustomer(customer);
             String token = resetPasswordToken.getToken();
             mailSender.sendResetPasswordEmailToCustomer(customer, token);
+            model.addAttribute("info", "Slaptažodio pakeitimo instrukcijas rasite laiške.");
         } catch (CustomerNotFoundInDBException e) {
             model.addAttribute("message", e.getMessage());
             return "rememberPassword";
         }
 
-        model.addAttribute("info", "Slaptažodio pakeitimo instrukcijas rasite laiške.");
         return "rememberPassword";
     }
 
