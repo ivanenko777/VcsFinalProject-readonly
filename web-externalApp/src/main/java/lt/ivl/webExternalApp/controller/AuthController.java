@@ -69,6 +69,8 @@ public class AuthController {
                 return "/activation";
             }
             return "redirect:/login";
+        } else {
+            model.addAttribute("message", "Tokenas nerastas");
         }
 
         return "/activation";
