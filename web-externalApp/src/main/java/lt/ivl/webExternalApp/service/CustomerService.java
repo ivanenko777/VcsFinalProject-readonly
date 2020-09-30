@@ -104,7 +104,7 @@ public class CustomerService {
         return customerRepository.findByEmail(email);
     }
 
-    public CustomerResetPasswordToken createPasswordResetTokenForCustomer(Customer customer) {
+    public CustomerResetPasswordToken createPasswordResetTokenForCustomerAccount(Customer customer) {
         String token = UUID.randomUUID().toString();
         CustomerResetPasswordToken myToken = new CustomerResetPasswordToken(token, customer);
         passwordTokenRepository.save(myToken);

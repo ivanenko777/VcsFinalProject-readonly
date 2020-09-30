@@ -103,7 +103,7 @@ public class AuthController {
     ) {
         try {
             Customer customer = customerService.findCustomerAccountByEmail(customerEmail);
-            CustomerResetPasswordToken resetPasswordToken = customerService.createPasswordResetTokenForCustomer(customer);
+            CustomerResetPasswordToken resetPasswordToken = customerService.createPasswordResetTokenForCustomerAccount(customer);
             String token = resetPasswordToken.getToken();
             mailSender.sendResetPasswordEmailToCustomer(customer, token);
             model.addAttribute("info", "Slaptažodio pakeitimo instrukcijas rasite laiške.");
