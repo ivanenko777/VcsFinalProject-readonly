@@ -41,7 +41,10 @@ public class CustomerService {
 //            throw new PasswordDontMatchException("Passwords are not match!");
         }
 
-        if (emailExist(customerDto.getEmail())) throw new UsernameExistsInDatabaseException("User exists in DB");
+        if (validateIsCustomerAccountExist(customerDto.getEmail())) {
+            throw new UsernameExistsInDatabaseException("Vartotojo paskyra yra DB!");
+//            throw new UsernameExistsInDatabaseException("User exists in DB");
+        }
 
         Customer customer = new Customer();
         customer.setEmail(customerDto.getEmail());
@@ -96,7 +99,9 @@ public class CustomerService {
         mailSender.sendActivatedEmailToCustomer(customer);
     }
 
-    private boolean emailExist(String email) {
+    private boolean validateIsCustomerAccountExist(String email) {
+        // TODO: email != null && password != null
+        // nes vartotojas gali buti sukurtas Employee
         return customerRepository.findByEmail(email) != null;
     }
 
