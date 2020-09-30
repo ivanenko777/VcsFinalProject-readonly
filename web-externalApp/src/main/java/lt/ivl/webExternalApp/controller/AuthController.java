@@ -53,11 +53,12 @@ public class AuthController {
             String token = UUID.randomUUID().toString();
             customerService.createVerificationTokenForNewCustomerAccount(customer, token);
             mailSender.sendVerificationEmailToCustomer(customer, token);
+            model.addAttribute("info", "Patvirtinkite registraciją. Instrukcijas rasite laiške.");
+            return "/activation";
         } catch (UsernameExistsInDatabaseException | PasswordDontMatchException e) {
             model.addAttribute("message", e.getMessage());
             return "registration";
         }
-        return "redirect:/activation";
     }
 
     @GetMapping("/activation")
@@ -106,12 +107,11 @@ public class AuthController {
             String token = resetPasswordToken.getToken();
             mailSender.sendResetPasswordEmailToCustomer(customer, token);
             model.addAttribute("info", "Slaptažodio pakeitimo instrukcijas rasite laiške.");
+            return "rememberPassword";
         } catch (CustomerNotFoundInDBException e) {
             model.addAttribute("message", e.getMessage());
             return "rememberPassword";
         }
-
-        return "rememberPassword";
     }
 
     @GetMapping("/reset-password")
@@ -121,14 +121,13 @@ public class AuthController {
     ) {
         try {
             customerService.validatePasswordResetToken(token);
+            model.addAttribute("token", token);
+            model.addAttribute("resetPassword", new ResetPasswordDto());
+            return "resetPassword";
         } catch (TokenInvalidException | TokenExpiredException e) {
             model.addAttribute("message", e.getMessage());
             return "resetPassword";
         }
-
-        model.addAttribute("token", token);
-        model.addAttribute("resetPassword", new ResetPasswordDto());
-        return "resetPassword";
     }
 
     @PostMapping("/reset-password")
@@ -154,10 +153,10 @@ public class AuthController {
             customerService.resetCustomerPassword(customer, resetPasswordDto, resetPasswordToken);
             model.addAttribute("token", token);
             model.addAttribute("info", "Slaptažodis pakeistas.");
+            return "resetPassword";
         } catch (TokenInvalidException | TokenExpiredException | PasswordDontMatchException e) {
             model.addAttribute("message", e.getMessage());
             return "resetPassword";
         }
-        return "resetPassword";
     }
 }
