@@ -33,7 +33,7 @@ public class CustomerService {
     @Autowired
     private MailSender mailSender;
 
-    public void registerNewCustomerAccount(CustomerDto customerDto) throws UsernameExistsInDatabaseException, PasswordDontMatchException {
+    public Customer registerNewCustomerAccount(CustomerDto customerDto) throws UsernameExistsInDatabaseException, PasswordDontMatchException {
         String password = customerDto.getPassword();
         String passwordVerify = customerDto.getPasswordVerify();
         if (!validateIsPasswordPass(password, passwordVerify)) {
@@ -54,13 +54,7 @@ public class CustomerService {
         customer.setPhone(customerDto.getPhone());
         saveCustomer(customer);
 
-        confirmNewCustomerRegistration(customer);
-    }
-
-    public void confirmNewCustomerRegistration(Customer customer) {
-        String token = UUID.randomUUID().toString();
-        createVerificationTokenForCustomer(customer, token);
-        mailSender.sendVerificationEmailToCustomer(customer, token);
+        return customer;
     }
 
     private void saveCustomer(Customer customer) {

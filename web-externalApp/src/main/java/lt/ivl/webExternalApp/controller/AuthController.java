@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/")
@@ -47,7 +48,10 @@ public class AuthController {
             return "registration";
         }
         try {
-            customerService.registerNewCustomerAccount(customerDto);
+            Customer customer = customerService.registerNewCustomerAccount(customerDto);
+            String token = UUID.randomUUID().toString();
+            customerService.createVerificationTokenForCustomer(customer, token);
+            mailSender.sendVerificationEmailToCustomer(customer, token);
         } catch (UsernameExistsInDatabaseException | PasswordDontMatchException e) {
             model.addAttribute("message", e.getMessage());
             return "registration";
