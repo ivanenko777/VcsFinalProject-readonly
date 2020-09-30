@@ -50,7 +50,7 @@ public class MailSender {
         final String recipientAddress = customer.getEmail();
         final String subject = "Registracija patvirtinta";
         final String appUrl = environment.getProperty("app.url");
-        final String confirmationUrl = appUrl + "login";
+        final String loginUrl = appUrl + "login";
         final String message1 = String.format("Sveiki, %s %s,", customer.getFirstName(), customer.getLastName());
         final String message2 = "Jūsų registracija patvirtinta. Paspauskite žemiau esančią nuorodą, kad prisijungtumėte.";
 
@@ -58,7 +58,7 @@ public class MailSender {
         email.setFrom(environment.getProperty("support.email"));
         email.setTo(recipientAddress);
         email.setSubject(subject);
-        email.setText(message1 + " \r\n" + message2 + " \r\n" + confirmationUrl);
+        email.setText(message1 + " \r\n" + message2 + " \r\n" + loginUrl);
         return email;
     }
 
@@ -66,7 +66,7 @@ public class MailSender {
         final String recipientAddress = customer.getEmail();
         final String subject = "Slaptažodžio pakeitimas";
         final String appUrl = environment.getProperty("app.url");
-        final String confirmationUrl = appUrl + "reset-password?token=" + token;
+        final String resetPasswordUrl = appUrl + "reset-password?token=" + token;
         final String message1 = String.format("Sveiki, %s %s,", customer.getFirstName(), customer.getLastName());
         final String message2 = "Paspauskite žemiau esančią nuorodą, kad pakeisti slaptažodį.";
 
@@ -74,7 +74,7 @@ public class MailSender {
         email.setFrom(environment.getProperty("support.email"));
         email.setTo(recipientAddress);
         email.setSubject(subject);
-        email.setText(message1 + " \r\n" + message2 + " \r\n" + confirmationUrl);
+        email.setText(message1 + " \r\n" + message2 + " \r\n" + resetPasswordUrl);
         return email;
     }
 }
