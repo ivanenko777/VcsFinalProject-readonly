@@ -49,15 +49,14 @@ public class CustomerService {
         customer.setFirstName(customerDto.getFirstName());
         customer.setLastName(customerDto.getLastName());
         customer.setPhone(customerDto.getPhone());
-        saveCustomer(customer);
 
-        return customer;
+        return saveCustomer(customer);
     }
 
     public void activateCustomerAccount(CustomerVerificationToken verificationToken) {
         Customer customer = verificationToken.getCustomer();
         customer.setActive(true);
-        customerRepository.save(customer);
+        saveCustomer(customer);
         tokenRepository.delete(verificationToken);
     }
 
@@ -76,14 +75,14 @@ public class CustomerService {
 
         // change password
         customer.setPassword(passwordEncoder.encode(password));
-        customerRepository.save(customer);
+        saveCustomer(customer);
 
         // delete token
         passwordTokenRepository.delete(resetPasswordToken);
     }
 
-    private void saveCustomer(Customer customer) {
-        customerRepository.save(customer);
+    private Customer saveCustomer(Customer customer) {
+        return customerRepository.save(customer);
     }
 
     public void createVerificationTokenForCustomerAccount(Customer customer, String token) {
