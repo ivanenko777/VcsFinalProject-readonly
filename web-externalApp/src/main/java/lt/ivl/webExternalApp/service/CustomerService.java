@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.UUID;
 
@@ -120,6 +121,11 @@ public class CustomerService {
         return password.equals(passwordVerify);
     }
 
+    private boolean validateIsTokenExpired(Timestamp tokenExpiryDate) {
+        Calendar calendar = Calendar.getInstance();
+        return (tokenExpiryDate.getTime() - calendar.getTime().getTime()) <= 0;
+    }
+
     public CustomerVerificationToken verifyCustomerAccountVerificationToken(String token) throws TokenInvalidException, TokenExpiredException {
         // jei tokeno nera ismetame klaida
         if (token == null) throw new TokenInvalidException("Tokenas nerastas.");
@@ -128,9 +134,9 @@ public class CustomerService {
         CustomerVerificationToken verificationToken = tokenRepository.findByToken(token);
         if (verificationToken == null) throw new TokenInvalidException("Patvirtinimo tokenas nerastas.");
 
-        // jei tokenas negalioja, issiunciame nauja ir ismetame klaida
-        Calendar calendar = Calendar.getInstance();
-        if ((verificationToken.getExpiryDate().getTime() - calendar.getTime().getTime()) <= 0) {
+        // jei tokenas negalioja, ismetame klaida
+        Timestamp verificationTokenExpiryDate = verificationToken.getExpiryDate();
+        if (validateIsTokenExpired(verificationTokenExpiryDate)) {
             throw new TokenExpiredException("Patvirtinimo tokenas negalioja.");
         }
 
@@ -147,9 +153,9 @@ public class CustomerService {
         if (tokenFromDb == null) throw new TokenInvalidException("Tokenas nerastas.");
 
         // jei tokenas negalioja ismetame klaida
-        Calendar calendar = Calendar.getInstance();
-        if ((tokenFromDb.getExpiryDate().getTime() - calendar.getTime().getTime()) <= 0) {
-            throw new TokenExpiredException("Tokenas negalioja.");
+        Timestamp passwordTokenExpiryDate = tokenFromDb.getExpiryDate();
+        if (validateIsTokenExpired(passwordTokenExpiryDate)) {
+            throw new TokenExpiredException("Patvirtinimo tokenas negalioja.");
         }
 
         return tokenFromDb;
