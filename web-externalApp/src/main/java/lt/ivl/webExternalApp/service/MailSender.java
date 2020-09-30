@@ -20,7 +20,7 @@ public class MailSender {
         mailSender.send(email);
     }
 
-    public void sendActivatedEmailToCustomer(Customer customer) {
+    public void sendAccountActivatedEmailToCustomer(Customer customer) {
         final SimpleMailMessage email = constructCustomerActivatatedEmail(customer);
         mailSender.send(email);
     }

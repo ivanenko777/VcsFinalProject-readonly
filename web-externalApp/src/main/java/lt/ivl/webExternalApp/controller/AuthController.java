@@ -71,7 +71,7 @@ public class AuthController {
                 CustomerVerificationToken verificationToken = customerService.verifyCustomerAccountVerificationToken(token);
                 customerService.activateCustomerAccount(verificationToken);
                 Customer customer = verificationToken.getCustomer();
-                mailSender.sendActivatedEmailToCustomer(customer);
+                mailSender.sendAccountActivatedEmailToCustomer(customer);
                 model.addAttribute("info", "Registracija patvirtinta.");
                 return "activation";
             } catch (TokenInvalidException e) {
