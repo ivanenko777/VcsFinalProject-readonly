@@ -76,23 +76,6 @@ public class CustomerService {
         tokenRepository.delete(verificationToken);
     }
 
-    public CustomerVerificationToken verifyCustomerAccountVerificationToken(String token) throws TokenInvalidException, TokenExpiredException {
-        // jei tokeno nera ismetame klaida
-        if (token == null) throw new TokenInvalidException("Tokenas nerastas.");
-
-        // jei tokenas nerastas ismetame klaida
-        CustomerVerificationToken verificationToken = tokenRepository.findByToken(token);
-        if (verificationToken == null) throw new TokenInvalidException("Patvirtinimo tokenas nerastas.");
-
-        // jei tokenas negalioja, issiunciame nauja ir ismetame klaida
-        Calendar calendar = Calendar.getInstance();
-        if ((verificationToken.getExpiryDate().getTime() - calendar.getTime().getTime()) <= 0) {
-            throw new TokenExpiredException("Patvirtinimo tokenas negalioja.");
-        }
-
-        return verificationToken;
-    }
-
     private boolean validateIsCustomerAccountExist(String email) {
         // TODO: email != null && password != null
         // nes vartotojas gali buti sukurtas Employee
@@ -117,23 +100,6 @@ public class CustomerService {
         return myToken;
     }
 
-    public CustomerResetPasswordToken verifyCustomerAccountPasswordResetToken(String token) throws TokenInvalidException, TokenExpiredException {
-        // jei tokeno nera ismetame klaida
-        if (token == null) throw new TokenInvalidException("Tokenas nerastas.");
-
-        // jei tokenas nerastas ismetame klaida
-        CustomerResetPasswordToken tokenFromDb = passwordTokenRepository.findByToken(token);
-        if (tokenFromDb == null) throw new TokenInvalidException("Tokenas nerastas.");
-
-        // jei tokenas negalioja ismetame klaida
-        Calendar calendar = Calendar.getInstance();
-        if ((tokenFromDb.getExpiryDate().getTime() - calendar.getTime().getTime()) <= 0) {
-            throw new TokenExpiredException("Tokenas negalioja.");
-        }
-
-        return tokenFromDb;
-    }
-
     public void resetCustomerPassword(
             Customer customer,
             ResetPasswordDto passwordDto,
@@ -153,5 +119,40 @@ public class CustomerService {
 
         // delete token
         passwordTokenRepository.delete(resetPasswordToken);
+    }
+
+    public CustomerVerificationToken verifyCustomerAccountVerificationToken(String token) throws TokenInvalidException, TokenExpiredException {
+        // jei tokeno nera ismetame klaida
+        if (token == null) throw new TokenInvalidException("Tokenas nerastas.");
+
+        // jei tokenas nerastas ismetame klaida
+        CustomerVerificationToken verificationToken = tokenRepository.findByToken(token);
+        if (verificationToken == null) throw new TokenInvalidException("Patvirtinimo tokenas nerastas.");
+
+        // jei tokenas negalioja, issiunciame nauja ir ismetame klaida
+        Calendar calendar = Calendar.getInstance();
+        if ((verificationToken.getExpiryDate().getTime() - calendar.getTime().getTime()) <= 0) {
+            throw new TokenExpiredException("Patvirtinimo tokenas negalioja.");
+        }
+        
+        return verificationToken;
+    }
+
+
+    public CustomerResetPasswordToken verifyCustomerAccountPasswordResetToken(String token) throws TokenInvalidException, TokenExpiredException {
+        // jei tokeno nera ismetame klaida
+        if (token == null) throw new TokenInvalidException("Tokenas nerastas.");
+
+        // jei tokenas nerastas ismetame klaida
+        CustomerResetPasswordToken tokenFromDb = passwordTokenRepository.findByToken(token);
+        if (tokenFromDb == null) throw new TokenInvalidException("Tokenas nerastas.");
+
+        // jei tokenas negalioja ismetame klaida
+        Calendar calendar = Calendar.getInstance();
+        if ((tokenFromDb.getExpiryDate().getTime() - calendar.getTime().getTime()) <= 0) {
+            throw new TokenExpiredException("Tokenas negalioja.");
+        }
+
+        return tokenFromDb;
     }
 }
