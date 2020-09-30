@@ -85,7 +85,6 @@ public class CustomerService {
         if (verificationToken == null) throw new TokenInvalidException("Patvirtinimo tokenas nerastas.");
 
         // jei tokenas negalioja, issiunciame nauja ir ismetame klaida
-        Customer customer = verificationToken.getCustomer();
         Calendar calendar = Calendar.getInstance();
         if ((verificationToken.getExpiryDate().getTime() - calendar.getTime().getTime()) <= 0) {
             throw new TokenExpiredException("Patvirtinimo tokenas negalioja.");
