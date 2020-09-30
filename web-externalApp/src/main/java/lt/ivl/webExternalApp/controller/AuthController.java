@@ -2,6 +2,7 @@ package lt.ivl.webExternalApp.controller;
 
 import lt.ivl.webExternalApp.domain.Customer;
 import lt.ivl.webExternalApp.domain.CustomerResetPasswordToken;
+import lt.ivl.webExternalApp.domain.CustomerVerificationToken;
 import lt.ivl.webExternalApp.dto.CustomerDto;
 import lt.ivl.webExternalApp.dto.ResetPasswordDto;
 import lt.ivl.webExternalApp.exception.*;
@@ -66,18 +67,27 @@ public class AuthController {
     ) {
         if (token != null && !token.isEmpty()) {
             try {
-                customerService.activateByVerificationToken(token);
-                model.addAttribute("info", "Patvirtinkite registraciją. Instrukcijas rasite laiške.");
-            } catch (TokenInvalidException | TokenExpiredException e) {
+                CustomerVerificationToken verificationToken = customerService.validateByVerificationToken(token);
+                customerService.activateCustomerAccount(verificationToken);
+                Customer customer = verificationToken.getCustomer();
+                mailSender.sendActivatedEmailToCustomer(customer);
+                model.addAttribute("info", "Registracija patvirtinta.");
+                return "activation";
+            } catch (TokenInvalidException e) {
                 model.addAttribute("message", e.getMessage());
                 return "/activation";
+            } catch (TokenExpiredException e) {
+                CustomerVerificationToken verificationToken = customerService.generateNewVerificationTokenForCustomer(token);
+                Customer customer = verificationToken.getCustomer();
+                String newToken = verificationToken.getToken();
+                mailSender.sendVerificationEmailToCustomer(customer, newToken);
+                model.addAttribute("message", "Patvirtinimo tokenas negalioja. Naujas išsiųstas į el. paštą.");
+                return "/activation";
             }
-            return "redirect:/login";
         } else {
             model.addAttribute("message", "Tokenas nerastas");
+            return "/activation";
         }
-
-        return "/activation";
     }
 
     @GetMapping("/remember-password")
