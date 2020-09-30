@@ -86,7 +86,7 @@ public class CustomerService {
         customerRepository.save(customer);
     }
 
-    public void createVerificationTokenForNewCustomerAccount(Customer customer, String token) {
+    public void createVerificationTokenForCustomerAccount(Customer customer, String token) {
         CustomerVerificationToken myToken = new CustomerVerificationToken(token, customer);
         tokenRepository.save(myToken);
     }

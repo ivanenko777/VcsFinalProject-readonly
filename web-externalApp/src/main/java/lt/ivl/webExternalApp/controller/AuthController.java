@@ -51,7 +51,7 @@ public class AuthController {
         try {
             Customer customer = customerService.registerNewCustomerAccount(customerDto);
             String token = UUID.randomUUID().toString();
-            customerService.createVerificationTokenForNewCustomerAccount(customer, token);
+            customerService.createVerificationTokenForCustomerAccount(customer, token);
             mailSender.sendVerificationEmailToCustomer(customer, token);
             model.addAttribute("info", "Patvirtinkite registraciją. Instrukcijas rasite laiške.");
             return "/activation";
