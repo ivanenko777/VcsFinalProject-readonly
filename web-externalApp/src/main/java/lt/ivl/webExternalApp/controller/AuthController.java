@@ -52,7 +52,7 @@ public class AuthController {
             Customer customer = customerService.registerNewCustomerAccount(customerDto);
             String token = UUID.randomUUID().toString();
             customerService.createVerificationTokenForCustomerAccount(customer, token);
-            mailSender.sendVerificationEmailToCustomer(customer, token);
+            mailSender.sendAccountVerificationEmailToCustomer(customer, token);
             model.addAttribute("info", "Patvirtinkite registraciją. Instrukcijas rasite laiške.");
             return "/activation";
         } catch (UsernameExistsInDatabaseException | PasswordDontMatchException e) {
@@ -81,7 +81,7 @@ public class AuthController {
                 CustomerVerificationToken verificationToken = customerService.generateNewVerificationTokenForCustomerAccount(token);
                 Customer customer = verificationToken.getCustomer();
                 String newToken = verificationToken.getToken();
-                mailSender.sendVerificationEmailToCustomer(customer, newToken);
+                mailSender.sendAccountVerificationEmailToCustomer(customer, newToken);
                 model.addAttribute("message", "Patvirtinimo tokenas negalioja. Naujas išsiųstas į el. paštą.");
                 return "/activation";
             }

@@ -15,7 +15,7 @@ public class MailSender {
     @Autowired
     private Environment environment;
 
-    public void sendVerificationEmailToCustomer(Customer customer, String token) {
+    public void sendAccountVerificationEmailToCustomer(Customer customer, String token) {
         final SimpleMailMessage email = constructCustomerVerificationEmail(customer, token);
         mailSender.send(email);
     }
