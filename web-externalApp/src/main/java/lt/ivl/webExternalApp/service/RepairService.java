@@ -17,7 +17,7 @@ public class RepairService {
     @Autowired
     private RepairRepository repairRepository;
 
-    public void createNewRepairItemByCustomer(Customer customer, RepairDto repairDto) {
+    public Repair createNewRepairItemByCustomer(Customer customer, RepairDto repairDto) {
         Repair repair = new Repair();
         repair.setCreatedByCustomer(customer);
         repair.setStatus(RepairStatus.PENDING);
@@ -31,7 +31,7 @@ public class RepairService {
         repair.setCreatedAt(timeNow);
         repair.setUpdatedAt(timeNow);
 
-        repairRepository.save(repair);
+        return repairRepository.save(repair);
     }
 
     public Iterable<Repair> findWithStatusesByCustomer(Customer customer, Iterable<RepairStatus> statuses) {

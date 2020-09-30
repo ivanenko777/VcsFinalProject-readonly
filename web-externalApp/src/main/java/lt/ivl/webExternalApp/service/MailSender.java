@@ -1,6 +1,7 @@
 package lt.ivl.webExternalApp.service;
 
 import lt.ivl.webExternalApp.domain.Customer;
+import lt.ivl.webExternalApp.domain.Repair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
@@ -27,6 +28,11 @@ public class MailSender {
 
     public void sendResetPasswordEmailToCustomer(Customer customer, String token) {
         final SimpleMailMessage email = constructCustomerResetPasswordEmail(customer, token);
+        mailSender.send(email);
+    }
+
+    public void sendRepairRequestToCustomer(Customer customer, Repair repair) {
+        final SimpleMailMessage email = constructCustomerRepairRequestEmail(customer, repair);
         mailSender.send(email);
     }
 
@@ -75,6 +81,25 @@ public class MailSender {
         email.setTo(recipientAddress);
         email.setSubject(subject);
         email.setText(message1 + " \r\n" + message2 + " \r\n" + confirmationUrl);
+        return email;
+    }
+
+    private SimpleMailMessage constructCustomerRepairRequestEmail(Customer customer, Repair repair) {
+        // remonto paraiska, STATUS -> PENDING
+        final int repairId = repair.getId();
+
+        final String recipientAddress = customer.getEmail();
+        final String subject = "Užsakymo paraiška #" + repairId;
+        final String appUrl = environment.getProperty("app.url");
+        final String repairViewUrl = appUrl + "repair/" + repairId + "/view";
+        final String message1 = String.format("Sveiki, %s %s,", customer.getFirstName(), customer.getLastName());
+        final String message2 = "Remonto paraiška užregistruota. Sekite info žemiau esančioje nuorodoje.";
+
+        final SimpleMailMessage email = new SimpleMailMessage();
+        email.setFrom(environment.getProperty("support.email"));
+        email.setTo(recipientAddress);
+        email.setSubject(subject);
+        email.setText(message1 + " \r\n" + message2 + " \r\n" + repairViewUrl);
         return email;
     }
 }

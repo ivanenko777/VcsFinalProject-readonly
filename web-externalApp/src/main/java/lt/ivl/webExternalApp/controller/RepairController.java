@@ -6,6 +6,7 @@ import lt.ivl.webExternalApp.domain.RepairStatus;
 import lt.ivl.webExternalApp.dto.RepairDto;
 import lt.ivl.webExternalApp.exception.ItemNotFoundException;
 import lt.ivl.webExternalApp.security.CustomerPrincipal;
+import lt.ivl.webExternalApp.service.MailSender;
 import lt.ivl.webExternalApp.service.RepairService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,6 +24,9 @@ import java.util.List;
 public class RepairController {
     @Autowired
     private RepairService repairService;
+
+    @Autowired
+    private MailSender mailSender;
 
     @GetMapping("/index")
     public String index(
@@ -74,8 +78,8 @@ public class RepairController {
             return "repair/add";
         }
         Customer customer = customerPrincipal.getCustomer();
-        repairService.createNewRepairItemByCustomer(customer, repairDto);
-
+        Repair newRepair = repairService.createNewRepairItemByCustomer(customer, repairDto);
+        mailSender.sendRepairRequestToCustomer(customer, newRepair);
         return "redirect:/repair/index";
     }
 
