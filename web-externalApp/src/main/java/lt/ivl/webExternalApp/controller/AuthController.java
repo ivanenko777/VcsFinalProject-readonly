@@ -68,7 +68,7 @@ public class AuthController {
     ) {
         if (token != null && !token.isEmpty()) {
             try {
-                CustomerVerificationToken verificationToken = customerService.validateByVerificationToken(token);
+                CustomerVerificationToken verificationToken = customerService.verifyCustomerAccountVerificationToken(token);
                 customerService.activateCustomerAccount(verificationToken);
                 Customer customer = verificationToken.getCustomer();
                 mailSender.sendActivatedEmailToCustomer(customer);

@@ -53,7 +53,7 @@ public class CustomerService {
 
         return customer;
     }
-    
+
     private void saveCustomer(Customer customer) {
         customerRepository.save(customer);
     }
@@ -76,7 +76,7 @@ public class CustomerService {
         tokenRepository.delete(verificationToken);
     }
 
-    public CustomerVerificationToken validateByVerificationToken(String token) throws TokenInvalidException, TokenExpiredException {
+    public CustomerVerificationToken verifyCustomerAccountVerificationToken(String token) throws TokenInvalidException, TokenExpiredException {
         // jei tokeno nera ismetame klaida
         if (token == null) throw new TokenInvalidException("Tokenas nerastas.");
 
