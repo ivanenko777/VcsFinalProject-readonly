@@ -120,7 +120,7 @@ public class AuthController {
             Model model
     ) {
         try {
-            customerService.validatePasswordResetToken(token);
+            customerService.verifyCustomerAccountPasswordResetToken(token);
             model.addAttribute("token", token);
             model.addAttribute("resetPassword", new ResetPasswordDto());
             return "resetPassword";
@@ -148,7 +148,7 @@ public class AuthController {
         }
 
         try {
-            CustomerResetPasswordToken resetPasswordToken = customerService.validatePasswordResetToken(token);
+            CustomerResetPasswordToken resetPasswordToken = customerService.verifyCustomerAccountPasswordResetToken(token);
             Customer customer = resetPasswordToken.getCustomer();
             customerService.resetCustomerPassword(customer, resetPasswordDto, resetPasswordToken);
             model.addAttribute("token", token);
