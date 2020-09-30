@@ -78,7 +78,7 @@ public class AuthController {
                 model.addAttribute("message", e.getMessage());
                 return "/activation";
             } catch (TokenExpiredException e) {
-                CustomerVerificationToken verificationToken = customerService.generateNewVerificationTokenForCustomer(token);
+                CustomerVerificationToken verificationToken = customerService.generateNewVerificationTokenForCustomerAccount(token);
                 Customer customer = verificationToken.getCustomer();
                 String newToken = verificationToken.getToken();
                 mailSender.sendVerificationEmailToCustomer(customer, newToken);

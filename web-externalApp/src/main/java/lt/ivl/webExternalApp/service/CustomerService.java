@@ -91,7 +91,7 @@ public class CustomerService {
         tokenRepository.save(myToken);
     }
 
-    public CustomerVerificationToken generateNewVerificationTokenForCustomer(String existingVerificationToken) {
+    public CustomerVerificationToken generateNewVerificationTokenForCustomerAccount(String existingVerificationToken) {
         CustomerVerificationToken token = tokenRepository.findByToken(existingVerificationToken);
         token.updateToken(UUID.randomUUID().toString());
         return tokenRepository.save(token);
