@@ -25,6 +25,11 @@ public class MailSender {
         mailSender.send(email);
     }
 
+    public void sendResetPasswordEmailToCustomer(Customer customer, String token) {
+        final SimpleMailMessage email = constructCustomerResetPasswordEmail(customer, token);
+        mailSender.send(email);
+    }
+
     private SimpleMailMessage constructCustomerVerificationEmail(Customer customer, String token) {
         final String recipientAddress = customer.getEmail();
         final String subject = "Registracijos patvirtinimas";
@@ -48,6 +53,22 @@ public class MailSender {
         final String confirmationUrl = appUrl + "login";
         final String message1 = String.format("Sveiki, %s %s,", customer.getFirstName(), customer.getLastName());
         final String message2 = "Jūsų registracija patvirtinta. Paspauskite žemiau esančią nuorodą, kad prisijungtumėte.";
+
+        final SimpleMailMessage email = new SimpleMailMessage();
+        email.setFrom(environment.getProperty("support.email"));
+        email.setTo(recipientAddress);
+        email.setSubject(subject);
+        email.setText(message1 + " \r\n" + message2 + " \r\n" + confirmationUrl);
+        return email;
+    }
+
+    private SimpleMailMessage constructCustomerResetPasswordEmail(Customer customer, String token) {
+        final String recipientAddress = customer.getEmail();
+        final String subject = "Slaptažodžio pakeitimas";
+        final String appUrl = environment.getProperty("app.url");
+        final String confirmationUrl = appUrl + "reset-password?token=" + token;
+        final String message1 = String.format("Sveiki, %s %s,", customer.getFirstName(), customer.getLastName());
+        final String message2 = "Paspauskite žemiau esančią nuorodą, kad pakeisti slaptažodį.";
 
         final SimpleMailMessage email = new SimpleMailMessage();
         email.setFrom(environment.getProperty("support.email"));
