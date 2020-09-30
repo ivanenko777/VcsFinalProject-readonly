@@ -110,10 +110,10 @@ public class CustomerService {
     }
 
     public Customer findCustomerByEmail(String email) throws CustomerNotFoundInDBException {
-        Customer customer = customerRepository.findByEmail(email);
-        if (customer == null) throw new CustomerNotFoundInDBException("El. pašto adresas nerastas");
-
-        return customer;
+        if (!validateIsCustomerAccountExist(email)) {
+            throw new CustomerNotFoundInDBException("Vartotojo paskyra nerasta");
+        }
+        return customerRepository.findByEmail(email);
     }
 
     public CustomerResetPasswordToken createPasswordResetTokenForCustomer(Customer customer) {
