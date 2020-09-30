@@ -30,9 +30,6 @@ public class CustomerService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private MailSender mailSender;
-
     public Customer registerNewCustomerAccount(CustomerDto customerDto) throws UsernameExistsInDatabaseException, PasswordDontMatchException {
         String password = customerDto.getPassword();
         String passwordVerify = customerDto.getPasswordVerify();
