@@ -87,7 +87,7 @@ public class AuthController {
             Model model
     ) {
         try {
-            Customer customer = customerService.findCustomerByEmail(customerEmail);
+            Customer customer = customerService.findCustomerAccountByEmail(customerEmail);
             CustomerResetPasswordToken resetPasswordToken = customerService.createPasswordResetTokenForCustomer(customer);
             String token = resetPasswordToken.getToken();
             mailSender.sendResetPasswordEmailToCustomer(customer, token);

@@ -18,7 +18,7 @@ public class CustomerDetailService implements UserDetailsService {
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         Customer customer = null;
         try {
-            customer = customerService.findCustomerByEmail(s);
+            customer = customerService.findCustomerAccountByEmail(s);
         } catch (CustomerNotFoundInDBException e) {
             throw new UsernameNotFoundException(s);
         }

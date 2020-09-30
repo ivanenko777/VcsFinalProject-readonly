@@ -109,7 +109,7 @@ public class CustomerService {
         return password.equals(passwordVerify);
     }
 
-    public Customer findCustomerByEmail(String email) throws CustomerNotFoundInDBException {
+    public Customer findCustomerAccountByEmail(String email) throws CustomerNotFoundInDBException {
         if (!validateIsCustomerAccountExist(email)) {
             throw new CustomerNotFoundInDBException("Vartotojo paskyra nerasta");
         }
