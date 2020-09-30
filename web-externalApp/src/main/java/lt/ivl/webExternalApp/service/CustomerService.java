@@ -72,7 +72,17 @@ public class CustomerService {
         return tokenRepository.save(token);
     }
 
-    public void activateByVerificationToken(String token) throws TokenInvalidException, TokenExpiredException {
+    public void activateCustomerAccount(CustomerVerificationToken verificationToken) {
+        Customer customer = verificationToken.getCustomer();
+        customer.setActive(true);
+        customerRepository.save(customer);
+        tokenRepository.delete(verificationToken);
+    }
+
+    public CustomerVerificationToken validateByVerificationToken(String token) throws TokenInvalidException, TokenExpiredException {
+        // jei tokeno nera ismetame klaida
+        if (token == null) throw new TokenInvalidException("Tokenas nerastas.");
+
         // jei tokenas nerastas ismetame klaida
         CustomerVerificationToken verificationToken = tokenRepository.findByToken(token);
         if (verificationToken == null) throw new TokenInvalidException("Patvirtinimo tokenas nerastas.");
@@ -81,16 +91,10 @@ public class CustomerService {
         Customer customer = verificationToken.getCustomer();
         Calendar calendar = Calendar.getInstance();
         if ((verificationToken.getExpiryDate().getTime() - calendar.getTime().getTime()) <= 0) {
-            String newToken = generateNewVerificationTokenForCustomer(token).getToken();
-            mailSender.sendVerificationEmailToCustomer(customer, newToken);
-            throw new TokenExpiredException("Patvirtinimo tokenas negalioja. Naujas išsiųstas į el. paštą.");
+            throw new TokenExpiredException("Patvirtinimo tokenas negalioja.");
         }
 
-        // jei tokenas galioja, aktyvuojame vartotoja ir issiunciame email
-        customer.setActive(true);
-        customerRepository.save(customer);
-        tokenRepository.delete(verificationToken);
-        mailSender.sendActivatedEmailToCustomer(customer);
+        return verificationToken;
     }
 
     private boolean validateIsCustomerAccountExist(String email) {
