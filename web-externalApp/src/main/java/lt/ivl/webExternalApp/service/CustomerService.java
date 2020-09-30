@@ -76,15 +76,6 @@ public class CustomerService {
         tokenRepository.delete(verificationToken);
     }
 
-    private boolean validateIsCustomerAccountExist(String email) {
-        // TODO: email != null && password != null
-        // nes vartotojas gali buti sukurtas Employee
-        return customerRepository.findByEmail(email) != null;
-    }
-
-    private boolean validateIsPasswordPass(String password, String passwordVerify) {
-        return password.equals(passwordVerify);
-    }
 
     public Customer findCustomerAccountByEmail(String email) throws CustomerNotFoundInDBException {
         if (!validateIsCustomerAccountExist(email)) {
@@ -121,6 +112,16 @@ public class CustomerService {
         passwordTokenRepository.delete(resetPasswordToken);
     }
 
+    private boolean validateIsCustomerAccountExist(String email) {
+        // TODO: email != null && password != null
+        // nes vartotojas gali buti sukurtas Employee
+        return customerRepository.findByEmail(email) != null;
+    }
+
+    private boolean validateIsPasswordPass(String password, String passwordVerify) {
+        return password.equals(passwordVerify);
+    }
+
     public CustomerVerificationToken verifyCustomerAccountVerificationToken(String token) throws TokenInvalidException, TokenExpiredException {
         // jei tokeno nera ismetame klaida
         if (token == null) throw new TokenInvalidException("Tokenas nerastas.");
@@ -134,7 +135,7 @@ public class CustomerService {
         if ((verificationToken.getExpiryDate().getTime() - calendar.getTime().getTime()) <= 0) {
             throw new TokenExpiredException("Patvirtinimo tokenas negalioja.");
         }
-        
+
         return verificationToken;
     }
 
