@@ -36,7 +36,10 @@ public class CustomerService {
     public void registerNewCustomerAccount(CustomerDto customerDto) throws UsernameExistsInDatabaseException, PasswordDontMatchException {
         String password = customerDto.getPassword();
         String passwordVerify = customerDto.getPasswordVerify();
-        verifyPasswordPass(password, passwordVerify);
+        if (!validateIsPasswordPass(password, passwordVerify)) {
+            throw new PasswordDontMatchException("Slaptažodiai nesutampa!");
+//            throw new PasswordDontMatchException("Passwords are not match!");
+        }
 
         if (emailExist(customerDto.getEmail())) throw new UsernameExistsInDatabaseException("User exists in DB");
 
@@ -97,10 +100,8 @@ public class CustomerService {
         return customerRepository.findByEmail(email) != null;
     }
 
-    private void verifyPasswordPass(String password, String passwordVerify) throws PasswordDontMatchException {
-        if (!password.equals(passwordVerify)) {
-            throw new PasswordDontMatchException("Passwords are not match!");
-        }
+    private boolean validateIsPasswordPass(String password, String passwordVerify) {
+        return password.equals(passwordVerify);
     }
 
     public Customer findCustomerByEmail(String email) throws CustomerNotFoundInDBException {
@@ -142,7 +143,10 @@ public class CustomerService {
         // password validation
         String password = passwordDto.getPassword();
         String passwordVerify = passwordDto.getPasswordVerify();
-        verifyPasswordPass(password, passwordVerify);
+        if (!validateIsPasswordPass(password, passwordVerify)) {
+            throw new PasswordDontMatchException("Slaptažodiai nesutampa!");
+//            throw new PasswordDontMatchException("Passwords are not match!");
+        }
 
         // change password
         customer.setPassword(passwordEncoder.encode(password));
