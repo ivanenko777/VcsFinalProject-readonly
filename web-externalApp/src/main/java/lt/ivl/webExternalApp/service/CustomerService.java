@@ -54,41 +54,11 @@ public class CustomerService {
         return customer;
     }
 
-    private void saveCustomer(Customer customer) {
-        customerRepository.save(customer);
-    }
-
-    public void createVerificationTokenForNewCustomerAccount(Customer customer, String token) {
-        CustomerVerificationToken myToken = new CustomerVerificationToken(token, customer);
-        tokenRepository.save(myToken);
-    }
-
-    public CustomerVerificationToken generateNewVerificationTokenForCustomer(String existingVerificationToken) {
-        CustomerVerificationToken token = tokenRepository.findByToken(existingVerificationToken);
-        token.updateToken(UUID.randomUUID().toString());
-        return tokenRepository.save(token);
-    }
-
     public void activateCustomerAccount(CustomerVerificationToken verificationToken) {
         Customer customer = verificationToken.getCustomer();
         customer.setActive(true);
         customerRepository.save(customer);
         tokenRepository.delete(verificationToken);
-    }
-
-
-    public Customer findCustomerAccountByEmail(String email) throws CustomerNotFoundInDBException {
-        if (!validateIsCustomerAccountExist(email)) {
-            throw new CustomerNotFoundInDBException("Vartotojo paskyra nerasta");
-        }
-        return customerRepository.findByEmail(email);
-    }
-
-    public CustomerResetPasswordToken createPasswordResetTokenForCustomer(Customer customer) {
-        String token = UUID.randomUUID().toString();
-        CustomerResetPasswordToken myToken = new CustomerResetPasswordToken(token, customer);
-        passwordTokenRepository.save(myToken);
-        return myToken;
     }
 
     public void resetCustomerPassword(
@@ -110,6 +80,35 @@ public class CustomerService {
 
         // delete token
         passwordTokenRepository.delete(resetPasswordToken);
+    }
+
+    private void saveCustomer(Customer customer) {
+        customerRepository.save(customer);
+    }
+
+    public void createVerificationTokenForNewCustomerAccount(Customer customer, String token) {
+        CustomerVerificationToken myToken = new CustomerVerificationToken(token, customer);
+        tokenRepository.save(myToken);
+    }
+
+    public CustomerVerificationToken generateNewVerificationTokenForCustomer(String existingVerificationToken) {
+        CustomerVerificationToken token = tokenRepository.findByToken(existingVerificationToken);
+        token.updateToken(UUID.randomUUID().toString());
+        return tokenRepository.save(token);
+    }
+
+    public Customer findCustomerAccountByEmail(String email) throws CustomerNotFoundInDBException {
+        if (!validateIsCustomerAccountExist(email)) {
+            throw new CustomerNotFoundInDBException("Vartotojo paskyra nerasta");
+        }
+        return customerRepository.findByEmail(email);
+    }
+
+    public CustomerResetPasswordToken createPasswordResetTokenForCustomer(Customer customer) {
+        String token = UUID.randomUUID().toString();
+        CustomerResetPasswordToken myToken = new CustomerResetPasswordToken(token, customer);
+        passwordTokenRepository.save(myToken);
+        return myToken;
     }
 
     private boolean validateIsCustomerAccountExist(String email) {
