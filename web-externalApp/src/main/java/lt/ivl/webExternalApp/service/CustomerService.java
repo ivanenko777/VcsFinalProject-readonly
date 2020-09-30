@@ -61,7 +61,7 @@ public class CustomerService {
         tokenRepository.delete(verificationToken);
     }
 
-    public void resetCustomerPassword(
+    public void resetCustomerAccountPassword(
             Customer customer,
             ResetPasswordDto passwordDto,
             CustomerResetPasswordToken resetPasswordToken

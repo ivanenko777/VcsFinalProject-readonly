@@ -150,7 +150,7 @@ public class AuthController {
         try {
             CustomerResetPasswordToken resetPasswordToken = customerService.verifyCustomerAccountPasswordResetToken(token);
             Customer customer = resetPasswordToken.getCustomer();
-            customerService.resetCustomerPassword(customer, resetPasswordDto, resetPasswordToken);
+            customerService.resetCustomerAccountPassword(customer, resetPasswordDto, resetPasswordToken);
             model.addAttribute("token", token);
             model.addAttribute("info", "Slaptažodis pakeistas.");
             return "resetPassword";
