@@ -30,10 +30,6 @@ public class CustomerVerificationToken {
         this.expiryDate = calculateExpiryDate(EXPIRATION);
     }
 
-    public static int getEXPIRATION() {
-        return EXPIRATION;
-    }
-
     public int getId() {
         return id;
     }
