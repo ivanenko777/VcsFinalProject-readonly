@@ -22,12 +22,9 @@ public class CustomerVerificationToken {
     private Timestamp expiryDate;
 
     public CustomerVerificationToken() {
-        super();
     }
 
-    public CustomerVerificationToken(final String token, final Customer customer) {
-        super();
-
+    public CustomerVerificationToken(String token, Customer customer) {
         this.token = token;
         this.customer = customer;
         this.expiryDate = calculateExpiryDate(EXPIRATION);

@@ -22,12 +22,9 @@ public class CustomerResetPasswordToken {
     private Timestamp expiryDate;
 
     public CustomerResetPasswordToken() {
-        super();
     }
 
     public CustomerResetPasswordToken(String token, Customer customer) {
-        super();
-
         this.token = token;
         this.customer = customer;
         this.expiryDate = calculateExpiryDate(EXPIRATION);
