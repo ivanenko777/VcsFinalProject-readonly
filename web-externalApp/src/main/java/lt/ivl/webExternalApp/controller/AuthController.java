@@ -50,7 +50,7 @@ public class AuthController {
         try {
             Customer customer = customerService.registerNewCustomerAccount(customerDto);
             String token = UUID.randomUUID().toString();
-            customerService.createVerificationTokenForCustomer(customer, token);
+            customerService.createVerificationTokenForNewCustomerAccount(customer, token);
             mailSender.sendVerificationEmailToCustomer(customer, token);
         } catch (UsernameExistsInDatabaseException | PasswordDontMatchException e) {
             model.addAttribute("message", e.getMessage());
