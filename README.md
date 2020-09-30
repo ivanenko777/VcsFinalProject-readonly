@@ -25,7 +25,7 @@ WIP [#2][i2]
   * [x] Account activation (tocken: notfound, expired, valid) -> [#8][i8]
 * [x] Login -> [#1][i1]
 * [x] Logoff -> [#1][i1]
-* [ ] Reset password
+* [ ] Reset password -> [#9][i9]
 * [ ] Profile / Settings (change Personal info, password)
 * [ ] Repairs
   * [x] List -> [#5][i5]
@@ -49,3 +49,4 @@ WIP [#2][i2]
 [i4]: https://github.com/ivanevla/VCS_final-project/pull/4
 [i5]: https://github.com/ivanevla/VCS_final-project/pull/5
 [i8]: https://github.com/ivanevla/VCS_final-project/pull/8
+[i9]: https://github.com/ivanevla/VCS_final-project/pull/9
