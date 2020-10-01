@@ -26,6 +26,9 @@ public class Repair {
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
+    public Repair() {
+    }
+
     public int getId() {
         return id;
     }

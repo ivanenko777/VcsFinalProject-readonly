@@ -25,7 +25,7 @@ WIP [#2][i2]
   * [x] Account activation (tocken: notfound, expired, valid) -> [#8][i8]
 * [x] Login -> [#1][i1]
 * [x] Logoff -> [#1][i1]
-* [ ] Reset password -> [#9][i9]
+* [x] Reset password -> [#9][i9]
 * [ ] Profile / Settings (change Personal info, password)
 * [ ] Repairs
   * [x] List -> [#5][i5]

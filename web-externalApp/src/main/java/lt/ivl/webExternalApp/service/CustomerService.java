@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.UUID;
 
@@ -30,15 +31,18 @@ public class CustomerService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private MailSender mailSender;
-
-    public void registerNewCustomerAccount(CustomerDto customerDto) throws UsernameExistsInDatabaseException, PasswordDontMatchException {
+    public Customer registerNewCustomerAccount(CustomerDto customerDto) throws UsernameExistsInDatabaseException, PasswordDontMatchException {
         String password = customerDto.getPassword();
         String passwordVerify = customerDto.getPasswordVerify();
-        verifyPasswordPass(password, passwordVerify);
+        if (!validateIsPasswordPass(password, passwordVerify)) {
+            throw new PasswordDontMatchException("Slaptažodiai nesutampa!");
+//            throw new PasswordDontMatchException("Passwords are not match!");
+        }
 
-        if (emailExist(customerDto.getEmail())) throw new UsernameExistsInDatabaseException("User exists in DB");
+        if (validateIsCustomerAccountExist(customerDto.getEmail())) {
+            throw new UsernameExistsInDatabaseException("Vartotojo paskyra yra DB!");
+//            throw new UsernameExistsInDatabaseException("User exists in DB");
+        }
 
         Customer customer = new Customer();
         customer.setEmail(customerDto.getEmail());
@@ -46,78 +50,101 @@ public class CustomerService {
         customer.setFirstName(customerDto.getFirstName());
         customer.setLastName(customerDto.getLastName());
         customer.setPhone(customerDto.getPhone());
+
+        return saveCustomer(customer);
+    }
+
+    public void activateCustomerAccount(CustomerVerificationToken verificationToken) {
+        Customer customer = verificationToken.getCustomer();
+        customer.setActive(true);
+        saveCustomer(customer);
+        tokenRepository.delete(verificationToken);
+    }
+
+    public void resetCustomerAccountPassword(
+            Customer customer,
+            ResetPasswordDto passwordDto,
+            CustomerResetPasswordToken resetPasswordToken
+    ) throws PasswordDontMatchException {
+        // password validation
+        String password = passwordDto.getPassword();
+        String passwordVerify = passwordDto.getPasswordVerify();
+        if (!validateIsPasswordPass(password, passwordVerify)) {
+            throw new PasswordDontMatchException("Slaptažodiai nesutampa!");
+//            throw new PasswordDontMatchException("Passwords are not match!");
+        }
+
+        // change password
+        customer.setPassword(passwordEncoder.encode(password));
         saveCustomer(customer);
 
-        confirmNewCustomerRegistration(customer);
+        // delete token
+        passwordTokenRepository.delete(resetPasswordToken);
     }
 
-    public void confirmNewCustomerRegistration(Customer customer) {
-        String token = UUID.randomUUID().toString();
-        createVerificationTokenForCustomer(customer, token);
-        mailSender.sendVerificationEmailToCustomer(customer, token);
+    private Customer saveCustomer(Customer customer) {
+        return customerRepository.save(customer);
     }
 
-    private void saveCustomer(Customer customer) {
-        customerRepository.save(customer);
-    }
-
-    public void createVerificationTokenForCustomer(Customer customer, String token) {
+    public void createVerificationTokenForCustomerAccount(Customer customer, String token) {
         CustomerVerificationToken myToken = new CustomerVerificationToken(token, customer);
         tokenRepository.save(myToken);
     }
 
-    public CustomerVerificationToken generateNewVerificationTokenForCustomer(String existingVerificationToken) {
+    public CustomerVerificationToken generateNewVerificationTokenForCustomerAccount(String existingVerificationToken) {
         CustomerVerificationToken token = tokenRepository.findByToken(existingVerificationToken);
         token.updateToken(UUID.randomUUID().toString());
         return tokenRepository.save(token);
     }
 
-    public void activateByVerificationToken(String token) throws TokenInvalidException, TokenExpiredException {
-        // jei tokenas nerastas ismetame klaida
-        CustomerVerificationToken verificationToken = tokenRepository.findByToken(token);
-        if (verificationToken == null) throw new TokenInvalidException("Patvirtinimo tokenas nerastas.");
-
-        // jei tokenas negalioja, issiunciame nauja ir ismetame klaida
-        Customer customer = verificationToken.getCustomer();
-        Calendar calendar = Calendar.getInstance();
-        if ((verificationToken.getExpiryDate().getTime() - calendar.getTime().getTime()) <= 0) {
-            String newToken = generateNewVerificationTokenForCustomer(token).getToken();
-            mailSender.sendVerificationEmailToCustomer(customer, newToken);
-            throw new TokenExpiredException("Patvirtinimo tokenas negalioja. Naujas išsiųstas į el. paštą.");
+    public Customer findCustomerAccountByEmail(String email) throws CustomerNotFoundInDBException {
+        if (!validateIsCustomerAccountExist(email)) {
+            throw new CustomerNotFoundInDBException("Vartotojo paskyra nerasta");
         }
-
-        // jei tokenas galioja, aktyvuojame vartotoja ir issiunciame email
-        customer.setActive(true);
-        customerRepository.save(customer);
-        tokenRepository.delete(verificationToken);
-        mailSender.sendActivatedEmailToCustomer(customer);
+        return customerRepository.findByEmail(email);
     }
 
-    private boolean emailExist(String email) {
-        return customerRepository.findByEmail(email) != null;
-    }
-
-    private void verifyPasswordPass(String password, String passwordVerify) throws PasswordDontMatchException {
-        if (!password.equals(passwordVerify)) {
-            throw new PasswordDontMatchException("Passwords are not match!");
-        }
-    }
-
-    public Customer findCustomerByEmail(String email) throws CustomerNotFoundInDBException {
-        Customer customer = customerRepository.findByEmail(email);
-        if (customer == null) throw new CustomerNotFoundInDBException("El. pašto adresas nerastas");
-
-        return customer;
-    }
-
-    public CustomerResetPasswordToken createPasswordResetTokenForCustomer(Customer customer) {
+    public CustomerResetPasswordToken createPasswordResetTokenForCustomerAccount(Customer customer) {
         String token = UUID.randomUUID().toString();
         CustomerResetPasswordToken myToken = new CustomerResetPasswordToken(token, customer);
         passwordTokenRepository.save(myToken);
         return myToken;
     }
 
-    public CustomerResetPasswordToken validatePasswordResetToken(String token) throws TokenInvalidException, TokenExpiredException {
+    private boolean validateIsCustomerAccountExist(String email) {
+        // TODO: email != null && password != null
+        // nes vartotojas gali buti sukurtas Employee
+        return customerRepository.findByEmail(email) != null;
+    }
+
+    private boolean validateIsPasswordPass(String password, String passwordVerify) {
+        return password.equals(passwordVerify);
+    }
+
+    private boolean validateIsTokenExpired(Timestamp tokenExpiryDate) {
+        Calendar calendar = Calendar.getInstance();
+        return (tokenExpiryDate.getTime() - calendar.getTime().getTime()) <= 0;
+    }
+
+    public CustomerVerificationToken verifyCustomerAccountVerificationToken(String token) throws TokenInvalidException, TokenExpiredException {
+        // jei tokeno nera ismetame klaida
+        if (token == null) throw new TokenInvalidException("Tokenas nerastas.");
+
+        // jei tokenas nerastas ismetame klaida
+        CustomerVerificationToken verificationToken = tokenRepository.findByToken(token);
+        if (verificationToken == null) throw new TokenInvalidException("Patvirtinimo tokenas nerastas.");
+
+        // jei tokenas negalioja, ismetame klaida
+        Timestamp verificationTokenExpiryDate = verificationToken.getExpiryDate();
+        if (validateIsTokenExpired(verificationTokenExpiryDate)) {
+            throw new TokenExpiredException("Patvirtinimo tokenas negalioja.");
+        }
+
+        return verificationToken;
+    }
+
+
+    public CustomerResetPasswordToken verifyCustomerAccountPasswordResetToken(String token) throws TokenInvalidException, TokenExpiredException {
         // jei tokeno nera ismetame klaida
         if (token == null) throw new TokenInvalidException("Tokenas nerastas.");
 
@@ -126,29 +153,11 @@ public class CustomerService {
         if (tokenFromDb == null) throw new TokenInvalidException("Tokenas nerastas.");
 
         // jei tokenas negalioja ismetame klaida
-        Calendar calendar = Calendar.getInstance();
-        if ((tokenFromDb.getExpiryDate().getTime() - calendar.getTime().getTime()) <= 0) {
-            throw new TokenExpiredException("Tokenas negalioja.");
+        Timestamp passwordTokenExpiryDate = tokenFromDb.getExpiryDate();
+        if (validateIsTokenExpired(passwordTokenExpiryDate)) {
+            throw new TokenExpiredException("Patvirtinimo tokenas negalioja.");
         }
 
         return tokenFromDb;
-    }
-
-    public void resetCustomerPassword(
-            Customer customer,
-            ResetPasswordDto passwordDto,
-            CustomerResetPasswordToken resetPasswordToken
-    ) throws PasswordDontMatchException {
-        // password validation
-        String password = passwordDto.getPassword();
-        String passwordVerify = passwordDto.getPasswordVerify();
-        verifyPasswordPass(password, passwordVerify);
-
-        // change password
-        customer.setPassword(passwordEncoder.encode(password));
-        customerRepository.save(customer);
-
-        // delete token
-        passwordTokenRepository.delete(resetPasswordToken);
     }
 }

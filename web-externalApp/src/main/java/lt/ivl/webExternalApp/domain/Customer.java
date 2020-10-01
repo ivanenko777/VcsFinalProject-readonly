@@ -21,7 +21,6 @@ public class Customer {
     private List<Repair> repairs;
 
     public Customer() {
-        super();
         this.active = false;
     }
 

@@ -2,6 +2,7 @@ package lt.ivl.webExternalApp.controller;
 
 import lt.ivl.webExternalApp.domain.Customer;
 import lt.ivl.webExternalApp.domain.CustomerResetPasswordToken;
+import lt.ivl.webExternalApp.domain.CustomerVerificationToken;
 import lt.ivl.webExternalApp.dto.CustomerDto;
 import lt.ivl.webExternalApp.dto.ResetPasswordDto;
 import lt.ivl.webExternalApp.exception.*;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/")
@@ -47,12 +49,16 @@ public class AuthController {
             return "registration";
         }
         try {
-            customerService.registerNewCustomerAccount(customerDto);
+            Customer customer = customerService.registerNewCustomerAccount(customerDto);
+            String token = UUID.randomUUID().toString();
+            customerService.createVerificationTokenForCustomerAccount(customer, token);
+            mailSender.sendAccountVerificationEmailToCustomer(customer, token);
+            model.addAttribute("info", "Patvirtinkite registraciją. Instrukcijas rasite laiške.");
+            return "/activation";
         } catch (UsernameExistsInDatabaseException | PasswordDontMatchException e) {
             model.addAttribute("message", e.getMessage());
             return "registration";
         }
-        return "redirect:/activation";
     }
 
     @GetMapping("/activation")
@@ -62,18 +68,27 @@ public class AuthController {
     ) {
         if (token != null && !token.isEmpty()) {
             try {
-                customerService.activateByVerificationToken(token);
-                model.addAttribute("info", "Patvirtinkite registraciją. Instrukcijas rasite laiške.");
-            } catch (TokenInvalidException | TokenExpiredException e) {
+                CustomerVerificationToken verificationToken = customerService.verifyCustomerAccountVerificationToken(token);
+                customerService.activateCustomerAccount(verificationToken);
+                Customer customer = verificationToken.getCustomer();
+                mailSender.sendAccountActivatedEmailToCustomer(customer);
+                model.addAttribute("info", "Registracija patvirtinta.");
+                return "activation";
+            } catch (TokenInvalidException e) {
                 model.addAttribute("message", e.getMessage());
                 return "/activation";
+            } catch (TokenExpiredException e) {
+                CustomerVerificationToken verificationToken = customerService.generateNewVerificationTokenForCustomerAccount(token);
+                Customer customer = verificationToken.getCustomer();
+                String newToken = verificationToken.getToken();
+                mailSender.sendAccountVerificationEmailToCustomer(customer, newToken);
+                model.addAttribute("message", "Patvirtinimo tokenas negalioja. Naujas išsiųstas į el. paštą.");
+                return "/activation";
             }
-            return "redirect:/login";
         } else {
             model.addAttribute("message", "Tokenas nerastas");
+            return "/activation";
         }
-
-        return "/activation";
     }
 
     @GetMapping("/remember-password")
@@ -87,17 +102,16 @@ public class AuthController {
             Model model
     ) {
         try {
-            Customer customer = customerService.findCustomerByEmail(customerEmail);
-            CustomerResetPasswordToken resetPasswordToken = customerService.createPasswordResetTokenForCustomer(customer);
+            Customer customer = customerService.findCustomerAccountByEmail(customerEmail);
+            CustomerResetPasswordToken resetPasswordToken = customerService.createPasswordResetTokenForCustomerAccount(customer);
             String token = resetPasswordToken.getToken();
             mailSender.sendResetPasswordEmailToCustomer(customer, token);
             model.addAttribute("info", "Slaptažodio pakeitimo instrukcijas rasite laiške.");
+            return "rememberPassword";
         } catch (CustomerNotFoundInDBException e) {
             model.addAttribute("message", e.getMessage());
             return "rememberPassword";
         }
-
-        return "rememberPassword";
     }
 
     @GetMapping("/reset-password")
@@ -106,15 +120,14 @@ public class AuthController {
             Model model
     ) {
         try {
-            customerService.validatePasswordResetToken(token);
+            customerService.verifyCustomerAccountPasswordResetToken(token);
+            model.addAttribute("token", token);
+            model.addAttribute("resetPassword", new ResetPasswordDto());
+            return "resetPassword";
         } catch (TokenInvalidException | TokenExpiredException e) {
             model.addAttribute("message", e.getMessage());
             return "resetPassword";
         }
-
-        model.addAttribute("token", token);
-        model.addAttribute("resetPassword", new ResetPasswordDto());
-        return "resetPassword";
     }
 
     @PostMapping("/reset-password")
@@ -135,15 +148,15 @@ public class AuthController {
         }
 
         try {
-            CustomerResetPasswordToken resetPasswordToken = customerService.validatePasswordResetToken(token);
+            CustomerResetPasswordToken resetPasswordToken = customerService.verifyCustomerAccountPasswordResetToken(token);
             Customer customer = resetPasswordToken.getCustomer();
-            customerService.resetCustomerPassword(customer, resetPasswordDto, resetPasswordToken);
+            customerService.resetCustomerAccountPassword(customer, resetPasswordDto, resetPasswordToken);
             model.addAttribute("token", token);
             model.addAttribute("info", "Slaptažodis pakeistas.");
+            return "resetPassword";
         } catch (TokenInvalidException | TokenExpiredException | PasswordDontMatchException e) {
             model.addAttribute("message", e.getMessage());
             return "resetPassword";
         }
-        return "resetPassword";
     }
 }
