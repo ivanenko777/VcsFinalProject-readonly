@@ -28,7 +28,8 @@ public class AuthController {
     private MailSender mailSender;
 
     @GetMapping("/login")
-    public String login() {
+    public String login(Model model) {
+        model.addAttribute("pageName", "Prisijungti");
         return "login";
     }
 
