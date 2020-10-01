@@ -30,7 +30,7 @@ public class AuthController {
     @GetMapping("/login")
     public String login(Model model) {
         model.addAttribute("pageName", "Prisijungti");
-        return "login";
+        return "auth/login";
     }
 
     @GetMapping("/registration")
