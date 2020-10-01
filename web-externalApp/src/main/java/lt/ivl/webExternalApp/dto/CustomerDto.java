@@ -11,6 +11,9 @@ public class CustomerDto {
     @NotNull
     @NotEmpty
     private String password;
+
+    @NotNull
+    @NotEmpty
     private String passwordVerify;
 
     @NotNull
