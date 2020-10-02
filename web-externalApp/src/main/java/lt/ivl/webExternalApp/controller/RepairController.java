@@ -39,7 +39,7 @@ public class RepairController {
         Iterable<Repair> repairsWithStatusPending = repairService.findWithStatusesByCustomer(customer, statusPending);
 
         model.addAttribute("pendingRepairs", repairsWithStatusPending);
-        return "repair/index";
+        return "/repair/index";
     }
 
     @GetMapping("/{id}/view")
@@ -57,13 +57,13 @@ public class RepairController {
         } catch (ItemNotFoundException | NumberFormatException e) {
             model.addAttribute("message", e.getMessage());
         }
-        return "repair/view";
+        return "/repair/view";
     }
 
     @GetMapping("/add")
     public String showCreateForm(Model model) {
         model.addAttribute("repair", new RepairDto());
-        return "repair/add";
+        return "/repair/add";
     }
 
     @PostMapping("/add")
@@ -75,7 +75,7 @@ public class RepairController {
     ) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("message", "Form has errors");
-            return "repair/add";
+            return "/repair/add";
         }
         Customer customer = customerPrincipal.getCustomer();
         Repair newRepair = repairService.createNewRepairItemByCustomer(customer, repairDto);
@@ -99,7 +99,7 @@ public class RepairController {
             model.addAttribute("message", e.getMessage());
         }
 
-        return "repair/delete";
+        return "/repair/delete";
     }
 
     @PostMapping("{id}/delete")
@@ -114,7 +114,7 @@ public class RepairController {
             repairService.deleteByCustomer(customer, repairId);
         } catch (ItemNotFoundException e) {
             model.addAttribute("message", e.getMessage());
-            return "repair/delete";
+            return "/repair/delete";
         }
 
         return "redirect:/repair/index";
