@@ -45,7 +45,7 @@ public class AuthController {
             Model model
     ) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("message", "Form has errors");
+            model.addAttribute("message", "Formoje yra klaidų");
             return "registration";
         }
         try {
@@ -148,7 +148,7 @@ public class AuthController {
         String token = request.getParameter("token");
 
         if (bindingResult.hasErrors()) {
-            model.addAttribute("message", "Form has errors");
+            model.addAttribute("message", "Formoje yra klaidų");
             model.addAttribute("token", token);
             return "resetPassword";
         }
