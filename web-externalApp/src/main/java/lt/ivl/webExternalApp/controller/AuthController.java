@@ -160,14 +160,11 @@ public class AuthController {
             model.addAttribute("token", token);
             model.addAttribute("info", "Slaptažodis pakeistas.");
             return "resetPassword";
-        } catch (TokenInvalidException e) {
+        } catch (TokenInvalidException | PasswordDontMatchException e) {
             model.addAttribute("message", e.getMessage());
             return "resetPassword";
         } catch (TokenExpiredException e) {
             model.addAttribute("message", "Nuorodos galiojimo laikas baigėsi.");
-            return "resetPassword";
-        } catch (PasswordDontMatchException e) {
-            model.addAttribute("message", e.getMessage());
             return "resetPassword";
         }
     }
