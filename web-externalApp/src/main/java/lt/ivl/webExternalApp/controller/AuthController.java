@@ -131,11 +131,10 @@ public class AuthController {
         } catch (TokenExpiredException e) {
             model.addAttribute("pageHideForm", true);
             model.addAttribute("message", "Nuorodos galiojimo laikas baigėsi.");
-        } finally {
-            model.addAttribute("token", token);
-            model.addAttribute("resetPassword", new ResetPasswordDto());
-            return "resetPassword";
         }
+        model.addAttribute("token", token);
+        model.addAttribute("resetPassword", new ResetPasswordDto());
+        return "auth/resetPassword";
     }
 
     @PostMapping("/reset-password")
@@ -153,7 +152,7 @@ public class AuthController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("message", "Formoje yra klaidų");
             model.addAttribute("token", token);
-            return "resetPassword";
+            return "auth/resetPassword";
         }
 
         try {
@@ -174,6 +173,6 @@ public class AuthController {
 
         model.addAttribute("resetPassword", resetPasswordDto);
         model.addAttribute("token", token);
-        return "resetPassword";
+        return "auth/resetPassword";
     }
 }
