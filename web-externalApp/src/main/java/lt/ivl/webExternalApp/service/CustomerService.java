@@ -35,8 +35,7 @@ public class CustomerService {
         String password = customerDto.getPassword();
         String passwordVerify = customerDto.getPasswordVerify();
         if (!validateIsPasswordPass(password, passwordVerify)) {
-            throw new PasswordDontMatchException("Slaptažodiai nesutampa!");
-//            throw new PasswordDontMatchException("Passwords are not match!");
+            throw new PasswordDontMatchException();
         }
 
         if (validateIsCustomerAccountExist(customerDto.getEmail())) {
@@ -70,8 +69,7 @@ public class CustomerService {
         String password = passwordDto.getPassword();
         String passwordVerify = passwordDto.getPasswordVerify();
         if (!validateIsPasswordPass(password, passwordVerify)) {
-            throw new PasswordDontMatchException("Slaptažodiai nesutampa!");
-//            throw new PasswordDontMatchException("Passwords are not match!");
+            throw new PasswordDontMatchException();
         }
 
         // change password
