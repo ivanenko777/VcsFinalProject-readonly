@@ -1,11 +1,12 @@
 package lt.ivl.webExternalApp.exception;
 
 public class CustomerNotFoundInDBException extends Exception {
-    public CustomerNotFoundInDBException(String message) {
-        super(message);
+    public CustomerNotFoundInDBException() {
+        super("Vartotojo paskyra nerasta!");
+//        super("Customer not found in DB!");
     }
 
-    public CustomerNotFoundInDBException(String message, Throwable cause) {
-        super(message, cause);
+    public CustomerNotFoundInDBException(String message) {
+        super(message);
     }
 }

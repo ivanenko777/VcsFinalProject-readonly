@@ -97,7 +97,7 @@ public class CustomerService {
 
     public Customer findCustomerAccountByEmail(String email) throws CustomerNotFoundInDBException {
         if (!validateIsCustomerAccountExist(email)) {
-            throw new CustomerNotFoundInDBException("Vartotojo paskyra nerasta");
+            throw new CustomerNotFoundInDBException();
         }
         return customerRepository.findByEmail(email);
     }
