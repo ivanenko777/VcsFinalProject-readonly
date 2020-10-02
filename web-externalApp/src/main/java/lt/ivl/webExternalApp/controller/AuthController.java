@@ -123,15 +123,17 @@ public class AuthController {
             Model model
     ) {
         try {
+            model.addAttribute("pageHideForm", false);
             customerService.verifyCustomerAccountPasswordResetToken(token);
+        } catch (TokenInvalidException e) {
+            model.addAttribute("pageHideForm", true);
+            model.addAttribute("message", e.getMessage());
+        } catch (TokenExpiredException e) {
+            model.addAttribute("pageHideForm", true);
+            model.addAttribute("message", "Nuorodos galiojimo laikas baigėsi.");
+        } finally {
             model.addAttribute("token", token);
             model.addAttribute("resetPassword", new ResetPasswordDto());
-            return "resetPassword";
-        } catch (TokenInvalidException e) {
-            model.addAttribute("message", e.getMessage());
-            return "resetPassword";
-        } catch (TokenExpiredException e) {
-            model.addAttribute("message", "Nuorodos galiojimo laikas baigėsi.");
             return "resetPassword";
         }
     }
@@ -146,6 +148,7 @@ public class AuthController {
     ) {
         // Paimam GETparametra token, is POSTrequesto
         String token = request.getParameter("token");
+        model.addAttribute("pageHideForm", false);
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("message", "Formoje yra klaidų");
@@ -157,15 +160,20 @@ public class AuthController {
             CustomerResetPasswordToken resetPasswordToken = customerService.verifyCustomerAccountPasswordResetToken(token);
             Customer customer = resetPasswordToken.getCustomer();
             customerService.resetCustomerAccountPassword(customer, resetPasswordDto, resetPasswordToken);
-            model.addAttribute("token", token);
             model.addAttribute("info", "Slaptažodis pakeistas.");
-            return "resetPassword";
-        } catch (TokenInvalidException | PasswordDontMatchException e) {
+        } catch (TokenInvalidException e) {
+            model.addAttribute("pageHideForm", true);
             model.addAttribute("message", e.getMessage());
-            return "resetPassword";
+        } catch (PasswordDontMatchException e) {
+            model.addAttribute("pageHideForm", false);
+            model.addAttribute("message", e.getMessage());
         } catch (TokenExpiredException e) {
+            model.addAttribute("pageHideForm", true);
             model.addAttribute("message", "Nuorodos galiojimo laikas baigėsi.");
-            return "resetPassword";
         }
+
+        model.addAttribute("resetPassword", resetPasswordDto);
+        model.addAttribute("token", token);
+        return "resetPassword";
     }
 }
