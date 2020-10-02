@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Klientų sistema</title>
 
@@ -10,9 +10,28 @@
           rel="stylesheet">
 </head>
 <body>
-<nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
     <div class="container">
-        <span class="navbar-brand mb-0 h1">Klientų sistema</span>
+        <h1 class="navbar-brand mb-0">Klientų sistema</h1>
+
+        <button aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation"
+                class="navbar-toggler"
+                data-target="#navbarNavAltMarkup" data-toggle="collapse" type="button">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav mr-auto">
+                <a class="nav-link" th:href="@{/}">Pradžia</a>
+                <a class="nav-link" th:href="@{/repair/index}">Mano užsakymai</a>
+            </div>
+            <div class="navbar-nav ml-auto">
+                <a class="nav-link" th:href="@{/login}">Prisijungti</a>
+                <form method="post" th:action="@{/logout}">
+                    <input class="btn btn-sm btn-outline-secondary mt-1" type="submit" value="Atsijungti"/>
+                </form>
+            </div>
+
+        </div>
     </div>
 </nav>
 
