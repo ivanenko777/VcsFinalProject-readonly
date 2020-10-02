@@ -96,7 +96,7 @@ public class AuthController {
 
     @GetMapping("/remember-password")
     public String rememberPasswordForm() {
-        return "rememberPassword";
+        return "auth/rememberPassword";
     }
 
     @PostMapping("/remember-password")
@@ -110,10 +110,10 @@ public class AuthController {
             String token = resetPasswordToken.getToken();
             mailSender.sendResetPasswordEmailToCustomer(customer, token);
             model.addAttribute("info", "Slaptažodžio keitimo instrukcijos išsiųstos į el. paštą.");
-            return "rememberPassword";
+            return "auth/rememberPassword";
         } catch (CustomerNotFoundInDBException e) {
             model.addAttribute("message", e.getMessage());
-            return "rememberPassword";
+            return "auth/rememberPassword";
         }
     }
 
