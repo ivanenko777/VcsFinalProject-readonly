@@ -1,11 +1,12 @@
 package lt.ivl.webExternalApp.exception;
 
 public class TokenInvalidException extends Exception {
-    public TokenInvalidException(String message) {
-        super(message);
+    public TokenInvalidException() {
+        super("Neteisingas tokenas!");
+//        super("Token is invalid!");
     }
 
-    public TokenInvalidException(String message, Throwable cause) {
-        super(message, cause);
+    public TokenInvalidException(String message) {
+        super(message);
     }
 }

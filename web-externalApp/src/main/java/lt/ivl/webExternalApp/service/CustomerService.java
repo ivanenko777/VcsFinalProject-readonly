@@ -126,11 +126,11 @@ public class CustomerService {
 
     public CustomerVerificationToken verifyCustomerAccountVerificationToken(String token) throws TokenInvalidException, TokenExpiredException {
         // jei tokeno nera ismetame klaida
-        if (token == null) throw new TokenInvalidException("Tokenas nerastas.");
+        if (token == null) throw new TokenInvalidException();
 
         // jei tokenas nerastas ismetame klaida
         CustomerVerificationToken verificationToken = tokenRepository.findByToken(token);
-        if (verificationToken == null) throw new TokenInvalidException("Patvirtinimo tokenas nerastas.");
+        if (verificationToken == null) throw new TokenInvalidException();
 
         // jei tokenas negalioja, ismetame klaida
         Timestamp verificationTokenExpiryDate = verificationToken.getExpiryDate();
@@ -144,11 +144,11 @@ public class CustomerService {
 
     public CustomerResetPasswordToken verifyCustomerAccountPasswordResetToken(String token) throws TokenInvalidException, TokenExpiredException {
         // jei tokeno nera ismetame klaida
-        if (token == null) throw new TokenInvalidException("Tokenas nerastas.");
+        if (token == null) throw new TokenInvalidException();
 
         // jei tokenas nerastas ismetame klaida
         CustomerResetPasswordToken tokenFromDb = passwordTokenRepository.findByToken(token);
-        if (tokenFromDb == null) throw new TokenInvalidException("Tokenas nerastas.");
+        if (tokenFromDb == null) throw new TokenInvalidException();
 
         // jei tokenas negalioja ismetame klaida
         Timestamp passwordTokenExpiryDate = tokenFromDb.getExpiryDate();
