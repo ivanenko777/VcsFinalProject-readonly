@@ -69,27 +69,22 @@ public class AuthController {
             @RequestParam(value = "token", required = false) String token,
             Model model
     ) {
-        if (token != null && !token.isEmpty()) {
-            try {
-                CustomerVerificationToken verificationToken = customerService.verifyCustomerAccountVerificationToken(token);
-                customerService.activateCustomerAccount(verificationToken);
-                Customer customer = verificationToken.getCustomer();
-                mailSender.sendAccountActivatedEmailToCustomer(customer);
-                model.addAttribute("info", "Registracija patvirtinta.");
-                return "activation";
-            } catch (TokenInvalidException e) {
-                model.addAttribute("message", "Nuoroda negalioja.");
-                return "/activation";
-            } catch (TokenExpiredException e) {
-                CustomerVerificationToken verificationToken = customerService.generateNewVerificationTokenForCustomerAccount(token);
-                Customer customer = verificationToken.getCustomer();
-                String newToken = verificationToken.getToken();
-                mailSender.sendAccountVerificationEmailToCustomer(customer, newToken);
-                model.addAttribute("message", "Nuorodos galiojimo laikas baigėsi. Nauja nuoroda išsiųsta į el. paštą.");
-                return "/activation";
-            }
-        } else {
-            model.addAttribute("message", "Tokenas nerastas");
+        try {
+            CustomerVerificationToken verificationToken = customerService.verifyCustomerAccountVerificationToken(token);
+            customerService.activateCustomerAccount(verificationToken);
+            Customer customer = verificationToken.getCustomer();
+            mailSender.sendAccountActivatedEmailToCustomer(customer);
+            model.addAttribute("info", "Registracija patvirtinta.");
+            return "activation";
+        } catch (TokenInvalidException e) {
+            model.addAttribute("message", "Nuoroda negalioja.");
+            return "/activation";
+        } catch (TokenExpiredException e) {
+            CustomerVerificationToken verificationToken = customerService.generateNewVerificationTokenForCustomerAccount(token);
+            Customer customer = verificationToken.getCustomer();
+            String newToken = verificationToken.getToken();
+            mailSender.sendAccountVerificationEmailToCustomer(customer, newToken);
+            model.addAttribute("message", "Nuorodos galiojimo laikas baigėsi. Nauja nuoroda išsiųsta į el. paštą.");
             return "/activation";
         }
     }
