@@ -35,7 +35,7 @@ public class AuthController {
     @GetMapping("/registration")
     public String registration(Model model) {
         model.addAttribute("customer", new CustomerDto());
-        return "registration";
+        return "auth/registration";
     }
 
     @PostMapping("/registration")
@@ -46,7 +46,7 @@ public class AuthController {
     ) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("message", "Formoje yra klaidų");
-            return "registration";
+            return "auth/registration";
         }
         try {
             Customer customer = customerService.registerNewCustomerAccount(customerDto);
@@ -57,10 +57,10 @@ public class AuthController {
             return "/activation";
         } catch (UsernameExistsInDatabaseException e) {
             model.addAttribute("message", e.getMessage() + " Jei pamiršote prisijungimo duomenis, pasinaudokite slaptažodžio priminimo funkcija.");
-            return "registration";
+            return "auth/registration";
         } catch (PasswordDontMatchException e) {
             model.addAttribute("message", e.getMessage());
-            return "registration";
+            return "auth/registration";
         }
     }
 
