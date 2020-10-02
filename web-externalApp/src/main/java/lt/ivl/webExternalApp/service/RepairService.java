@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -34,7 +35,7 @@ public class RepairService {
         return repairRepository.save(repair);
     }
 
-    public Iterable<Repair> findWithStatusesByCustomer(Customer customer, Iterable<RepairStatus> statuses) {
+    public List<Repair> findWithStatusesByCustomer(Customer customer, Iterable<RepairStatus> statuses) {
         return repairRepository.findAllByCreatedByCustomerAndStatusInOrderByCreatedAtDesc(customer, statuses);
     }
 

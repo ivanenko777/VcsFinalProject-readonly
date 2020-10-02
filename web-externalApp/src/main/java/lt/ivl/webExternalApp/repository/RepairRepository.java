@@ -6,11 +6,12 @@ import lt.ivl.webExternalApp.domain.RepairStatus;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface RepairRepository extends CrudRepository<Repair, Integer> {
-    Iterable<Repair> findAllByCreatedByCustomerAndStatusInOrderByCreatedAtDesc(
+    List<Repair> findAllByCreatedByCustomerAndStatusInOrderByCreatedAtDesc(
             Customer customer, Iterable<RepairStatus> statuses);
 
     Optional<Repair> findByIdAndCreatedByCustomer(Integer integer, Customer customer);
