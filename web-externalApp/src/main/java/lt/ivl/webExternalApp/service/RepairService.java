@@ -41,7 +41,7 @@ public class RepairService {
     public Repair findByCustomer(Customer customer, int id) throws ItemNotFoundException {
         Optional<Repair> repairFromDb = repairRepository.findByIdAndCreatedByCustomer(id, customer);
         if (repairFromDb.isEmpty()) {
-            throw new ItemNotFoundException("Repair item not found!");
+            throw new ItemNotFoundException();
         }
 
         return repairFromDb.get();
@@ -51,7 +51,7 @@ public class RepairService {
         Optional<Repair> repairFromDb = repairRepository.findByIdAndCreatedByCustomer(id, customer);
 
         if (repairFromDb.isEmpty() || repairFromDb.get().getStatus() != RepairStatus.PENDING) {
-            throw new ItemNotFoundException("Repair item not found!");
+            throw new ItemNotFoundException();
         }
 
         return repairFromDb;
