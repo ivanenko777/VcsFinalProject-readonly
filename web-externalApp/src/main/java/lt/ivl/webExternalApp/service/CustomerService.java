@@ -39,8 +39,7 @@ public class CustomerService {
         }
 
         if (validateIsCustomerAccountExist(customerDto.getEmail())) {
-            throw new UsernameExistsInDatabaseException("Vartotojo paskyra yra DB!");
-//            throw new UsernameExistsInDatabaseException("User exists in DB");
+            throw new UsernameExistsInDatabaseException();
         }
 
         Customer customer = new Customer();

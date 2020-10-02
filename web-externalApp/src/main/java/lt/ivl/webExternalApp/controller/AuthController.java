@@ -56,7 +56,10 @@ public class AuthController {
             mailSender.sendAccountVerificationEmailToCustomer(customer, token);
             model.addAttribute("info", "Patvirtinkite registraciją. Instrukcijas rasite laiške.");
             return "/activation";
-        } catch (UsernameExistsInDatabaseException | PasswordDontMatchException e) {
+        } catch (UsernameExistsInDatabaseException e) {
+            model.addAttribute("message", e.getMessage() + " Jei pamiršote prisijungimo duomenis, pasinaudokite slaptažodžio priminimo funkcija.");
+            return "registration";
+        } catch (PasswordDontMatchException e) {
             model.addAttribute("message", e.getMessage());
             return "registration";
         }
