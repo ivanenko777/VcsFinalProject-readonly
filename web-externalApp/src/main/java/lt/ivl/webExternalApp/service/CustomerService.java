@@ -135,7 +135,7 @@ public class CustomerService {
         // jei tokenas negalioja, ismetame klaida
         Timestamp verificationTokenExpiryDate = verificationToken.getExpiryDate();
         if (validateIsTokenExpired(verificationTokenExpiryDate)) {
-            throw new TokenExpiredException("Patvirtinimo tokenas negalioja.");
+            throw new TokenExpiredException();
         }
 
         return verificationToken;
@@ -153,7 +153,7 @@ public class CustomerService {
         // jei tokenas negalioja ismetame klaida
         Timestamp passwordTokenExpiryDate = tokenFromDb.getExpiryDate();
         if (validateIsTokenExpired(passwordTokenExpiryDate)) {
-            throw new TokenExpiredException("Patvirtinimo tokenas negalioja.");
+            throw new TokenExpiredException();
         }
 
         return tokenFromDb;

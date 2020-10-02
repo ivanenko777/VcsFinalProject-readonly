@@ -83,7 +83,7 @@ public class AuthController {
                 Customer customer = verificationToken.getCustomer();
                 String newToken = verificationToken.getToken();
                 mailSender.sendAccountVerificationEmailToCustomer(customer, newToken);
-                model.addAttribute("message", "Patvirtinimo tokenas negalioja. Naujas išsiųstas į el. paštą.");
+                model.addAttribute("message", "Nuorodos galiojimo laikas baigėsi. Nauja nuoroda išsiųsta į el. paštą.");
                 return "/activation";
             }
         } else {
@@ -125,8 +125,11 @@ public class AuthController {
             model.addAttribute("token", token);
             model.addAttribute("resetPassword", new ResetPasswordDto());
             return "resetPassword";
-        } catch (TokenInvalidException | TokenExpiredException e) {
+        } catch (TokenInvalidException e) {
             model.addAttribute("message", e.getMessage());
+            return "resetPassword";
+        } catch (TokenExpiredException e) {
+            model.addAttribute("message", "Nuorodos galiojimo laikas baigėsi.");
             return "resetPassword";
         }
     }
@@ -155,7 +158,13 @@ public class AuthController {
             model.addAttribute("token", token);
             model.addAttribute("info", "Slaptažodis pakeistas.");
             return "resetPassword";
-        } catch (TokenInvalidException | TokenExpiredException | PasswordDontMatchException e) {
+        } catch (TokenInvalidException e) {
+            model.addAttribute("message", e.getMessage());
+            return "resetPassword";
+        } catch (TokenExpiredException e) {
+            model.addAttribute("message", "Nuorodos galiojimo laikas baigėsi.");
+            return "resetPassword";
+        } catch (PasswordDontMatchException e) {
             model.addAttribute("message", e.getMessage());
             return "resetPassword";
         }
