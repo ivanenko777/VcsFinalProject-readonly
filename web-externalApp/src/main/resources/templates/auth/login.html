@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en"
-      layout:decorate="~{layout-auth.html}"
+      layout:decorate="~{_layouts/layout-auth.html}"
+      th:with="pageName=${'Prisijungti'}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org"
-      th:with="pageName=${'Prisijungti'}">
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE" th:text="${pageName}">...</title>
