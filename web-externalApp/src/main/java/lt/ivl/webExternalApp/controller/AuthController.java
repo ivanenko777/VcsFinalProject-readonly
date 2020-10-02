@@ -78,7 +78,7 @@ public class AuthController {
                 model.addAttribute("info", "Registracija patvirtinta.");
                 return "activation";
             } catch (TokenInvalidException e) {
-                model.addAttribute("message", e.getMessage());
+                model.addAttribute("message", "Nuoroda negalioja.");
                 return "/activation";
             } catch (TokenExpiredException e) {
                 CustomerVerificationToken verificationToken = customerService.generateNewVerificationTokenForCustomerAccount(token);
@@ -127,7 +127,7 @@ public class AuthController {
             customerService.verifyCustomerAccountPasswordResetToken(token);
         } catch (TokenInvalidException e) {
             model.addAttribute("pageHideForm", true);
-            model.addAttribute("message", e.getMessage());
+            model.addAttribute("message", "Nuoroda negalioja.");
         } catch (TokenExpiredException e) {
             model.addAttribute("pageHideForm", true);
             model.addAttribute("message", "Nuorodos galiojimo laikas baigėsi.");
@@ -163,7 +163,7 @@ public class AuthController {
             model.addAttribute("info", "Slaptažodis pakeistas.");
         } catch (TokenInvalidException e) {
             model.addAttribute("pageHideForm", true);
-            model.addAttribute("message", e.getMessage());
+            model.addAttribute("message", "Nuoroda negalioja.");
         } catch (PasswordDontMatchException e) {
             model.addAttribute("pageHideForm", false);
             model.addAttribute("message", e.getMessage());
