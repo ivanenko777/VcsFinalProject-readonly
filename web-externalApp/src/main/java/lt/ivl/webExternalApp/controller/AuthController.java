@@ -109,7 +109,7 @@ public class AuthController {
             CustomerResetPasswordToken resetPasswordToken = customerService.createPasswordResetTokenForCustomerAccount(customer);
             String token = resetPasswordToken.getToken();
             mailSender.sendResetPasswordEmailToCustomer(customer, token);
-            model.addAttribute("info", "Slaptažodio pakeitimo instrukcijas rasite laiške.");
+            model.addAttribute("info", "Slaptažodžio keitimo instrukcijos išsiųstos į el. paštą.");
             return "rememberPassword";
         } catch (CustomerNotFoundInDBException e) {
             model.addAttribute("message", e.getMessage());
