@@ -54,7 +54,7 @@ public class AuthController {
             customerService.createVerificationTokenForCustomerAccount(customer, token);
             mailSender.sendAccountVerificationEmailToCustomer(customer, token);
             model.addAttribute("info", "Patvirtinkite registraciją. Instrukcijas rasite laiške.");
-            return "/activation";
+            return "auth/activation";
         } catch (UsernameExistsInDatabaseException e) {
             model.addAttribute("message", e.getMessage() + " Jei pamiršote prisijungimo duomenis, pasinaudokite slaptažodžio priminimo funkcija.");
             return "auth/registration";
@@ -75,17 +75,17 @@ public class AuthController {
             Customer customer = verificationToken.getCustomer();
             mailSender.sendAccountActivatedEmailToCustomer(customer);
             model.addAttribute("info", "Registracija patvirtinta.");
-            return "activation";
+            return "auth/activation";
         } catch (TokenInvalidException e) {
             model.addAttribute("message", "Nuoroda negalioja.");
-            return "/activation";
+            return "auth/activation";
         } catch (TokenExpiredException e) {
             CustomerVerificationToken verificationToken = customerService.generateNewVerificationTokenForCustomerAccount(token);
             Customer customer = verificationToken.getCustomer();
             String newToken = verificationToken.getToken();
             mailSender.sendAccountVerificationEmailToCustomer(customer, newToken);
             model.addAttribute("message", "Nuorodos galiojimo laikas baigėsi. Nauja nuoroda išsiųsta į el. paštą.");
-            return "/activation";
+            return "auth/activation";
         }
     }
 
