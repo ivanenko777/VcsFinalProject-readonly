@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Klientų sistema</title>
 
@@ -28,13 +31,17 @@
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav mr-auto">
                 <a class="nav-link" th:href="@{/}">Pradžia</a>
-                <a class="nav-link" th:href="@{/repair/index}">Mano remontai</a>
+                <a class="nav-link" sec:authorize="isAuthenticated()"
+                   th:href="@{/repair/index}">Mano remontai</a>
             </div>
             <div class="navbar-nav ml-auto">
-                <a class="nav-link" th:href="@{/login}">Prisijungti</a>
-                <form method="post" th:action="@{/logout}">
-                    <input class="btn btn-sm btn-outline-secondary mt-1" type="submit" value="Atsijungti"/>
-                </form>
+                    <a class="nav-link" th:href="@{/login}" sec:authorize="isAnonymous()">Prisijungti</a>
+
+                    <a class="nav-link disabled" href="#" sec:authorize="isAuthenticated()"
+                       sec:authentication="principal.fullName">full name</a>
+                    <form method="post" th:action="@{/logout}" sec:authorize="isAuthenticated()">
+                        <input class="btn btn-sm btn-outline-secondary mt-1" type="submit" value="Atsijungti"/>
+                    </form>
             </div>
 
         </div>
