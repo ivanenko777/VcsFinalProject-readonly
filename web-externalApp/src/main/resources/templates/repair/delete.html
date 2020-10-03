@@ -1,46 +1,34 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      layout:decorate="~{_layouts/layout-auth.html}"
+      th:with="pageName=${'Ar tirtai norite ištrinti remontą #'+ repair.id + '?'}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Pašalinti</title>
+    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE" th:text="${pageName}">...</title>
 </head>
 <body>
-<h1>Ar tiktai norite pašalinti šį remontą?</h1>
-<div style="color: red" th:if="${message}" th:text="${message}"></div>
-<a th:href="@{/repair/index}">Atgal</a>
-
-<div th:if="${repair}">
-    <form method="post" th:action="@{/repair/{id}/delete(id=${repair.id})}" th:object="${repair}">
-        <input type="submit" value="Delete">
-    </form>
-
-    <strong>Info</strong>
-    <table>
-        <tr>
-            <td>Status</td>
-            <td th:text="${repair.status}">...</td>
-        </tr>
-        <tr>
-            <td>Type</td>
-            <td th:text="${repair.deviceType}">...</td>
-        </tr>
-        <tr>
-            <td>Manufacturer</td>
-            <td th:text="${repair.deviceManufacturer}">...</td>
-        </tr>
-        <tr>
-            <td>Model</td>
-            <td th:text="${repair.deviceModel}">...</td>
-        </tr>
-        <tr>
-            <td>Serial</td>
-            <td th:text="${repair.deviceSerialNo}">...</td>
-        </tr>
-        <tr>
-            <td>Description</td>
-            <td th:text="${repair.description}">...</td>
-        </tr>
-    </table>
+<div layout:fragment="content">
+    <div class="container">
+        <div class="row justify-content-center align-items-center pt-2 pt-2">
+            <h4 th:text="${pageName}"></h4>
+        </div>
+        <div class="row justify-content-center align-items-center pt-2 pt-2">
+            <div class="alert alert-danger" th:if="${message}" th:text="${message}"></div>
+            <form action="#" autocomplete="off" method="post" th:action="@{/repair/delete}"
+                  th:object="${repair}">
+                <div class="form-row">
+                    <div class="col-md-12 form-group">
+                        <div class="text-center">
+                            <a class="btn btn-outline-secondary font-weight-bold" th:href="@{/repair/{id}/view(id=${repair.id})}">&laquo;
+                                Atgal</a>
+                            <input class="btn btn-danger font-weight-bold" type="submit" value="Ištrinti">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 </body>
-</html>
