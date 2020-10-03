@@ -17,6 +17,10 @@ public class CustomerPrincipal implements UserDetails {
         return customer;
     }
 
+    public String getFullName() {
+        return this.customer.getFirstName() + " " + this.customer.getLastName();
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;

@@ -28,14 +28,14 @@ public class AuthController {
     private MailSender mailSender;
 
     @GetMapping("/login")
-    public String login() {
-        return "login";
+    public String login(Model model) {
+        return "/auth/login";
     }
 
     @GetMapping("/registration")
     public String registration(Model model) {
         model.addAttribute("customer", new CustomerDto());
-        return "registration";
+        return "/auth/registration";
     }
 
     @PostMapping("/registration")
@@ -45,19 +45,22 @@ public class AuthController {
             Model model
     ) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("message", "Form has errors");
-            return "registration";
+            model.addAttribute("messageError", "Formoje yra klaidų");
+            return "/auth/registration";
         }
         try {
             Customer customer = customerService.registerNewCustomerAccount(customerDto);
             String token = UUID.randomUUID().toString();
             customerService.createVerificationTokenForCustomerAccount(customer, token);
             mailSender.sendAccountVerificationEmailToCustomer(customer, token);
-            model.addAttribute("info", "Patvirtinkite registraciją. Instrukcijas rasite laiške.");
-            return "/activation";
-        } catch (UsernameExistsInDatabaseException | PasswordDontMatchException e) {
-            model.addAttribute("message", e.getMessage());
-            return "registration";
+            model.addAttribute("messageInfo", "Patvirtinkite registraciją. Instrukcijas rasite laiške.");
+            return "/auth/activation";
+        } catch (UsernameExistsInDatabaseException e) {
+            model.addAttribute("messageError", e.getMessage() + " Jei pamiršote prisijungimo duomenis, pasinaudokite slaptažodžio priminimo funkcija.");
+            return "/auth/registration";
+        } catch (PasswordDontMatchException e) {
+            model.addAttribute("messageError", e.getMessage());
+            return "/auth/registration";
         }
     }
 
@@ -66,34 +69,29 @@ public class AuthController {
             @RequestParam(value = "token", required = false) String token,
             Model model
     ) {
-        if (token != null && !token.isEmpty()) {
-            try {
-                CustomerVerificationToken verificationToken = customerService.verifyCustomerAccountVerificationToken(token);
-                customerService.activateCustomerAccount(verificationToken);
-                Customer customer = verificationToken.getCustomer();
-                mailSender.sendAccountActivatedEmailToCustomer(customer);
-                model.addAttribute("info", "Registracija patvirtinta.");
-                return "activation";
-            } catch (TokenInvalidException e) {
-                model.addAttribute("message", e.getMessage());
-                return "/activation";
-            } catch (TokenExpiredException e) {
-                CustomerVerificationToken verificationToken = customerService.generateNewVerificationTokenForCustomerAccount(token);
-                Customer customer = verificationToken.getCustomer();
-                String newToken = verificationToken.getToken();
-                mailSender.sendAccountVerificationEmailToCustomer(customer, newToken);
-                model.addAttribute("message", "Patvirtinimo tokenas negalioja. Naujas išsiųstas į el. paštą.");
-                return "/activation";
-            }
-        } else {
-            model.addAttribute("message", "Tokenas nerastas");
-            return "/activation";
+        try {
+            CustomerVerificationToken verificationToken = customerService.verifyCustomerAccountVerificationToken(token);
+            customerService.activateCustomerAccount(verificationToken);
+            Customer customer = verificationToken.getCustomer();
+            mailSender.sendAccountActivatedEmailToCustomer(customer);
+            model.addAttribute("messageInfo", "Registracija patvirtinta.");
+            return "/auth/activation";
+        } catch (TokenInvalidException e) {
+            model.addAttribute("messageError", "Nuoroda negalioja.");
+            return "/auth/activation";
+        } catch (TokenExpiredException e) {
+            CustomerVerificationToken verificationToken = customerService.generateNewVerificationTokenForCustomerAccount(token);
+            Customer customer = verificationToken.getCustomer();
+            String newToken = verificationToken.getToken();
+            mailSender.sendAccountVerificationEmailToCustomer(customer, newToken);
+            model.addAttribute("messageError", "Nuorodos galiojimo laikas baigėsi. Nauja nuoroda išsiųsta į el. paštą.");
+            return "/auth/activation";
         }
     }
 
     @GetMapping("/remember-password")
     public String rememberPasswordForm() {
-        return "rememberPassword";
+        return "/auth/rememberPassword";
     }
 
     @PostMapping("/remember-password")
@@ -106,11 +104,11 @@ public class AuthController {
             CustomerResetPasswordToken resetPasswordToken = customerService.createPasswordResetTokenForCustomerAccount(customer);
             String token = resetPasswordToken.getToken();
             mailSender.sendResetPasswordEmailToCustomer(customer, token);
-            model.addAttribute("info", "Slaptažodio pakeitimo instrukcijas rasite laiške.");
-            return "rememberPassword";
+            model.addAttribute("messageInfo", "Slaptažodžio keitimo instrukcijos išsiųstos į el. paštą.");
+            return "/auth/rememberPassword";
         } catch (CustomerNotFoundInDBException e) {
-            model.addAttribute("message", e.getMessage());
-            return "rememberPassword";
+            model.addAttribute("messageError", e.getMessage());
+            return "/auth/rememberPassword";
         }
     }
 
@@ -120,14 +118,18 @@ public class AuthController {
             Model model
     ) {
         try {
+            model.addAttribute("pageHideForm", false);
             customerService.verifyCustomerAccountPasswordResetToken(token);
-            model.addAttribute("token", token);
-            model.addAttribute("resetPassword", new ResetPasswordDto());
-            return "resetPassword";
-        } catch (TokenInvalidException | TokenExpiredException e) {
-            model.addAttribute("message", e.getMessage());
-            return "resetPassword";
+        } catch (TokenInvalidException e) {
+            model.addAttribute("pageHideForm", true);
+            model.addAttribute("messageError", "Nuoroda negalioja.");
+        } catch (TokenExpiredException e) {
+            model.addAttribute("pageHideForm", true);
+            model.addAttribute("messageError", "Nuorodos galiojimo laikas baigėsi.");
         }
+        model.addAttribute("token", token);
+        model.addAttribute("resetPassword", new ResetPasswordDto());
+        return "/auth/resetPassword";
     }
 
     @PostMapping("/reset-password")
@@ -140,23 +142,32 @@ public class AuthController {
     ) {
         // Paimam GETparametra token, is POSTrequesto
         String token = request.getParameter("token");
+        model.addAttribute("pageHideForm", false);
 
         if (bindingResult.hasErrors()) {
-            model.addAttribute("message", "Form has errors");
+            model.addAttribute("messageError", "Formoje yra klaidų");
             model.addAttribute("token", token);
-            return "resetPassword";
+            return "/auth/resetPassword";
         }
 
         try {
             CustomerResetPasswordToken resetPasswordToken = customerService.verifyCustomerAccountPasswordResetToken(token);
             Customer customer = resetPasswordToken.getCustomer();
             customerService.resetCustomerAccountPassword(customer, resetPasswordDto, resetPasswordToken);
-            model.addAttribute("token", token);
-            model.addAttribute("info", "Slaptažodis pakeistas.");
-            return "resetPassword";
-        } catch (TokenInvalidException | TokenExpiredException | PasswordDontMatchException e) {
-            model.addAttribute("message", e.getMessage());
-            return "resetPassword";
+            model.addAttribute("messageInfo", "Slaptažodis pakeistas.");
+        } catch (TokenInvalidException e) {
+            model.addAttribute("pageHideForm", true);
+            model.addAttribute("messageError", "Nuoroda negalioja.");
+        } catch (PasswordDontMatchException e) {
+            model.addAttribute("pageHideForm", false);
+            model.addAttribute("messageError", e.getMessage());
+        } catch (TokenExpiredException e) {
+            model.addAttribute("pageHideForm", true);
+            model.addAttribute("messageError", "Nuorodos galiojimo laikas baigėsi.");
         }
+
+        model.addAttribute("resetPassword", resetPasswordDto);
+        model.addAttribute("token", token);
+        return "/auth/resetPassword";
     }
 }

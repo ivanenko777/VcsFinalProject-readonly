@@ -34,12 +34,10 @@ public class RepairController {
             Model model
     ) {
         Customer customer = customerPrincipal.getCustomer();
-
         List<RepairStatus> statusPending = Collections.singletonList(RepairStatus.PENDING);
-        Iterable<Repair> repairsWithStatusPending = repairService.findWithStatusesByCustomer(customer, statusPending);
-
+        List<Repair> repairsWithStatusPending = repairService.findWithStatusesByCustomer(customer, statusPending);
         model.addAttribute("pendingRepairs", repairsWithStatusPending);
-        return "repair/index";
+        return "/repair/index";
     }
 
     @GetMapping("/{id}/view")
@@ -55,15 +53,15 @@ public class RepairController {
             Repair repair = repairService.findByCustomer(customer, repairId);
             model.addAttribute("repair", repair);
         } catch (ItemNotFoundException | NumberFormatException e) {
-            model.addAttribute("message", e.getMessage());
+            model.addAttribute("messageError", e.getMessage());
         }
-        return "repair/view";
+        return "/repair/view";
     }
 
     @GetMapping("/add")
     public String showCreateForm(Model model) {
         model.addAttribute("repair", new RepairDto());
-        return "repair/add";
+        return "/repair/add";
     }
 
     @PostMapping("/add")
@@ -74,8 +72,8 @@ public class RepairController {
             Model model
     ) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("message", "Form has errors");
-            return "repair/add";
+            model.addAttribute("messageError", "Formoje yra klaidų");
+            return "/repair/add";
         }
         Customer customer = customerPrincipal.getCustomer();
         Repair newRepair = repairService.createNewRepairItemByCustomer(customer, repairDto);
@@ -96,10 +94,10 @@ public class RepairController {
 
             model.addAttribute("repair", repair);
         } catch (ItemNotFoundException | NumberFormatException e) {
-            model.addAttribute("message", e.getMessage());
+            model.addAttribute("messageError", e.getMessage());
         }
 
-        return "repair/delete";
+        return "/repair/delete";
     }
 
     @PostMapping("{id}/delete")
@@ -113,8 +111,8 @@ public class RepairController {
             Customer customer = customerPrincipal.getCustomer();
             repairService.deleteByCustomer(customer, repairId);
         } catch (ItemNotFoundException e) {
-            model.addAttribute("message", e.getMessage());
-            return "repair/delete";
+            model.addAttribute("messageError", e.getMessage());
+            return "/repair/delete";
         }
 
         return "redirect:/repair/index";

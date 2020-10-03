@@ -5,24 +5,27 @@ import javax.validation.constraints.NotNull;
 
 public class CustomerDto {
     @NotNull
-    @NotEmpty
+    @NotEmpty(message = "Laukas negali būti tuščias.")
     private String email;
 
     @NotNull
-    @NotEmpty
+    @NotEmpty(message = "Laukas negali būti tuščias.")
     private String password;
+
+    @NotNull
+    @NotEmpty(message = "Laukas negali būti tuščias.")
     private String passwordVerify;
 
     @NotNull
-    @NotEmpty
+    @NotEmpty(message = "Laukas negali būti tuščias.")
     private String firstName;
 
     @NotNull
-    @NotEmpty
+    @NotEmpty(message = "Laukas negali būti tuščias.")
     private String lastName;
 
     @NotNull
-    @NotEmpty
+    @NotEmpty(message = "Laukas negali būti tuščias.")
     private String phone;
 
     public String getEmail() {

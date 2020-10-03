@@ -1,43 +1,63 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      layout:decorate="~{_layouts/layout}"
+      th:with="pageName=${'Remontų sąrašas'}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Mano remontai</title>
+    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE" th:text="${pageName}">...</title>
 </head>
 <body>
-<h1>Mano remontai</h1>
-<a th:href="@{/repair/add}">Registruoti naują remontą</a>
+<div layout:fragment="content">
 
-<h4>Nepatvirtintos registracijos (status: pending)</h4>
-<table>
-    <thead>
-    <tr>
-        <th>Status</th>
-        <th>Created at</th>
-        <th>Type</th>
-        <th>Manufacturer</th>
-        <th>Model</th>
-        <th>Serial</th>
-        <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody th:each="repair : ${pendingRepairs}">
-    <tr>
-        <td th:text="${repair.status}">...</td>
-        <td th:text="${repair.createdAt}">...</td>
-        <td th:text="${repair.deviceType}">...</td>
-        <td th:text="${repair.deviceManufacturer}">...</td>
-        <td th:text="${repair.deviceModel}">...</td>
-        <td th:text="${repair.deviceSerialNo}">...</td>
-        <td>
-            <a th:href="@{/repair/{id}/view(id=${repair.id})}">Info</a>
-            <a th:href="@{/repair/{id}/delete(id=${repair.id})}">Delete</a>
-        </td>
-    </tr>
-    </tbody>
-</table>
-<h4>Nepatvirtinti mokėjimai (status: all extept pending and completed)</h4>
-<h4>Vykdomi remontai (status: all extept pending and completed)</h4>
-<h4>Įvykdyti remontai (status: completed)</h4>
+    <div class="row pt-2" th:if="${pendingRepairs.size()}">
+        <div class="col-md-12 d-flex">
+            <h4 th:text="${pageName}"></h4>
+            <a class="btn btn-success font-weight-bold ml-auto" th:href="@{/repair/add}">Registruoti naują remontą</a>
+        </div>
+    </div>
+
+    <div class="row pt-2">
+        <div class="col-md-12" th:switch="${pendingRepairs.size()}">
+            <div class="jumbotron text-muted text-center" th:case="0">
+                <h1 class="display-4">Remontų sąrašas tuščias</h1>
+                <hr/>
+                <p class="lead">
+                    <a class="btn btn-success btn-lg ml-auto" th:href="@{/repair/add}">Registruoti naują remontą</a>
+                </p>
+            </div>
+
+            <table class="table" th:case="*">
+                <thead>
+                <tr>
+                    <th scope="col">&num;</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Data</th>
+                    <th scope="col">Tipas</th>
+                    <th scope="col">Gamintojas</th>
+                    <th scope="col">Modelis</th>
+                    <th scope="col">Serijinis nr.</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody th:each="repair : ${pendingRepairs}">
+                <tr>
+                    <td scope="row" th:text="${repair.id}"></td>
+                    <td th:text="${repair.status}"></td>
+                    <td th:text="${#dates.format(repair.createdAt, 'yyyy-MM-dd')}"></td>
+                    <td th:text="${repair.deviceType}"></td>
+                    <td th:text="${repair.deviceManufacturer}"></td>
+                    <td th:text="${repair.deviceModel}"></td>
+                    <td th:text="${repair.deviceSerialNo}"></td>
+                    <td class="text-right">
+                        <a class="btn btn-sm btn-outline-primary font-weight-bold"
+                           th:href="@{/repair/{id}/view(id=${repair.id})}">Plačiau &raquo;</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 </body>
-</html>

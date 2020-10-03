@@ -1,46 +1,80 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      layout:decorate="~{_layouts/layout}"
+      th:with="pageName=${'Registruoti naują remontą'}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Registruoti naują remontą</title>
+    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE" th:text="${pageName}">...</title>
 </head>
 <body>
-<h1>Registruoti naują remontą</h1>
-<a th:href="@{/repair/index}">Atgal</a>
-<div style="color: red" th:if="${message}" th:text="${message}"></div>
+<div layout:fragment="content">
+    <div class="row justify-content-center align-items-center pt-2 pt-2">
+        <h4 th:text="${pageName}"></h4>
+    </div>
 
-<form action="#" method="post" th:action="@{/repair/add}" th:object="${repair}">
-    <div>
-        <label>Įrenginio tipas</label>
-        <input th:field="*{deviceType}"/>
-        <span style="color: red" th:each="error: ${#fields.errors('deviceType')}"
-              th:text="${error}">Validation error</span>
-    </div>
-    <div>
-        <label>Gamintojas</label>
-        <input th:field="*{deviceManufacturer}"/>
-        <span style="color: red" th:each="error: ${#fields.errors('deviceManufacturer')}"
-              th:text="${error}">Validation error</span>
-    </div>
-    <div>
-        <label>Modelis</label>
-        <input th:field="*{deviceModel}"/>
-        <span style="color: red" th:each="error: ${#fields.errors('deviceModel')}"
-              th:text="${error}">Validation error</span>
-    </div>
-    <div>
-        <label>Serijinis numeris</label>
-        <input th:field="*{deviceSerialNo}"/>
-        <span style="color: red" th:each="error: ${#fields.errors('deviceSerialNo')}"
-              th:text="${error}">Validation error</span>
-    </div>
-    <textarea th:field="*{description}">
-    </textarea>
-    <span style="color: red" th:each="error: ${#fields.errors('deviceSerialNo')}"
-          th:text="${error}">Validation error</span>
-    <div>
-        <input type="submit" value="Save"/>
-    </div>
-</form>
+    <div class="row justify-content-center align-items-center pt-2 pt-2">
+        <div class="col-9">
 
+            <div th:replace="_layouts/_fragments :: messages"></div>
+
+            <form action="#" autocomplete="off" method="post" th:action="@{/repair/add}"
+                  th:object="${repair}">
+                <div class="form-row">
+                    <div class="col-md-6 form-group">
+                        <label th:for="firstName">Įrenginio tipas</label>
+                        <input th:class="${#fields.errors('deviceType').isEmpty()} ? 'form-control' : 'form-control is-invalid'"
+                               th:field="*{deviceType}" type="text"/>
+                        <div class="invalid-feedback" th:each="error: ${#fields.errors('deviceType')}"
+                             th:text="${error}"></div>
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label th:for="firstName">Serijinis numeris</label>
+                        <input th:class="${#fields.errors('deviceSerialNo').isEmpty()} ? 'form-control' : 'form-control is-invalid'"
+                               th:field="*{deviceSerialNo}" type="text"/>
+                        <div class="invalid-feedback" th:each="error: ${#fields.errors('deviceSerialNo')}"
+                             th:text="${error}"></div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-6 form-group">
+                        <label th:for="firstName">Įrenginio gamintojas</label>
+                        <input th:class="${#fields.errors('deviceManufacturer').isEmpty()} ? 'form-control' : 'form-control is-invalid'"
+                               th:field="*{deviceManufacturer}" type="text"/>
+                        <div class="invalid-feedback" th:each="error: ${#fields.errors('deviceManufacturer')}"
+                             th:text="${error}"></div>
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label th:for="firstName">Įrenginio modelis</label>
+                        <input th:class="${#fields.errors('deviceModel').isEmpty()} ? 'form-control' : 'form-control is-invalid'"
+                               th:field="*{deviceModel}" type="text"/>
+                        <div class="invalid-feedback" th:each="error: ${#fields.errors('deviceModel')}"
+                             th:text="${error}"></div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-12 form-group">
+                        <label th:for="description">Gedimo aprašymas</label>
+                        <textarea
+                                rows="3"
+                                th:class="${#fields.errors('description').isEmpty()} ? 'form-control' : 'form-control is-invalid'"
+                                th:field="*{description}"></textarea>
+                        <div class="invalid-feedback" th:each="error: ${#fields.errors('description')}"
+                             th:text="${error}"></div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-12 form-group">
+                        <div class="text-center">
+                            <a class="btn btn-outline-secondary font-weight-bold" th:href="@{/repair/index}">&laquo;
+                                Atgal</a>
+                            <input class="btn btn-success" type="submit" value="Išsaugoti">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 </body>

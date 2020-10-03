@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -34,14 +35,14 @@ public class RepairService {
         return repairRepository.save(repair);
     }
 
-    public Iterable<Repair> findWithStatusesByCustomer(Customer customer, Iterable<RepairStatus> statuses) {
+    public List<Repair> findWithStatusesByCustomer(Customer customer, Iterable<RepairStatus> statuses) {
         return repairRepository.findAllByCreatedByCustomerAndStatusInOrderByCreatedAtDesc(customer, statuses);
     }
 
     public Repair findByCustomer(Customer customer, int id) throws ItemNotFoundException {
         Optional<Repair> repairFromDb = repairRepository.findByIdAndCreatedByCustomer(id, customer);
         if (repairFromDb.isEmpty()) {
-            throw new ItemNotFoundException("Repair item not found!");
+            throw new ItemNotFoundException();
         }
 
         return repairFromDb.get();
@@ -51,7 +52,7 @@ public class RepairService {
         Optional<Repair> repairFromDb = repairRepository.findByIdAndCreatedByCustomer(id, customer);
 
         if (repairFromDb.isEmpty() || repairFromDb.get().getStatus() != RepairStatus.PENDING) {
-            throw new ItemNotFoundException("Repair item not found!");
+            throw new ItemNotFoundException();
         }
 
         return repairFromDb;

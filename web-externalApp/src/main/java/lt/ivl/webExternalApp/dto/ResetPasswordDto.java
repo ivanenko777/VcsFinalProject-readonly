@@ -5,8 +5,11 @@ import javax.validation.constraints.NotNull;
 
 public class ResetPasswordDto {
     @NotNull
-    @NotEmpty
+    @NotEmpty(message = "Laukas negali būti tuščias.")
     private String password;
+
+    @NotNull
+    @NotEmpty(message = "Laukas negali būti tuščias.")
     private String passwordVerify;
 
     public String getPassword() {

@@ -35,13 +35,11 @@ public class CustomerService {
         String password = customerDto.getPassword();
         String passwordVerify = customerDto.getPasswordVerify();
         if (!validateIsPasswordPass(password, passwordVerify)) {
-            throw new PasswordDontMatchException("Slaptažodiai nesutampa!");
-//            throw new PasswordDontMatchException("Passwords are not match!");
+            throw new PasswordDontMatchException();
         }
 
         if (validateIsCustomerAccountExist(customerDto.getEmail())) {
-            throw new UsernameExistsInDatabaseException("Vartotojo paskyra yra DB!");
-//            throw new UsernameExistsInDatabaseException("User exists in DB");
+            throw new UsernameExistsInDatabaseException();
         }
 
         Customer customer = new Customer();
@@ -70,8 +68,7 @@ public class CustomerService {
         String password = passwordDto.getPassword();
         String passwordVerify = passwordDto.getPasswordVerify();
         if (!validateIsPasswordPass(password, passwordVerify)) {
-            throw new PasswordDontMatchException("Slaptažodiai nesutampa!");
-//            throw new PasswordDontMatchException("Passwords are not match!");
+            throw new PasswordDontMatchException();
         }
 
         // change password
@@ -99,7 +96,7 @@ public class CustomerService {
 
     public Customer findCustomerAccountByEmail(String email) throws CustomerNotFoundInDBException {
         if (!validateIsCustomerAccountExist(email)) {
-            throw new CustomerNotFoundInDBException("Vartotojo paskyra nerasta");
+            throw new CustomerNotFoundInDBException();
         }
         return customerRepository.findByEmail(email);
     }
@@ -128,16 +125,16 @@ public class CustomerService {
 
     public CustomerVerificationToken verifyCustomerAccountVerificationToken(String token) throws TokenInvalidException, TokenExpiredException {
         // jei tokeno nera ismetame klaida
-        if (token == null) throw new TokenInvalidException("Tokenas nerastas.");
+        if (token == null) throw new TokenInvalidException();
 
         // jei tokenas nerastas ismetame klaida
         CustomerVerificationToken verificationToken = tokenRepository.findByToken(token);
-        if (verificationToken == null) throw new TokenInvalidException("Patvirtinimo tokenas nerastas.");
+        if (verificationToken == null) throw new TokenInvalidException();
 
         // jei tokenas negalioja, ismetame klaida
         Timestamp verificationTokenExpiryDate = verificationToken.getExpiryDate();
         if (validateIsTokenExpired(verificationTokenExpiryDate)) {
-            throw new TokenExpiredException("Patvirtinimo tokenas negalioja.");
+            throw new TokenExpiredException();
         }
 
         return verificationToken;
@@ -146,16 +143,16 @@ public class CustomerService {
 
     public CustomerResetPasswordToken verifyCustomerAccountPasswordResetToken(String token) throws TokenInvalidException, TokenExpiredException {
         // jei tokeno nera ismetame klaida
-        if (token == null) throw new TokenInvalidException("Tokenas nerastas.");
+        if (token == null) throw new TokenInvalidException();
 
         // jei tokenas nerastas ismetame klaida
         CustomerResetPasswordToken tokenFromDb = passwordTokenRepository.findByToken(token);
-        if (tokenFromDb == null) throw new TokenInvalidException("Tokenas nerastas.");
+        if (tokenFromDb == null) throw new TokenInvalidException();
 
         // jei tokenas negalioja ismetame klaida
         Timestamp passwordTokenExpiryDate = tokenFromDb.getExpiryDate();
         if (validateIsTokenExpired(passwordTokenExpiryDate)) {
-            throw new TokenExpiredException("Patvirtinimo tokenas negalioja.");
+            throw new TokenExpiredException();
         }
 
         return tokenFromDb;

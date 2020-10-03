@@ -5,23 +5,23 @@ import javax.validation.constraints.NotNull;
 
 public class RepairDto {
     @NotNull
-    @NotEmpty
+    @NotEmpty(message = "Laukas negali būti tuščias.")
     private String deviceType;
 
     @NotNull
-    @NotEmpty
+    @NotEmpty(message = "Laukas negali būti tuščias.")
     private String deviceManufacturer;
 
     @NotNull
-    @NotEmpty
+    @NotEmpty(message = "Laukas negali būti tuščias.")
     private String deviceModel;
 
     @NotNull
-    @NotEmpty
+    @NotEmpty(message = "Laukas negali būti tuščias.")
     private String deviceSerialNo;
 
     @NotNull
-    @NotEmpty
+    @NotEmpty(message = "Laukas negali būti tuščias.")
     private String description;
 
     public String getDeviceType() {

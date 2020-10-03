@@ -5,8 +5,12 @@
 * Java 14
 * Spring Framework
   * Spring Security - WebSecurityConfigurerAdapter, UserDetails, UserDetailsService
+  * Mail - JavaMailSender, SimpleMailMessage
+  * Validation
+* Thymeleaf
+    * Thymeleaf plugins: thymeleaf-layout-dialect, thymeleaf-extras-springsecurity5
 * SQL (MySQL)
-* Bootstrap
+* Bootstrap -> [#12][i12]
 
 ## Processes
 WIP [#2][i2]
@@ -50,3 +54,4 @@ WIP [#2][i2]
 [i5]: https://github.com/ivanevla/VCS_final-project/pull/5
 [i8]: https://github.com/ivanevla/VCS_final-project/pull/8
 [i9]: https://github.com/ivanevla/VCS_final-project/pull/9
+[i12]: https://github.com/ivanevla/VCS_final-project/pull/12
