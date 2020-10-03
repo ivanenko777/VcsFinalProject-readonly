@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,21 +17,25 @@ public class MailSender {
     @Autowired
     private Environment environment;
 
+    @Async
     public void sendAccountVerificationEmailToCustomer(Customer customer, String token) {
         final SimpleMailMessage email = constructCustomerVerificationEmail(customer, token);
         mailSender.send(email);
     }
 
+    @Async
     public void sendAccountActivatedEmailToCustomer(Customer customer) {
         final SimpleMailMessage email = constructCustomerActivatatedEmail(customer);
         mailSender.send(email);
     }
 
+    @Async
     public void sendResetPasswordEmailToCustomer(Customer customer, String token) {
         final SimpleMailMessage email = constructCustomerResetPasswordEmail(customer, token);
         mailSender.send(email);
     }
 
+    @Async
     public void sendRepairRequestToCustomer(Customer customer, Repair repair) {
         final SimpleMailMessage email = constructCustomerRepairRequestEmail(customer, repair);
         mailSender.send(email);
