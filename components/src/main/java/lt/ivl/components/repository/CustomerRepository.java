@@ -1,4 +1,4 @@
-package lt.ivl.webExternalApp.repository;
+package lt.ivl.components.repository;
 
 import lt.ivl.components.domain.Customer;
 import org.springframework.data.repository.CrudRepository;

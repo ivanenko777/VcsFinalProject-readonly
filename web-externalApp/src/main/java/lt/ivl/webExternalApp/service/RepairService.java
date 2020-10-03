@@ -5,7 +5,7 @@ import lt.ivl.components.domain.Repair;
 import lt.ivl.components.domain.RepairStatus;
 import lt.ivl.webExternalApp.dto.RepairDto;
 import lt.ivl.webExternalApp.exception.ItemNotFoundException;
-import lt.ivl.webExternalApp.repository.RepairRepository;
+import lt.ivl.components.repository.RepairRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

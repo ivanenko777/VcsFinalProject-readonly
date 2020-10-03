@@ -1,4 +1,4 @@
-package lt.ivl.webExternalApp.repository;
+package lt.ivl.components.repository;
 
 import lt.ivl.components.domain.CustomerResetPasswordToken;
 import org.springframework.data.repository.CrudRepository;
