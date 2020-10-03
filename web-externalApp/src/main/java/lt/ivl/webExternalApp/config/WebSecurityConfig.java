@@ -17,9 +17,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private CustomerDetailService customerDetailService;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -40,7 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(customerDetailService)
-                .passwordEncoder(passwordEncoder);
+                .passwordEncoder(encoder());
     }
 
     @Bean
