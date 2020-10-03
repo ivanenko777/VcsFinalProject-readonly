@@ -72,7 +72,7 @@ public class RepairController {
             Model model
     ) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("message", "Form has errors");
+            model.addAttribute("message", "Formoje yra klaidų");
             return "/repair/add";
         }
         Customer customer = customerPrincipal.getCustomer();
