@@ -1,42 +1,63 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      layout:decorate="~{_layouts/layout-auth.html}"
+      th:with="pageName=${'Užsakymas #' + repair.id}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Info</title>
+    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE" th:text="${pageName}">...</title>
 </head>
 <body>
-<h1>Info</h1>
-<div style="color: red" th:if="${message}" th:text="${message}"></div>
-<a th:href="@{/repair/index}">Atgal</a>
+<div layout:fragment="content">
+    <div class="container">
 
-<div th:if="${repair}">
-    <strong>Info</strong>
-    <table>
-        <tr>
-            <td>Status</td>
-            <td th:text="${repair.status}">...</td>
-        </tr>
-        <tr>
-            <td>Type</td>
-            <td th:text="${repair.deviceType}">...</td>
-        </tr>
-        <tr>
-            <td>Manufacturer</td>
-            <td th:text="${repair.deviceManufacturer}">...</td>
-        </tr>
-        <tr>
-            <td>Model</td>
-            <td th:text="${repair.deviceModel}">...</td>
-        </tr>
-        <tr>
-            <td>Serial</td>
-            <td th:text="${repair.deviceSerialNo}">...</td>
-        </tr>
-        <tr>
-            <td>Description</td>
-            <td th:text="${repair.description}">...</td>
-        </tr>
-    </table>
+        <div class="row justify-content-center align-items-center pt-2 pt-2">
+            <h4 th:text="${pageName}"></h4>
+        </div>
+
+        <div class="row justify-content-center align-items-center pt-2">
+            <div class="col-9">
+                <div class="row mb-1">
+                    <div class="col-md-6 font-weight-bold text-right">Užsakymo numeris</div>
+                    <div class="col-md-6" th:text="${'#' + repair.id}"></div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col-md-6 font-weight-bold text-right">Data</div>
+                    <div class="col-md-6" th:text="${#dates.format(repair.createdAt, 'yyyy-MM-dd HH:mm')}"></div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col-md-6 font-weight-bold text-right">Įrenginio tipas</div>
+                    <div class="col-md-6" th:text="${repair.deviceType}"></div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col-md-6 font-weight-bold text-right">Įrenginio gamintojas</div>
+                    <div class="col-md-6" th:text="${repair.deviceManufacturer}"></div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col-md-6 font-weight-bold text-right">Įrenginio modelis</div>
+                    <div class="col-md-6" th:text="${repair.deviceModel}"></div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col-md-6 font-weight-bold text-right">Įrenginio serijinis numeris</div>
+                    <div class="col-md-6" th:text="${repair.deviceSerialNo}"></div>
+                </div>
+                <div class="row mb-1">
+                    <div class="col-md-6 font-weight-bold text-right">Gedimo aprašymas</div>
+                    <div class="col-md-6"
+                         th:utext="${#strings.replace(repair.description, '&#10;', '&lt;br&gt;')}"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center align-items-center pt-2 pt-2">
+            <div>
+                <a class="btn btn-outline-secondary font-weight-bold mr-auto" th:href="@{/repair/index}">
+                    &laquo; Atgal</a>
+                <a class="btn btn-danger font-weight-bold ml-auto" th:href="@{/repair/{id}/delete(id=${repair.id})}">
+                    Ištrinti remontą</a>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
-</html>
