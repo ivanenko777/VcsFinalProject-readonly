@@ -1,4 +1,4 @@
-package lt.ivl.webExternalApp.domain;
+package lt.ivl.components.domain;
 
 import javax.persistence.*;
 import java.util.List;

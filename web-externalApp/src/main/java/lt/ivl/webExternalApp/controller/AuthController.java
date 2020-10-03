@@ -1,8 +1,8 @@
 package lt.ivl.webExternalApp.controller;
 
-import lt.ivl.webExternalApp.domain.Customer;
-import lt.ivl.webExternalApp.domain.CustomerResetPasswordToken;
-import lt.ivl.webExternalApp.domain.CustomerVerificationToken;
+import lt.ivl.components.domain.Customer;
+import lt.ivl.components.domain.CustomerResetPasswordToken;
+import lt.ivl.components.domain.CustomerVerificationToken;
 import lt.ivl.webExternalApp.dto.CustomerDto;
 import lt.ivl.webExternalApp.dto.ResetPasswordDto;
 import lt.ivl.webExternalApp.exception.*;

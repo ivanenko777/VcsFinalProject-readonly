@@ -1,4 +1,4 @@
-package lt.ivl.webExternalApp.domain;
+package lt.ivl.components.domain;
 
 public enum RepairStatus {
     PENDING;

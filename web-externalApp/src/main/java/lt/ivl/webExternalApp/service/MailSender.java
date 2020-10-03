@@ -1,7 +1,7 @@
 package lt.ivl.webExternalApp.service;
 
-import lt.ivl.webExternalApp.domain.Customer;
-import lt.ivl.webExternalApp.domain.Repair;
+import lt.ivl.components.domain.Customer;
+import lt.ivl.components.domain.Repair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;

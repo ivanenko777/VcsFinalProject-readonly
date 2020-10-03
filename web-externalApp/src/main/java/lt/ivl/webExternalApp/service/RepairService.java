@@ -1,8 +1,8 @@
 package lt.ivl.webExternalApp.service;
 
-import lt.ivl.webExternalApp.domain.Customer;
-import lt.ivl.webExternalApp.domain.Repair;
-import lt.ivl.webExternalApp.domain.RepairStatus;
+import lt.ivl.components.domain.Customer;
+import lt.ivl.components.domain.Repair;
+import lt.ivl.components.domain.RepairStatus;
 import lt.ivl.webExternalApp.dto.RepairDto;
 import lt.ivl.webExternalApp.exception.ItemNotFoundException;
 import lt.ivl.webExternalApp.repository.RepairRepository;
