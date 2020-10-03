@@ -18,6 +18,7 @@
     <modules>
         <module>web-externalApp</module>
         <module>web-internalApp</module>
+        <module>components</module>
     </modules>
 
     <parent>
