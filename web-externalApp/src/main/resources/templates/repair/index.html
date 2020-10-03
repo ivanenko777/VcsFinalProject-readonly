@@ -10,55 +10,53 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <div class="container">
 
-        <div class="row pt-2" th:if="${pendingRepairs.size()}">
-            <div class="col-md-12 d-flex">
-                <h4 th:text="${pageName}"></h4>
-                <a class="btn btn-success font-weight-bold ml-auto" th:href="@{/repair/add}">Registruoti naują remontą</a>
-            </div>
+    <div class="row pt-2" th:if="${pendingRepairs.size()}">
+        <div class="col-md-12 d-flex">
+            <h4 th:text="${pageName}"></h4>
+            <a class="btn btn-success font-weight-bold ml-auto" th:href="@{/repair/add}">Registruoti naują remontą</a>
         </div>
+    </div>
 
-        <div class="row pt-2">
-            <div class="col-md-12" th:switch="${pendingRepairs.size()}">
-                <div class="jumbotron text-muted text-center" th:case="0">
-                    <h1 class="display-4">Remontų sąrašas tuščias</h1>
-                    <hr/>
-                    <p class="lead">
-                        <a class="btn btn-success btn-lg ml-auto" th:href="@{/repair/add}">Registruoti naują remontą</a>
-                    </p>
-                </div>
-
-                <table class="table" th:case="*">
-                    <thead>
-                    <tr>
-                        <th scope="col">&num;</th>
-                        <th scope="col">Status</th>
-                        <th scope="col">Data</th>
-                        <th scope="col">Tipas</th>
-                        <th scope="col">Gamintojas</th>
-                        <th scope="col">Modelis</th>
-                        <th scope="col">Serijinis nr.</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody th:each="repair : ${pendingRepairs}">
-                    <tr>
-                        <td scope="row" th:text="${repair.id}"></td>
-                        <td th:text="${repair.status}"></td>
-                        <td th:text="${#dates.format(repair.createdAt, 'yyyy-MM-dd')}"></td>
-                        <td th:text="${repair.deviceType}"></td>
-                        <td th:text="${repair.deviceManufacturer}"></td>
-                        <td th:text="${repair.deviceModel}"></td>
-                        <td th:text="${repair.deviceSerialNo}"></td>
-                        <td class="text-right">
-                            <a class="btn btn-sm btn-outline-primary font-weight-bold"
-                               th:href="@{/repair/{id}/view(id=${repair.id})}">Plačiau &raquo;</a>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+    <div class="row pt-2">
+        <div class="col-md-12" th:switch="${pendingRepairs.size()}">
+            <div class="jumbotron text-muted text-center" th:case="0">
+                <h1 class="display-4">Remontų sąrašas tuščias</h1>
+                <hr/>
+                <p class="lead">
+                    <a class="btn btn-success btn-lg ml-auto" th:href="@{/repair/add}">Registruoti naują remontą</a>
+                </p>
             </div>
+
+            <table class="table" th:case="*">
+                <thead>
+                <tr>
+                    <th scope="col">&num;</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Data</th>
+                    <th scope="col">Tipas</th>
+                    <th scope="col">Gamintojas</th>
+                    <th scope="col">Modelis</th>
+                    <th scope="col">Serijinis nr.</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody th:each="repair : ${pendingRepairs}">
+                <tr>
+                    <td scope="row" th:text="${repair.id}"></td>
+                    <td th:text="${repair.status}"></td>
+                    <td th:text="${#dates.format(repair.createdAt, 'yyyy-MM-dd')}"></td>
+                    <td th:text="${repair.deviceType}"></td>
+                    <td th:text="${repair.deviceManufacturer}"></td>
+                    <td th:text="${repair.deviceModel}"></td>
+                    <td th:text="${repair.deviceSerialNo}"></td>
+                    <td class="text-right">
+                        <a class="btn btn-sm btn-outline-primary font-weight-bold"
+                           th:href="@{/repair/{id}/view(id=${repair.id})}">Plačiau &raquo;</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
