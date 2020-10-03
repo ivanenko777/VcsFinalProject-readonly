@@ -142,9 +142,9 @@ public class AuthController {
     ) {
         // Paimam GETparametra token, is POSTrequesto
         String token = request.getParameter("token");
-        model.addAttribute("pageHideForm", false);
 
         if (bindingResult.hasErrors()) {
+            model.addAttribute("pageHideForm", false);
             model.addAttribute("messageError", "Formoje yra klaidų");
             model.addAttribute("token", token);
             return "/auth/resetPassword";
@@ -154,6 +154,7 @@ public class AuthController {
             CustomerResetPasswordToken resetPasswordToken = customerService.verifyCustomerAccountPasswordResetToken(token);
             Customer customer = resetPasswordToken.getCustomer();
             customerService.resetCustomerAccountPassword(customer, resetPasswordDto, resetPasswordToken);
+            model.addAttribute("pageHideForm", true);
             model.addAttribute("messageInfo", "Slaptažodis pakeistas.");
         } catch (TokenInvalidException e) {
             model.addAttribute("pageHideForm", true);
