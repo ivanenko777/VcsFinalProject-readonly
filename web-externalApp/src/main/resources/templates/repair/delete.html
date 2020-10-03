@@ -17,7 +17,7 @@
 
         <div th:replace="_layouts/_fragments :: messages"></div>
 
-        <form action="#" autocomplete="off" method="post" th:action="@{/repair/delete}"
+        <form action="#" autocomplete="off" method="post" th:action="@{/repair/{id}/delete(id=${repair.id})}"
               th:object="${repair}">
             <div class="form-row">
                 <div class="col-md-12 form-group">
