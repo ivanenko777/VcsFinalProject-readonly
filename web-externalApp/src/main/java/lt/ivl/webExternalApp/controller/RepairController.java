@@ -53,7 +53,7 @@ public class RepairController {
             Repair repair = repairService.findByCustomer(customer, repairId);
             model.addAttribute("repair", repair);
         } catch (ItemNotFoundException | NumberFormatException e) {
-            model.addAttribute("message", e.getMessage());
+            model.addAttribute("messageError", e.getMessage());
         }
         return "/repair/view";
     }
@@ -72,7 +72,7 @@ public class RepairController {
             Model model
     ) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("message", "Formoje yra klaidų");
+            model.addAttribute("messageError", "Formoje yra klaidų");
             return "/repair/add";
         }
         Customer customer = customerPrincipal.getCustomer();
@@ -94,7 +94,7 @@ public class RepairController {
 
             model.addAttribute("repair", repair);
         } catch (ItemNotFoundException | NumberFormatException e) {
-            model.addAttribute("message", e.getMessage());
+            model.addAttribute("messageError", e.getMessage());
         }
 
         return "/repair/delete";
@@ -111,7 +111,7 @@ public class RepairController {
             Customer customer = customerPrincipal.getCustomer();
             repairService.deleteByCustomer(customer, repairId);
         } catch (ItemNotFoundException e) {
-            model.addAttribute("message", e.getMessage());
+            model.addAttribute("messageError", e.getMessage());
             return "/repair/delete";
         }
 

@@ -45,7 +45,7 @@ public class AuthController {
             Model model
     ) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("message", "Formoje yra klaidų");
+            model.addAttribute("messageError", "Formoje yra klaidų");
             return "/auth/registration";
         }
         try {
@@ -53,13 +53,13 @@ public class AuthController {
             String token = UUID.randomUUID().toString();
             customerService.createVerificationTokenForCustomerAccount(customer, token);
             mailSender.sendAccountVerificationEmailToCustomer(customer, token);
-            model.addAttribute("info", "Patvirtinkite registraciją. Instrukcijas rasite laiške.");
+            model.addAttribute("messageInfo", "Patvirtinkite registraciją. Instrukcijas rasite laiške.");
             return "/auth/activation";
         } catch (UsernameExistsInDatabaseException e) {
-            model.addAttribute("message", e.getMessage() + " Jei pamiršote prisijungimo duomenis, pasinaudokite slaptažodžio priminimo funkcija.");
+            model.addAttribute("messageError", e.getMessage() + " Jei pamiršote prisijungimo duomenis, pasinaudokite slaptažodžio priminimo funkcija.");
             return "/auth/registration";
         } catch (PasswordDontMatchException e) {
-            model.addAttribute("message", e.getMessage());
+            model.addAttribute("messageError", e.getMessage());
             return "/auth/registration";
         }
     }
@@ -74,17 +74,17 @@ public class AuthController {
             customerService.activateCustomerAccount(verificationToken);
             Customer customer = verificationToken.getCustomer();
             mailSender.sendAccountActivatedEmailToCustomer(customer);
-            model.addAttribute("info", "Registracija patvirtinta.");
+            model.addAttribute("messageInfo", "Registracija patvirtinta.");
             return "/auth/activation";
         } catch (TokenInvalidException e) {
-            model.addAttribute("message", "Nuoroda negalioja.");
+            model.addAttribute("messageError", "Nuoroda negalioja.");
             return "/auth/activation";
         } catch (TokenExpiredException e) {
             CustomerVerificationToken verificationToken = customerService.generateNewVerificationTokenForCustomerAccount(token);
             Customer customer = verificationToken.getCustomer();
             String newToken = verificationToken.getToken();
             mailSender.sendAccountVerificationEmailToCustomer(customer, newToken);
-            model.addAttribute("message", "Nuorodos galiojimo laikas baigėsi. Nauja nuoroda išsiųsta į el. paštą.");
+            model.addAttribute("messageError", "Nuorodos galiojimo laikas baigėsi. Nauja nuoroda išsiųsta į el. paštą.");
             return "/auth/activation";
         }
     }
@@ -104,10 +104,10 @@ public class AuthController {
             CustomerResetPasswordToken resetPasswordToken = customerService.createPasswordResetTokenForCustomerAccount(customer);
             String token = resetPasswordToken.getToken();
             mailSender.sendResetPasswordEmailToCustomer(customer, token);
-            model.addAttribute("info", "Slaptažodžio keitimo instrukcijos išsiųstos į el. paštą.");
+            model.addAttribute("messageInfo", "Slaptažodžio keitimo instrukcijos išsiųstos į el. paštą.");
             return "/auth/rememberPassword";
         } catch (CustomerNotFoundInDBException e) {
-            model.addAttribute("message", e.getMessage());
+            model.addAttribute("messageError", e.getMessage());
             return "/auth/rememberPassword";
         }
     }
@@ -122,10 +122,10 @@ public class AuthController {
             customerService.verifyCustomerAccountPasswordResetToken(token);
         } catch (TokenInvalidException e) {
             model.addAttribute("pageHideForm", true);
-            model.addAttribute("message", "Nuoroda negalioja.");
+            model.addAttribute("messageError", "Nuoroda negalioja.");
         } catch (TokenExpiredException e) {
             model.addAttribute("pageHideForm", true);
-            model.addAttribute("message", "Nuorodos galiojimo laikas baigėsi.");
+            model.addAttribute("messageError", "Nuorodos galiojimo laikas baigėsi.");
         }
         model.addAttribute("token", token);
         model.addAttribute("resetPassword", new ResetPasswordDto());
@@ -145,7 +145,7 @@ public class AuthController {
         model.addAttribute("pageHideForm", false);
 
         if (bindingResult.hasErrors()) {
-            model.addAttribute("message", "Formoje yra klaidų");
+            model.addAttribute("messageError", "Formoje yra klaidų");
             model.addAttribute("token", token);
             return "/auth/resetPassword";
         }
@@ -154,16 +154,16 @@ public class AuthController {
             CustomerResetPasswordToken resetPasswordToken = customerService.verifyCustomerAccountPasswordResetToken(token);
             Customer customer = resetPasswordToken.getCustomer();
             customerService.resetCustomerAccountPassword(customer, resetPasswordDto, resetPasswordToken);
-            model.addAttribute("info", "Slaptažodis pakeistas.");
+            model.addAttribute("messageInfo", "Slaptažodis pakeistas.");
         } catch (TokenInvalidException e) {
             model.addAttribute("pageHideForm", true);
-            model.addAttribute("message", "Nuoroda negalioja.");
+            model.addAttribute("messageError", "Nuoroda negalioja.");
         } catch (PasswordDontMatchException e) {
             model.addAttribute("pageHideForm", false);
-            model.addAttribute("message", e.getMessage());
+            model.addAttribute("messageError", e.getMessage());
         } catch (TokenExpiredException e) {
             model.addAttribute("pageHideForm", true);
-            model.addAttribute("message", "Nuorodos galiojimo laikas baigėsi.");
+            model.addAttribute("messageError", "Nuorodos galiojimo laikas baigėsi.");
         }
 
         model.addAttribute("resetPassword", resetPasswordDto);

@@ -15,7 +15,9 @@
             <h4 th:text="${pageName}"></h4>
         </div>
         <div class="row justify-content-center align-items-center pt-2 pt-2">
-            <div class="alert alert-danger" th:if="${message}" th:text="${message}"></div>
+
+            <div th:insert="_layouts/_fragments :: messages"></div>
+
             <form action="#" autocomplete="off" method="post" th:action="@{/repair/delete}"
                   th:object="${repair}">
                 <div class="form-row">
