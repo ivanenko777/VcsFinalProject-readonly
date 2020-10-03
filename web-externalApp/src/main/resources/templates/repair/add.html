@@ -18,7 +18,7 @@
         <div class="row justify-content-center align-items-center pt-2 pt-2">
             <div class="col-9">
 
-                <div th:insert="_layouts/_fragments :: messages"></div>
+                <div th:replace="_layouts/_fragments :: messages"></div>
 
                 <form action="#" autocomplete="off" method="post" th:action="@{/repair/add}"
                       th:object="${repair}">
