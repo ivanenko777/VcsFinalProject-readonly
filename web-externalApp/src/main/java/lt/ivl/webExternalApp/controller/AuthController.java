@@ -29,13 +29,13 @@ public class AuthController {
 
     @GetMapping("/login")
     public String login(Model model) {
-        return "/auth/login";
+        return "auth/login";
     }
 
     @GetMapping("/registration")
     public String registration(Model model) {
         model.addAttribute("customer", new CustomerDto());
-        return "/auth/registration";
+        return "auth/registration";
     }
 
     @PostMapping("/registration")
@@ -46,7 +46,7 @@ public class AuthController {
     ) {
         if (bindingResult.hasErrors()) {
             model.addAttribute("messageError", "Formoje yra klaidų");
-            return "/auth/registration";
+            return "auth/registration";
         }
         try {
             Customer customer = customerService.registerNewCustomerAccount(customerDto);
@@ -54,13 +54,13 @@ public class AuthController {
             customerService.createVerificationTokenForCustomerAccount(customer, token);
             mailSender.sendAccountVerificationEmailToCustomer(customer, token);
             model.addAttribute("messageInfo", "Patvirtinkite registraciją. Instrukcijas rasite laiške.");
-            return "/auth/activation";
+            return "auth/activation";
         } catch (UsernameExistsInDatabaseException e) {
             model.addAttribute("messageError", e.getMessage() + " Jei pamiršote prisijungimo duomenis, pasinaudokite slaptažodžio priminimo funkcija.");
-            return "/auth/registration";
+            return "auth/registration";
         } catch (PasswordDontMatchException e) {
             model.addAttribute("messageError", e.getMessage());
-            return "/auth/registration";
+            return "auth/registration";
         }
     }
 
@@ -75,23 +75,21 @@ public class AuthController {
             Customer customer = verificationToken.getCustomer();
             mailSender.sendAccountActivatedEmailToCustomer(customer);
             model.addAttribute("messageInfo", "Registracija patvirtinta.");
-            return "/auth/activation";
         } catch (TokenInvalidException e) {
             model.addAttribute("messageError", "Nuoroda negalioja.");
-            return "/auth/activation";
         } catch (TokenExpiredException e) {
             CustomerVerificationToken verificationToken = customerService.generateNewVerificationTokenForCustomerAccount(token);
             Customer customer = verificationToken.getCustomer();
             String newToken = verificationToken.getToken();
             mailSender.sendAccountVerificationEmailToCustomer(customer, newToken);
             model.addAttribute("messageError", "Nuorodos galiojimo laikas baigėsi. Nauja nuoroda išsiųsta į el. paštą.");
-            return "/auth/activation";
         }
+        return "auth/activation";
     }
 
     @GetMapping("/remember-password")
     public String rememberPasswordForm() {
-        return "/auth/rememberPassword";
+        return "auth/rememberPassword";
     }
 
     @PostMapping("/remember-password")
@@ -105,10 +103,10 @@ public class AuthController {
             String token = resetPasswordToken.getToken();
             mailSender.sendResetPasswordEmailToCustomer(customer, token);
             model.addAttribute("messageInfo", "Slaptažodžio keitimo instrukcijos išsiųstos į el. paštą.");
-            return "/auth/rememberPassword";
+            return "auth/rememberPassword";
         } catch (CustomerNotFoundInDBException e) {
             model.addAttribute("messageError", e.getMessage());
-            return "/auth/rememberPassword";
+            return "auth/rememberPassword";
         }
     }
 
@@ -129,7 +127,7 @@ public class AuthController {
         }
         model.addAttribute("token", token);
         model.addAttribute("resetPassword", new ResetPasswordDto());
-        return "/auth/resetPassword";
+        return "auth/resetPassword";
     }
 
     @PostMapping("/reset-password")
@@ -147,7 +145,7 @@ public class AuthController {
             model.addAttribute("pageHideForm", false);
             model.addAttribute("messageError", "Formoje yra klaidų");
             model.addAttribute("token", token);
-            return "/auth/resetPassword";
+            return "auth/resetPassword";
         }
 
         try {
@@ -169,6 +167,6 @@ public class AuthController {
 
         model.addAttribute("resetPassword", resetPasswordDto);
         model.addAttribute("token", token);
-        return "/auth/resetPassword";
+        return "auth/resetPassword";
     }
 }
