@@ -5,6 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>web-externalApp</artifactId>
+    <packaging>jar</packaging>
 
     <parent>
         <artifactId>repairserviceis</artifactId>
