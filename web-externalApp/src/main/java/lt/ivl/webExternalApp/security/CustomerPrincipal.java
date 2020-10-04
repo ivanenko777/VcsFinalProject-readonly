@@ -1,6 +1,6 @@
 package lt.ivl.webExternalApp.security;
 
-import lt.ivl.webExternalApp.domain.Customer;
+import lt.ivl.components.domain.Customer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

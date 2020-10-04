@@ -1,14 +1,14 @@
 package lt.ivl.webExternalApp.service;
 
-import lt.ivl.webExternalApp.domain.Customer;
-import lt.ivl.webExternalApp.domain.CustomerResetPasswordToken;
-import lt.ivl.webExternalApp.domain.CustomerVerificationToken;
+import lt.ivl.components.domain.Customer;
+import lt.ivl.components.domain.CustomerResetPasswordToken;
+import lt.ivl.components.domain.CustomerVerificationToken;
 import lt.ivl.webExternalApp.dto.CustomerDto;
 import lt.ivl.webExternalApp.dto.ResetPasswordDto;
 import lt.ivl.webExternalApp.exception.*;
-import lt.ivl.webExternalApp.repository.CustomerRepository;
-import lt.ivl.webExternalApp.repository.CustomerResetPasswordTokenRepository;
-import lt.ivl.webExternalApp.repository.CustomerVerificationTokenRepository;
+import lt.ivl.components.repository.CustomerRepository;
+import lt.ivl.components.repository.CustomerResetPasswordTokenRepository;
+import lt.ivl.components.repository.CustomerVerificationTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

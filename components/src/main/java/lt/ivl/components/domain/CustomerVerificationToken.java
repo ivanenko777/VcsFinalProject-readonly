@@ -1,4 +1,4 @@
-package lt.ivl.webExternalApp.domain;
+package lt.ivl.components.domain;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -6,7 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 @Entity
-public class CustomerResetPasswordToken {
+public class CustomerVerificationToken {
     private static final int EXPIRATION = 60 * 24;
 
     @Id
@@ -21,10 +21,10 @@ public class CustomerResetPasswordToken {
 
     private Timestamp expiryDate;
 
-    public CustomerResetPasswordToken() {
+    public CustomerVerificationToken() {
     }
 
-    public CustomerResetPasswordToken(String token, Customer customer) {
+    public CustomerVerificationToken(String token, Customer customer) {
         this.token = token;
         this.customer = customer;
         this.expiryDate = calculateExpiryDate(EXPIRATION);
@@ -63,5 +63,10 @@ public class CustomerResetPasswordToken {
         calendar.setTimeInMillis(new Date().getTime());
         calendar.add(Calendar.MINUTE, expiryTimeInMinutes);
         return new Timestamp(calendar.getTime().getTime());
+    }
+
+    public void updateToken(String token) {
+        this.token = token;
+        this.expiryDate = calculateExpiryDate(EXPIRATION);
     }
 }

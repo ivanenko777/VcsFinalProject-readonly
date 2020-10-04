@@ -5,6 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>web-externalApp</artifactId>
+    <packaging>jar</packaging>
 
     <parent>
         <artifactId>repairserviceis</artifactId>
@@ -13,6 +14,12 @@
     </parent>
 
     <dependencies>
+        <dependency>
+            <groupId>lt.ivl</groupId>
+            <artifactId>components</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
         <!-- WEB -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
