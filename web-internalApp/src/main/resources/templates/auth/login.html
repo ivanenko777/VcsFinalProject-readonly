@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en"
+      layout:decorate="~{_layouts/layout}"
+      th:with="pageName=${'Prisijungti'}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE" th:text="${pageName}">...</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="row justify-content-center align-items-center" style="height:calc(75vh - 60px)">
+        <div class="col-5">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title" th:text="${pageName}">...</h4>
+
+                    <div class="alert alert-danger" th:if="${param.error}">
+                        Neteisingas el. pašto adresas ir/arba slaptažodis
+                    </div>
+                    <div class="alert alert-info" th:if="${param.logout}">Jūs sėkmingai atsijungėte</div>
+
+                    <form autocomplete="off" method="post" th:action="@{/login}">
+                        <div class="form-group">
+                            <label for="email">El. pašto adresas</label>
+                            <input aria-describedby="emailHelp" class="form-control" id="email" name="email"
+                                   type="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Slaptažodis</label>
+                            <input class="form-control" id="password" name="password" type="password">
+                        </div>
+                        <div class="form-group text-center">
+                            <input class="btn btn-primary" type="submit" value="Prisijungti">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
