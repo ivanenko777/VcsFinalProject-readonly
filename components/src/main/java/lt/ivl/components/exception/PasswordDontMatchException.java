@@ -2,7 +2,7 @@ package lt.ivl.components.exception;
 
 public class PasswordDontMatchException extends Exception {
     public PasswordDontMatchException() {
-        super("Slaptažodiai nesutampa!");
+        super("Slaptažodžiai nesutampa!");
 //        super("Passwords are not match!");
     }
 
