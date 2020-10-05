@@ -3,6 +3,7 @@ package lt.ivl.webExternalApp.controller;
 import lt.ivl.components.domain.Customer;
 import lt.ivl.components.domain.CustomerResetPasswordToken;
 import lt.ivl.components.domain.CustomerVerificationToken;
+import lt.ivl.components.exception.PasswordDontMatchException;
 import lt.ivl.components.exception.TokenExpiredException;
 import lt.ivl.components.exception.TokenInvalidException;
 import lt.ivl.webExternalApp.dto.CustomerDto;
