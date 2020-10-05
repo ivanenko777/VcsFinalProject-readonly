@@ -3,11 +3,15 @@ package lt.ivl.components.service;
 import lt.ivl.components.domain.Employee;
 import lt.ivl.components.domain.EmployeeResetPasswordToken;
 import lt.ivl.components.exception.EmployeeNotFoundInDbException;
+import lt.ivl.components.exception.TokenExpiredException;
+import lt.ivl.components.exception.TokenInvalidException;
 import lt.ivl.components.repository.EmployeeRepository;
 import lt.ivl.components.repository.EmployeeResetPasswordTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -36,5 +40,37 @@ public class EmployeeService {
         EmployeeResetPasswordToken myToken = new EmployeeResetPasswordToken(token, employee);
         employeePasswordTokenRepository.save(myToken);
         return myToken;
+    }
+
+    public EmployeeResetPasswordToken verifyEmployeeAccountPasswordResetToken(String token) throws TokenInvalidException, TokenExpiredException {
+        // jei tokeno nera ismetame klaida
+        if (token == null) throw new TokenInvalidException();
+
+        // jei tokenas nerastas ismetame klaida
+        Optional<EmployeeResetPasswordToken> tokenFromDb = employeePasswordTokenRepository.findByToken(token);
+        if (tokenFromDb.isEmpty()) throw new TokenInvalidException();
+
+        // jei tokenas negalioja ismetame klaida
+        Timestamp passwordTokenExpiryDate = tokenFromDb.get().getExpiryDate();
+        Calendar calendar = Calendar.getInstance();
+        if ((passwordTokenExpiryDate.getTime() - calendar.getTime().getTime()) <= 0) {
+            throw new TokenExpiredException();
+        }
+
+        return tokenFromDb.get();
+    }
+
+    public void resetPasswordAndActivateEmployeeAccount(
+            Employee employee,
+            String newPassword,
+            EmployeeResetPasswordToken resetPasswordToken
+    ) {
+        // change password and activate account
+        employee.setPassword(newPassword);
+        employee.setActive(true);
+        saveEmployee(employee);
+
+        // delete token
+        employeePasswordTokenRepository.delete(resetPasswordToken);
     }
 }
