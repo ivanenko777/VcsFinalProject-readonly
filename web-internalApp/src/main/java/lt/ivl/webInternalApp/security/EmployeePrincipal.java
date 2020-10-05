@@ -17,6 +17,10 @@ public class EmployeePrincipal implements UserDetails {
         return employee;
     }
 
+    public String getFullName() {
+        return employee.getFirstName() + " " + employee.getLastName();
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;

@@ -33,10 +33,11 @@
                 <a class="nav-link" th:href="@{/}">Pradžia</a>
             </div>
             <div class="navbar-nav ml-auto">
-                <a class="nav-link" th:href="@{/login}">Prisijungti</a>
+                <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/login}">Prisijungti</a>
 
-
-                <form method="post" th:action="@{/logout}">
+                <a class="nav-link disabled" href="#" sec:authentication="principal.fullName"
+                   sec:authorize="isAuthenticated()">full name</a>
+                <form method="post" sec:authorize="isAuthenticated()" th:action="@{/logout}">
                     <input class="btn btn-sm btn-outline-secondary mt-1" type="submit" value="Atsijungti"/>
                 </form>
             </div>
