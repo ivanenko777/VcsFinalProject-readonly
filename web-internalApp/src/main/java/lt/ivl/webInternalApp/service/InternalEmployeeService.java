@@ -9,12 +9,16 @@ import lt.ivl.components.exception.TokenInvalidException;
 import lt.ivl.components.service.EmployeeService;
 import lt.ivl.webInternalApp.dto.ResetPasswordDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class InternalEmployeeService {
     @Autowired
-    EmployeeService componentEmployeeService;
+    private EmployeeService componentEmployeeService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public Employee findEmployeeAccountByEmail(String email) throws EmployeeNotFoundInDbException {
         return componentEmployeeService.findEmployeeByEmail(email);
@@ -41,8 +45,7 @@ public class InternalEmployeeService {
         }
 
         // change password
-        // TODO: encrypt password
-        String newPassword = password;
+        String newPassword = passwordEncoder.encode(password);
         componentEmployeeService.resetPasswordAndActivateEmployeeAccount(employee, newPassword, resetPasswordToken);
     }
 }
