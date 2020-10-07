@@ -2,6 +2,7 @@ package lt.ivl.components.service;
 
 import lt.ivl.components.domain.Employee;
 import lt.ivl.components.domain.EmployeeResetPasswordToken;
+import lt.ivl.components.exception.EmployeeAccountExistsInDatabaseException;
 import lt.ivl.components.exception.EmployeeNotFoundInDbException;
 import lt.ivl.components.exception.TokenExpiredException;
 import lt.ivl.components.exception.TokenInvalidException;
@@ -69,6 +70,11 @@ public class EmployeeService {
         }
 
         return tokenFromDb.get();
+    }
+
+    public void verifyIsEmployeeAccountExists(String email) throws EmployeeAccountExistsInDatabaseException {
+        Optional<Employee> employee = employeeRepository.findByEmail(email);
+        if (employee.isPresent()) throw new EmployeeAccountExistsInDatabaseException();
     }
 
     public void resetPasswordAndActivateEmployeeAccount(

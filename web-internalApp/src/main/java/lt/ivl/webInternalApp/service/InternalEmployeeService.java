@@ -58,6 +58,16 @@ public class InternalEmployeeService {
         return componentEmployeeService.saveEmployee(employee);
     }
 
+    public Employee createEmployeeAccount(EmployeeDto employeeDto) throws EmployeeAccountExistsInDatabaseException {
+        String email = employeeDto.getEmail();
+        // throw exception if exists
+        componentEmployeeService.verifyIsEmployeeAccountExists(email);
+
+        Employee employee = new Employee();
+        employee = fillEmployeeFields(employee, employeeDto);
+        return componentEmployeeService.saveEmployee(employee);
+    }
+
     private Employee fillEmployeeFields(Employee employee, EmployeeDto employeeDto) {
         employee.setFirstName(employeeDto.getFirstName());
         employee.setLastName(employeeDto.getLastName());

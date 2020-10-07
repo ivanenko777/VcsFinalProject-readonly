@@ -24,7 +24,7 @@ public class Employee {
     private Set<EmployeeRole> roles = new HashSet<>();
 
     public Employee() {
-        this.active = true;
+        this.active = false;
     }
 
     public int getId() {

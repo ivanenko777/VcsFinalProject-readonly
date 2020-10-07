@@ -1,7 +1,9 @@
 package lt.ivl.webInternalApp.controller;
 
 import lt.ivl.components.domain.Employee;
+import lt.ivl.components.domain.EmployeeResetPasswordToken;
 import lt.ivl.components.domain.EmployeeRole;
+import lt.ivl.components.exception.EmployeeAccountExistsInDatabaseException;
 import lt.ivl.webInternalApp.dto.EmployeeDto;
 import lt.ivl.webInternalApp.service.InternalEmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,41 @@ public class ManageEmployeeController {
         return "manage-employee/view";
     }
 
+    @GetMapping("/add")
+    public String showCreateForm(Model model) {
+        List<EmployeeRole> roleList = Arrays.asList(EmployeeRole.values());
+
+        model.addAttribute("roles", roleList);
+        model.addAttribute("employeeDto", new EmployeeDto());
+        return "manage-employee/add";
+    }
+
+    @PostMapping("/add")
+    public String create(
+            @Valid @ModelAttribute("employeeDto") EmployeeDto employeeDto,
+            BindingResult bindingResult,
+            Model model
+    ) {
+        List<EmployeeRole> roleList = Arrays.asList(EmployeeRole.values());
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("roles", roleList);
+            model.addAttribute("messageError", "Formoje yra klaidų");
+            return "manage-employee/add";
+        }
+
+        try {
+            Employee employee = internalEmployeeService.createEmployeeAccount(employeeDto);
+            EmployeeResetPasswordToken passwordResetToken = internalEmployeeService.createPasswordResetTokenForEmployeeAccount(employee);
+            // TODO: send activation email
+            return "redirect:/manage-employee/{employee}/view";
+        } catch (EmployeeAccountExistsInDatabaseException e) {
+            model.addAttribute("roles", roleList);
+            model.addAttribute("messageError", e.getMessage());
+            return "manage-employee/add";
+        }
+    }
+
     @GetMapping("{employee}/edit")
     public String showUpdateForm(@PathVariable("employee") Employee employee, Model model) {
         EmployeeDto employeeDto = new EmployeeDto(employee);
@@ -61,7 +98,7 @@ public class ManageEmployeeController {
             model.addAttribute("messageError", "Formoje yra klaidų");
             return "manage-employee/edit";
         }
-        internalEmployeeService.update(employee, employeeDto);
+        internalEmployeeService.updateEmployeeAccount(employee, employeeDto);
         return "redirect:/manage-employee/{employee}/view";
     }
 }
