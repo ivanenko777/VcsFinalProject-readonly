@@ -34,7 +34,7 @@ public class ManageEmployeeController {
     }
 
     @GetMapping("{employee}/edit")
-    public String edit(@PathVariable("employee") Employee employee, Model model) {
+    public String showUpdateForm(@PathVariable("employee") Employee employee, Model model) {
         EmployeeDto employeeDto = new EmployeeDto(employee);
         int employeeId = employee.getId();
         List<EmployeeRole> roleList = Arrays.asList(EmployeeRole.values());
