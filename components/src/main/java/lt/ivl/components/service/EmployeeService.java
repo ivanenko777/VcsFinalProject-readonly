@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -26,6 +27,10 @@ public class EmployeeService {
 
     public Employee saveEmployee(Employee employee) {
         return employeeRepository.save(employee);
+    }
+
+    public List<Employee> findAll() {
+        return (List<Employee>) employeeRepository.findAll();
     }
 
     @Transactional

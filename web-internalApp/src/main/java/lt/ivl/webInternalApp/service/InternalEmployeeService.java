@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class InternalEmployeeService {
     @Autowired
@@ -19,6 +21,10 @@ public class InternalEmployeeService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    public List<Employee> findAll() {
+        return componentEmployeeService.findAll();
+    }
 
     public Employee findEmployeeAccountByEmail(String email) throws EmployeeNotFoundInDbException {
         return componentEmployeeService.findEmployeeByEmail(email);
