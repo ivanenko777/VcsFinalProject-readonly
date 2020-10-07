@@ -2,10 +2,7 @@ package lt.ivl.webInternalApp.service;
 
 import lt.ivl.components.domain.Employee;
 import lt.ivl.components.domain.EmployeeResetPasswordToken;
-import lt.ivl.components.exception.EmployeeNotFoundInDbException;
-import lt.ivl.components.exception.PasswordDontMatchException;
-import lt.ivl.components.exception.TokenExpiredException;
-import lt.ivl.components.exception.TokenInvalidException;
+import lt.ivl.components.exception.*;
 import lt.ivl.components.service.EmployeeService;
 import lt.ivl.webInternalApp.dto.EmployeeDto;
 import lt.ivl.webInternalApp.dto.ResetPasswordDto;
@@ -56,7 +53,12 @@ public class InternalEmployeeService {
         componentEmployeeService.resetPasswordAndActivateEmployeeAccount(employee, newPassword, resetPasswordToken);
     }
 
-    public void updateEmployeeAccount(Employee employee, EmployeeDto employeeDto) {
+    public Employee updateEmployeeAccount(Employee employee, EmployeeDto employeeDto) {
+        employee = fillEmployeeFields(employee, employeeDto);
+        return componentEmployeeService.saveEmployee(employee);
+    }
+
+    private Employee fillEmployeeFields(Employee employee, EmployeeDto employeeDto) {
         employee.setFirstName(employeeDto.getFirstName());
         employee.setLastName(employeeDto.getLastName());
         employee.setEmail(employeeDto.getEmail());
@@ -65,6 +67,6 @@ public class InternalEmployeeService {
         employee.getRoles().clear();
         employee.setRoles(employeeDto.getRoles());
 
-        componentEmployeeService.saveEmployee(employee);
+        return employee;
     }
 }
