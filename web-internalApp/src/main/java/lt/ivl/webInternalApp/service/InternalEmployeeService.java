@@ -7,6 +7,7 @@ import lt.ivl.components.exception.PasswordDontMatchException;
 import lt.ivl.components.exception.TokenExpiredException;
 import lt.ivl.components.exception.TokenInvalidException;
 import lt.ivl.components.service.EmployeeService;
+import lt.ivl.webInternalApp.dto.EmployeeDto;
 import lt.ivl.webInternalApp.dto.ResetPasswordDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -53,5 +54,17 @@ public class InternalEmployeeService {
         // change password
         String newPassword = passwordEncoder.encode(password);
         componentEmployeeService.resetPasswordAndActivateEmployeeAccount(employee, newPassword, resetPasswordToken);
+    }
+
+    public void update(Employee employee, EmployeeDto employeeDto) {
+        employee.setFirstName(employeeDto.getFirstName());
+        employee.setLastName(employeeDto.getLastName());
+        employee.setEmail(employeeDto.getEmail());
+        employee.setPhone(employeeDto.getPhone());
+
+        employee.getRoles().clear();
+        employee.setRoles(employeeDto.getRoles());
+
+        componentEmployeeService.saveEmployee(employee);
     }
 }

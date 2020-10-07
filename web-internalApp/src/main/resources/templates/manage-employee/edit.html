@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en"
+      layout:decorate="~{_layouts/layout}"
+      th:with="pageName=${'Redaguoti: ' + employeeDto.email}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE" th:text="${pageName}">...</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="row justify-content-center align-items-center pt-2 pt-2">
+        <h4 th:text="${pageName}"></h4>
+    </div>
+
+    <div class="row justify-content-center align-items-center pt-2 pt-2">
+        <div class="col-9">
+
+            <div th:replace="_layouts/_fragments :: messages"></div>
+
+            <form action="#" autocomplete="off" method="post"
+                  th:action="@{/manage-employee/{employeeId}/edit(employeeId=${employeeId})}"
+                  th:object="${employeeDto}">
+                <div class="form-row">
+                    <div class="col-md-6 form-group">
+                        <label th:for="firstName">Vardas</label>
+                        <input th:class="${#fields.errors('firstName').isEmpty()} ? 'form-control' : 'form-control is-invalid'"
+                               th:field="*{firstName}" type="text"/>
+                        <div class="invalid-feedback" th:each="error: ${#fields.errors('firstName')}"
+                             th:text="${error}"></div>
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label th:for="lastName">Pavardė</label>
+                        <input th:class="${#fields.errors('lastName').isEmpty()} ? 'form-control' : 'form-control is-invalid'"
+                               th:field="*{lastName}" type="text"/>
+                        <div class="invalid-feedback" th:each="error: ${#fields.errors('lastName')}"
+                             th:text="${error}"></div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-6 form-group">
+                        <label th:for="firstName">El. paštas</label>
+                        <input th:class="${#fields.errors('email').isEmpty()} ? 'form-control' : 'form-control is-invalid'"
+                               th:field="*{email}" type="text"/>
+                        <div class="invalid-feedback" th:each="error: ${#fields.errors('email')}"
+                             th:text="${error}"></div>
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label th:for="firstName">Telefonas</label>
+                        <input th:class="${#fields.errors('phone').isEmpty()} ? 'form-control' : 'form-control is-invalid'"
+                               th:field="*{phone}" type="text"/>
+                        <div class="invalid-feedback" th:each="error: ${#fields.errors('phone')}"
+                             th:text="${error}"></div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-12 form-group">
+                        <label th:for="roles">Rolės</label>
+                        <div th:each="role : ${roles}">
+                            <input name="roles"
+                                   th:class="${#fields.errors('roles').isEmpty()} ? 'form-check-input' : 'form-check-input is-invalid'"
+                                   th:field="*{roles}" th:text="${role.name()}" th:value="${role.name()}"
+                                   type="checkbox"/>
+                            <div class="invalid-feedback" th:each="error: ${#fields.errors('roles')}"
+                                 th:text="${error}"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-12 form-group">
+                        <div class="text-center">
+                            <a class="btn btn-outline-secondary font-weight-bold"
+                               th:href="@{/manage-employee/{id}/view(id=${employee.id})}">
+                                &laquo; Atgal</a>
+                            <input class="btn btn-success" type="submit" value="Išsaugoti">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+</body>
