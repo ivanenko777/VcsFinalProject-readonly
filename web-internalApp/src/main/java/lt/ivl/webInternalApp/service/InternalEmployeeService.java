@@ -56,7 +56,7 @@ public class InternalEmployeeService {
         componentEmployeeService.resetPasswordAndActivateEmployeeAccount(employee, newPassword, resetPasswordToken);
     }
 
-    public void update(Employee employee, EmployeeDto employeeDto) {
+    public void updateEmployeeAccount(Employee employee, EmployeeDto employeeDto) {
         employee.setFirstName(employeeDto.getFirstName());
         employee.setLastName(employeeDto.getLastName());
         employee.setEmail(employeeDto.getEmail());
