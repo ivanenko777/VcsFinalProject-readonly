@@ -18,7 +18,7 @@ public class Employee {
     private String lastName;
     private String phone;
 
-    @ElementCollection(targetClass = EmployeeRole.class, fetch = FetchType.EAGER)
+    @ElementCollection(targetClass = EmployeeRole.class, fetch = FetchType.LAZY)
     @CollectionTable(name = "employee_role", joinColumns = @JoinColumn(name = "employee_id"))
     @Enumerated(EnumType.STRING)
     private Set<EmployeeRole> roles = new HashSet<>();

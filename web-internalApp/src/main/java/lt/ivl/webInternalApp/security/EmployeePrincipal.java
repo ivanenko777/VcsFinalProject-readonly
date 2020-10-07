@@ -1,10 +1,14 @@
 package lt.ivl.webInternalApp.security;
 
 import lt.ivl.components.domain.Employee;
+import lt.ivl.components.domain.EmployeeRole;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 public class EmployeePrincipal implements UserDetails {
     private Employee employee;
@@ -23,7 +27,12 @@ public class EmployeePrincipal implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        Set<GrantedAuthority> authorities = new HashSet<>();
+        Set<EmployeeRole> roles = employee.getRoles();
+        for (EmployeeRole role : roles) {
+            authorities.add(new SimpleGrantedAuthority(role.name()));
+        }
+        return authorities;
     }
 
     @Override

@@ -10,6 +10,7 @@ import lt.ivl.components.repository.EmployeeResetPasswordTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Optional;
@@ -27,11 +28,16 @@ public class EmployeeService {
         return employeeRepository.save(employee);
     }
 
+    @Transactional
     public Employee findEmployeeByEmail(String email) throws EmployeeNotFoundInDbException {
         Optional<Employee> employee = employeeRepository.findByEmail(email);
         if (employee.isEmpty()) {
             throw new EmployeeNotFoundInDbException();
         }
+        // FIX: org.hibernate.LazyInitializationException: failed to lazily initialize a collection of role:
+        // lt.ivl.components.domain.Employee.roles, could not initialize proxy - no Session
+        employee.get().getRoles().size();
+
         return employee.get();
     }
 
