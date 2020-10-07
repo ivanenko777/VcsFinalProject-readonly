@@ -36,8 +36,11 @@
                 <td th:text="${employee.email}"></td>
                 <td th:text="${employee.phone}"></td>
                 <td th:text="${employee.active}"></td>
-                <td th:each="role : ${employee.roles}" th:if="${employee.roles}">
-                    <span th:text="${role.name()}"></span>
+                <td>
+                    <span th:text="${#strings.listJoin(employee.roles, ', ')}" th:if="${employee.roles}"></span>
+<!--                    <ul th:each="role : ${employee.roles}" th:if="${employee.roles}">-->
+<!--                        <li th:text="${role.name()}"></li>-->
+<!--                    </ul>-->
                 </td>
                 <td class="text-right">
                     <a class="btn btn-sm btn-outline-primary font-weight-bold"
