@@ -9,7 +9,7 @@ import lt.ivl.components.exception.TokenInvalidException;
 import lt.ivl.webExternalApp.dto.CustomerDto;
 import lt.ivl.webExternalApp.dto.ResetPasswordDto;
 import lt.ivl.webExternalApp.exception.*;
-import lt.ivl.webExternalApp.service.CustomerService;
+import lt.ivl.webExternalApp.service.ExternalCustomerService;
 import lt.ivl.webExternalApp.service.MailSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,7 +25,7 @@ import java.util.UUID;
 @RequestMapping("/")
 public class AuthController {
     @Autowired
-    private CustomerService customerService;
+    private ExternalCustomerService externalCustomerService;
 
     @Autowired
     private MailSender mailSender;
@@ -52,9 +52,9 @@ public class AuthController {
             return "auth/registration";
         }
         try {
-            Customer customer = customerService.registerNewCustomerAccount(customerDto);
+            Customer customer = externalCustomerService.registerNewCustomerAccount(customerDto);
             String token = UUID.randomUUID().toString();
-            customerService.createVerificationTokenForCustomerAccount(customer, token);
+            externalCustomerService.createVerificationTokenForCustomerAccount(customer, token);
             mailSender.sendAccountVerificationEmailToCustomer(customer, token);
             model.addAttribute("messageInfo", "Patvirtinkite registraciją. Instrukcijas rasite laiške.");
             return "auth/activation";
@@ -73,15 +73,15 @@ public class AuthController {
             Model model
     ) {
         try {
-            CustomerVerificationToken verificationToken = customerService.verifyCustomerAccountVerificationToken(token);
-            customerService.activateCustomerAccount(verificationToken);
+            CustomerVerificationToken verificationToken = externalCustomerService.verifyCustomerAccountVerificationToken(token);
+            externalCustomerService.activateCustomerAccount(verificationToken);
             Customer customer = verificationToken.getCustomer();
             mailSender.sendAccountActivatedEmailToCustomer(customer);
             model.addAttribute("messageInfo", "Registracija patvirtinta.");
         } catch (TokenInvalidException e) {
             model.addAttribute("messageError", "Nuoroda negalioja.");
         } catch (TokenExpiredException e) {
-            CustomerVerificationToken verificationToken = customerService.generateNewVerificationTokenForCustomerAccount(token);
+            CustomerVerificationToken verificationToken = externalCustomerService.generateNewVerificationTokenForCustomerAccount(token);
             Customer customer = verificationToken.getCustomer();
             String newToken = verificationToken.getToken();
             mailSender.sendAccountVerificationEmailToCustomer(customer, newToken);
@@ -101,8 +101,8 @@ public class AuthController {
             Model model
     ) {
         try {
-            Customer customer = customerService.findCustomerAccountByEmail(customerEmail);
-            CustomerResetPasswordToken resetPasswordToken = customerService.createPasswordResetTokenForCustomerAccount(customer);
+            Customer customer = externalCustomerService.findCustomerAccountByEmail(customerEmail);
+            CustomerResetPasswordToken resetPasswordToken = externalCustomerService.createPasswordResetTokenForCustomerAccount(customer);
             String token = resetPasswordToken.getToken();
             mailSender.sendResetPasswordEmailToCustomer(customer, token);
             model.addAttribute("messageInfo", "Slaptažodžio keitimo instrukcijos išsiųstos į el. paštą.");
@@ -120,7 +120,7 @@ public class AuthController {
     ) {
         try {
             model.addAttribute("pageHideForm", false);
-            customerService.verifyCustomerAccountPasswordResetToken(token);
+            externalCustomerService.verifyCustomerAccountPasswordResetToken(token);
         } catch (TokenInvalidException e) {
             model.addAttribute("pageHideForm", true);
             model.addAttribute("messageError", "Nuoroda negalioja.");
@@ -152,9 +152,9 @@ public class AuthController {
         }
 
         try {
-            CustomerResetPasswordToken resetPasswordToken = customerService.verifyCustomerAccountPasswordResetToken(token);
+            CustomerResetPasswordToken resetPasswordToken = externalCustomerService.verifyCustomerAccountPasswordResetToken(token);
             Customer customer = resetPasswordToken.getCustomer();
-            customerService.resetCustomerAccountPassword(customer, resetPasswordDto, resetPasswordToken);
+            externalCustomerService.resetCustomerAccountPassword(customer, resetPasswordDto, resetPasswordToken);
             model.addAttribute("pageHideForm", true);
             model.addAttribute("messageInfo", "Slaptažodis pakeistas.");
         } catch (TokenInvalidException e) {

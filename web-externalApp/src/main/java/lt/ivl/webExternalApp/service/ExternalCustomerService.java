@@ -21,7 +21,7 @@ import java.util.Calendar;
 import java.util.UUID;
 
 @Service
-public class CustomerService {
+public class ExternalCustomerService {
     @Autowired
     CustomerVerificationTokenRepository tokenRepository;
 
