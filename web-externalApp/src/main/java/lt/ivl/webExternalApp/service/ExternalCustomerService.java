@@ -21,12 +21,6 @@ import java.util.UUID;
 
 @Service
 public class ExternalCustomerService {
-//    @Autowired
-//    CustomerVerificationTokenRepository tokenRepository;
-//
-//    @Autowired
-//    CustomerResetPasswordTokenRepository passwordTokenRepository;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
 
