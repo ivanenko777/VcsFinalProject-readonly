@@ -7,6 +7,9 @@ import lt.ivl.components.exception.CustomerNotFoundInDBException;
 import lt.ivl.components.exception.PasswordDontMatchException;
 import lt.ivl.components.exception.TokenExpiredException;
 import lt.ivl.components.exception.TokenInvalidException;
+import lt.ivl.components.repository.CustomerRepository;
+import lt.ivl.components.repository.CustomerResetPasswordTokenRepository;
+import lt.ivl.components.repository.CustomerVerificationTokenRepository;
 import lt.ivl.components.service.CustomerService;
 import lt.ivl.webExternalApp.dto.CustomerDto;
 import lt.ivl.webExternalApp.dto.ResetPasswordDto;
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -36,23 +40,39 @@ public class ExternalCustomerService {
     @Autowired
     private CustomerService componentCustomerService;
 
+    // register by Customer
     public Customer registerNewCustomerAccount(CustomerDto customerDto) throws UsernameExistsInDatabaseException, PasswordDontMatchException {
         String password = customerDto.getPassword();
         String passwordVerify = customerDto.getPasswordVerify();
-        if (!validateIsPasswordPass(password, passwordVerify)) {
+        if (!password.equals(passwordVerify)) {
             throw new PasswordDontMatchException();
         }
 
-        if (validateIsCustomerAccountExist(customerDto.getEmail())) {
-            throw new UsernameExistsInDatabaseException();
+        // TODO: A: jei email != null && pass != null throw UsernameExistsInDatabaseException();
+        // TODO: jei email != null && pass == null
+        //  B: tada atnaujinti vartotojo info + prideti slaptazodi
+        //  C: else sukurti nauja vartotoja
+        String email = customerDto.getEmail();
+        Customer customer = null;
+        try {
+            customer = componentCustomerService.findCustomerByEmail(email);
+            // A
+            if(!customer.getPassword().isEmpty()) throw new UsernameExistsInDatabaseException();
+            // B
+            // customer.setEmail(customerDto.getEmail());
+            customer.setPassword(passwordEncoder.encode(customerDto.getPassword()));
+            customer.setFirstName(customerDto.getFirstName());
+            customer.setLastName(customerDto.getLastName());
+            customer.setPhone(customerDto.getPhone());
+        } catch (CustomerNotFoundInDBException e) {
+            // C
+            customer = new Customer();
+            customer.setEmail(customerDto.getEmail());
+            customer.setPassword(passwordEncoder.encode(customerDto.getPassword()));
+            customer.setFirstName(customerDto.getFirstName());
+            customer.setLastName(customerDto.getLastName());
+            customer.setPhone(customerDto.getPhone());
         }
-
-        Customer customer = new Customer();
-        customer.setEmail(customerDto.getEmail());
-        customer.setPassword(passwordEncoder.encode(customerDto.getPassword()));
-        customer.setFirstName(customerDto.getFirstName());
-        customer.setLastName(customerDto.getLastName());
-        customer.setPhone(customerDto.getPhone());
 
         return componentCustomerService.saveCustomer(customer);
     }
@@ -96,10 +116,7 @@ public class ExternalCustomerService {
     }
 
     public Customer findCustomerAccountByEmail(String email) throws CustomerNotFoundInDBException {
-        if (!validateIsCustomerAccountExist(email)) {
-            throw new CustomerNotFoundInDBException();
-        }
-        return customerRepository.findByEmail(email);
+        return componentCustomerService.findCustomerAccountByEmail(email);
     }
 
     public CustomerResetPasswordToken createPasswordResetTokenForCustomerAccount(Customer customer) {
@@ -109,11 +126,6 @@ public class ExternalCustomerService {
         return myToken;
     }
 
-    private boolean validateIsCustomerAccountExist(String email) {
-        // TODO: email != null && password != null
-        // nes vartotojas gali buti sukurtas Employee
-        return customerRepository.findByEmail(email) != null;
-    }
 
     private boolean validateIsPasswordPass(String password, String passwordVerify) {
         return password.equals(passwordVerify);
