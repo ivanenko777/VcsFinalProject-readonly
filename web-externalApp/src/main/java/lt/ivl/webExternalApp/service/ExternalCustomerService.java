@@ -7,29 +7,25 @@ import lt.ivl.components.exception.CustomerNotFoundInDBException;
 import lt.ivl.components.exception.PasswordDontMatchException;
 import lt.ivl.components.exception.TokenExpiredException;
 import lt.ivl.components.exception.TokenInvalidException;
-import lt.ivl.components.repository.CustomerRepository;
-import lt.ivl.components.repository.CustomerResetPasswordTokenRepository;
-import lt.ivl.components.repository.CustomerVerificationTokenRepository;
 import lt.ivl.components.service.CustomerService;
 import lt.ivl.webExternalApp.dto.CustomerDto;
 import lt.ivl.webExternalApp.dto.ResetPasswordDto;
-import lt.ivl.webExternalApp.exception.*;
+import lt.ivl.webExternalApp.exception.UsernameExistsInDatabaseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
 public class ExternalCustomerService {
-    @Autowired
-    CustomerVerificationTokenRepository tokenRepository;
-
-    @Autowired
-    CustomerResetPasswordTokenRepository passwordTokenRepository;
+//    @Autowired
+//    CustomerVerificationTokenRepository tokenRepository;
+//
+//    @Autowired
+//    CustomerResetPasswordTokenRepository passwordTokenRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -110,43 +106,11 @@ public class ExternalCustomerService {
         return componentCustomerService.createPasswordResetTokenForCustomerAccount(customer);
     }
 
-    private boolean validateIsTokenExpired(Timestamp tokenExpiryDate) {
-        Calendar calendar = Calendar.getInstance();
-        return (tokenExpiryDate.getTime() - calendar.getTime().getTime()) <= 0;
-    }
-
     public CustomerVerificationToken verifyCustomerAccountVerificationToken(String token) throws TokenInvalidException, TokenExpiredException {
-        // jei tokeno nera ismetame klaida
-        if (token == null) throw new TokenInvalidException();
-
-        // jei tokenas nerastas ismetame klaida
-        CustomerVerificationToken verificationToken = tokenRepository.findByToken(token);
-        if (verificationToken == null) throw new TokenInvalidException();
-
-        // jei tokenas negalioja, ismetame klaida
-        Timestamp verificationTokenExpiryDate = verificationToken.getExpiryDate();
-        if (validateIsTokenExpired(verificationTokenExpiryDate)) {
-            throw new TokenExpiredException();
-        }
-
-        return verificationToken;
+        return componentCustomerService.verifyCustomerAccountVerificationToken(token);
     }
-
 
     public CustomerResetPasswordToken verifyCustomerAccountPasswordResetToken(String token) throws TokenInvalidException, TokenExpiredException {
-        // jei tokeno nera ismetame klaida
-        if (token == null) throw new TokenInvalidException();
-
-        // jei tokenas nerastas ismetame klaida
-        CustomerResetPasswordToken tokenFromDb = passwordTokenRepository.findByToken(token);
-        if (tokenFromDb == null) throw new TokenInvalidException();
-
-        // jei tokenas negalioja ismetame klaida
-        Timestamp passwordTokenExpiryDate = tokenFromDb.getExpiryDate();
-        if (validateIsTokenExpired(passwordTokenExpiryDate)) {
-            throw new TokenExpiredException();
-        }
-
-        return tokenFromDb;
+        return componentCustomerService.verifyCustomerAccountPasswordResetToken(token);
     }
 }
