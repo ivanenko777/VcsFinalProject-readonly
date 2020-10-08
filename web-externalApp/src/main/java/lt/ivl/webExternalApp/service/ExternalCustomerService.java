@@ -56,13 +56,13 @@ public class ExternalCustomerService {
         customer.setLastName(customerDto.getLastName());
         customer.setPhone(customerDto.getPhone());
 
-        return saveCustomer(customer);
+        return componentCustomerService.saveCustomer(customer);
     }
 
     public void activateCustomerAccount(CustomerVerificationToken verificationToken) {
         Customer customer = verificationToken.getCustomer();
         customer.setActive(true);
-        saveCustomer(customer);
+        componentCustomerService.saveCustomer(customer);
         tokenRepository.delete(verificationToken);
     }
 
@@ -80,14 +80,10 @@ public class ExternalCustomerService {
 
         // change password
         customer.setPassword(passwordEncoder.encode(password));
-        saveCustomer(customer);
+        componentCustomerService.saveCustomer(customer);
 
         // delete token
         passwordTokenRepository.delete(resetPasswordToken);
-    }
-
-    private Customer saveCustomer(Customer customer) {
-        return customerRepository.save(customer);
     }
 
     public void createVerificationTokenForCustomerAccount(Customer customer, String token) {
