@@ -1,6 +1,8 @@
 package lt.ivl.components.domain;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Employee {
@@ -16,8 +18,13 @@ public class Employee {
     private String lastName;
     private String phone;
 
+    @ElementCollection(targetClass = EmployeeRole.class, fetch = FetchType.LAZY)
+    @CollectionTable(name = "employee_role", joinColumns = @JoinColumn(name = "employee_id"))
+    @Enumerated(EnumType.STRING)
+    private Set<EmployeeRole> roles = new HashSet<>();
+
     public Employee() {
-        this.active = true;
+        this.active = false;
     }
 
     public int getId() {
@@ -70,5 +77,13 @@ public class Employee {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public Set<EmployeeRole> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<EmployeeRole> roles) {
+        this.roles = roles;
     }
 }

@@ -2,6 +2,7 @@ package lt.ivl.components.service;
 
 import lt.ivl.components.domain.Employee;
 import lt.ivl.components.domain.EmployeeResetPasswordToken;
+import lt.ivl.components.exception.EmployeeAccountExistsInDatabaseException;
 import lt.ivl.components.exception.EmployeeNotFoundInDbException;
 import lt.ivl.components.exception.TokenExpiredException;
 import lt.ivl.components.exception.TokenInvalidException;
@@ -10,8 +11,10 @@ import lt.ivl.components.repository.EmployeeResetPasswordTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -27,11 +30,20 @@ public class EmployeeService {
         return employeeRepository.save(employee);
     }
 
+    public List<Employee> findAll() {
+        return (List<Employee>) employeeRepository.findAll();
+    }
+
+    @Transactional
     public Employee findEmployeeByEmail(String email) throws EmployeeNotFoundInDbException {
         Optional<Employee> employee = employeeRepository.findByEmail(email);
         if (employee.isEmpty()) {
             throw new EmployeeNotFoundInDbException();
         }
+        // FIX: org.hibernate.LazyInitializationException: failed to lazily initialize a collection of role:
+        // lt.ivl.components.domain.Employee.roles, could not initialize proxy - no Session
+        employee.get().getRoles().size();
+
         return employee.get();
     }
 
@@ -58,6 +70,11 @@ public class EmployeeService {
         }
 
         return tokenFromDb.get();
+    }
+
+    public void verifyIsEmployeeAccountExists(String email) throws EmployeeAccountExistsInDatabaseException {
+        Optional<Employee> employee = employeeRepository.findByEmail(email);
+        if (employee.isPresent()) throw new EmployeeAccountExistsInDatabaseException();
     }
 
     public void resetPasswordAndActivateEmployeeAccount(

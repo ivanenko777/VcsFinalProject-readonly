@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en"
+      layout:decorate="~{_layouts/layout}"
+      th:with="pageName=${'Darbuotojų sąrašas'}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE" th:text="${pageName}">...</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="row pt-2">
+        <div class="col-md-12 d-flex">
+            <h4 th:text="${pageName}"></h4>
+            <a class="btn btn-success font-weight-bold ml-auto" th:href="@{/manage-employee/add}">Pridėti naują
+                darbuotoją</a>
+        </div>
+    </div>
+
+    <div class="row pt-2">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Vardas, pavardė</th>
+                <th scope="col">Email</th>
+                <th scope="col">Telefonas</th>
+                <th scope="col">Aktyvus</th>
+                <th scope="col">Rolės</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody th:each="employee : ${employeeList}">
+            <tr>
+                <td th:text="${employee.firstName + ' ' + employee.lastName}"></td>
+                <td th:text="${employee.email}"></td>
+                <td th:text="${employee.phone}"></td>
+                <td th:text="${employee.active}"></td>
+                <td>
+                    <span th:text="${#strings.listJoin(employee.roles, ', ')}" th:if="${employee.roles}"></span>
+<!--                    <ul th:each="role : ${employee.roles}" th:if="${employee.roles}">-->
+<!--                        <li th:text="${role.name()}"></li>-->
+<!--                    </ul>-->
+                </td>
+                <td class="text-right">
+                    <a class="btn btn-sm btn-outline-primary font-weight-bold"
+                       th:href="@{/manage-employee/{id}/view(id=${employee.id})}">Info &raquo;</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>

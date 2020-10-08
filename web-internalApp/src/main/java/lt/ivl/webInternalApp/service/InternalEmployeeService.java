@@ -2,15 +2,15 @@ package lt.ivl.webInternalApp.service;
 
 import lt.ivl.components.domain.Employee;
 import lt.ivl.components.domain.EmployeeResetPasswordToken;
-import lt.ivl.components.exception.EmployeeNotFoundInDbException;
-import lt.ivl.components.exception.PasswordDontMatchException;
-import lt.ivl.components.exception.TokenExpiredException;
-import lt.ivl.components.exception.TokenInvalidException;
+import lt.ivl.components.exception.*;
 import lt.ivl.components.service.EmployeeService;
+import lt.ivl.webInternalApp.dto.EmployeeDto;
 import lt.ivl.webInternalApp.dto.ResetPasswordDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class InternalEmployeeService {
@@ -19,6 +19,10 @@ public class InternalEmployeeService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    public List<Employee> findAll() {
+        return componentEmployeeService.findAll();
+    }
 
     public Employee findEmployeeAccountByEmail(String email) throws EmployeeNotFoundInDbException {
         return componentEmployeeService.findEmployeeByEmail(email);
@@ -47,5 +51,32 @@ public class InternalEmployeeService {
         // change password
         String newPassword = passwordEncoder.encode(password);
         componentEmployeeService.resetPasswordAndActivateEmployeeAccount(employee, newPassword, resetPasswordToken);
+    }
+
+    public Employee updateEmployeeAccount(Employee employee, EmployeeDto employeeDto) {
+        employee = fillEmployeeFields(employee, employeeDto);
+        return componentEmployeeService.saveEmployee(employee);
+    }
+
+    public Employee createEmployeeAccount(EmployeeDto employeeDto) throws EmployeeAccountExistsInDatabaseException {
+        String email = employeeDto.getEmail();
+        // throw exception if exists
+        componentEmployeeService.verifyIsEmployeeAccountExists(email);
+
+        Employee employee = new Employee();
+        employee = fillEmployeeFields(employee, employeeDto);
+        return componentEmployeeService.saveEmployee(employee);
+    }
+
+    private Employee fillEmployeeFields(Employee employee, EmployeeDto employeeDto) {
+        employee.setFirstName(employeeDto.getFirstName());
+        employee.setLastName(employeeDto.getLastName());
+        employee.setEmail(employeeDto.getEmail());
+        employee.setPhone(employeeDto.getPhone());
+
+        employee.getRoles().clear();
+        employee.setRoles(employeeDto.getRoles());
+
+        return employee;
     }
 }

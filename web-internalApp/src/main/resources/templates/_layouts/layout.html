@@ -4,7 +4,7 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Klientų sistema</title>
+    <title>Vidinė sistema</title>
 
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport">
@@ -31,6 +31,8 @@
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav mr-auto">
                 <a class="nav-link" th:href="@{/}">Pradžia</a>
+                <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/manage-employee/list}">
+                    Darbuotojų valdymas</a>
             </div>
             <div class="navbar-nav ml-auto">
                 <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/login}">Prisijungti</a>
