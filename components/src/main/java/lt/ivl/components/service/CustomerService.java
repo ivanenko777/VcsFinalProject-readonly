@@ -112,16 +112,17 @@ public class CustomerService {
         if (token == null) throw new TokenInvalidException();
 
         // jei tokenas nerastas ismetame klaida
-        CustomerResetPasswordToken tokenFromDb = passwordTokenRepository.findByToken(token);
-        if (tokenFromDb == null) throw new TokenInvalidException();
+        Optional<CustomerResetPasswordToken> tokenFromDb = passwordTokenRepository.findByToken(token);
+        if (tokenFromDb.isEmpty()) throw new TokenInvalidException();
 
         // jei tokenas negalioja ismetame klaida
-        Timestamp passwordTokenExpiryDate = tokenFromDb.getExpiryDate();
+        CustomerResetPasswordToken resetPasswordToken = tokenFromDb.get();
+        Timestamp passwordTokenExpiryDate = resetPasswordToken.getExpiryDate();
         if (validateIsTokenExpired(passwordTokenExpiryDate)) {
             throw new TokenExpiredException();
         }
 
-        return tokenFromDb;
+        return resetPasswordToken;
     }
 
     private boolean validateIsTokenExpired(Timestamp tokenExpiryDate) {
