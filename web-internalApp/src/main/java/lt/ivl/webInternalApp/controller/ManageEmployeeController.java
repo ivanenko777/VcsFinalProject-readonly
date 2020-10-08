@@ -62,7 +62,7 @@ public class ManageEmployeeController {
             Employee employee = internalEmployeeService.createEmployeeAccount(employeeDto);
             EmployeeResetPasswordToken passwordResetToken = internalEmployeeService.createPasswordResetTokenForEmployeeAccount(employee);
             // TODO: send activation email
-            return "redirect:/manage-employee/{employee}/view";
+            return "redirect:/manage-employee/" + employee.getId() + "/view";
         } catch (EmployeeAccountExistsInDatabaseException e) {
             model.addAttribute("roles", roleList);
             model.addAttribute("messageError", e.getMessage());
