@@ -9,7 +9,7 @@ import lt.ivl.components.exception.TokenExpiredException;
 import lt.ivl.components.exception.TokenInvalidException;
 import lt.ivl.webExternalApp.dto.CustomerDto;
 import lt.ivl.webExternalApp.dto.ResetPasswordDto;
-import lt.ivl.webExternalApp.exception.CustomerExistsInDatabaseException;
+import lt.ivl.components.exception.CustomerExistsInDatabaseException;
 import lt.ivl.webExternalApp.service.ExternalCustomerService;
 import lt.ivl.webExternalApp.service.MailSender;
 import org.springframework.beans.factory.annotation.Autowired;

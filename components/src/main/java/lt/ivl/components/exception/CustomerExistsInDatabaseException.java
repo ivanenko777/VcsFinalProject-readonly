@@ -1,4 +1,4 @@
-package lt.ivl.webExternalApp.exception;
+package lt.ivl.components.exception;
 
 public class CustomerExistsInDatabaseException extends Exception {
     public CustomerExistsInDatabaseException() {

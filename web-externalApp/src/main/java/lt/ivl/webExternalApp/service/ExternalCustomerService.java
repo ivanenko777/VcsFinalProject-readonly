@@ -10,7 +10,7 @@ import lt.ivl.components.exception.TokenInvalidException;
 import lt.ivl.components.service.CustomerService;
 import lt.ivl.webExternalApp.dto.CustomerDto;
 import lt.ivl.webExternalApp.dto.ResetPasswordDto;
-import lt.ivl.webExternalApp.exception.CustomerExistsInDatabaseException;
+import lt.ivl.components.exception.CustomerExistsInDatabaseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
