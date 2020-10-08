@@ -1,7 +1,22 @@
 package lt.ivl.components.service;
 
+import lt.ivl.components.domain.Customer;
+import lt.ivl.components.domain.CustomerVerificationToken;
+import lt.ivl.components.repository.CustomerRepository;
+import lt.ivl.components.repository.CustomerResetPasswordTokenRepository;
+import lt.ivl.components.repository.CustomerVerificationTokenRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CustomerService {
+    @Autowired
+    CustomerVerificationTokenRepository tokenRepository;
+
+    @Autowired
+    CustomerResetPasswordTokenRepository passwordTokenRepository;
+
+    @Autowired
+    private CustomerRepository customerRepository;
+    
 }
