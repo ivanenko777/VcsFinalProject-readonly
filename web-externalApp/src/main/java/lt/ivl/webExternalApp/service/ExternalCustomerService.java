@@ -32,9 +32,6 @@ public class ExternalCustomerService {
     CustomerResetPasswordTokenRepository passwordTokenRepository;
 
     @Autowired
-    private CustomerRepository customerRepository;
-
-    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
