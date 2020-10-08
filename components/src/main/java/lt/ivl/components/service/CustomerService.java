@@ -20,10 +20,10 @@ import java.util.UUID;
 @Service
 public class CustomerService {
     @Autowired
-    CustomerVerificationTokenRepository tokenRepository;
+    private CustomerVerificationTokenRepository tokenRepository;
 
     @Autowired
-    CustomerResetPasswordTokenRepository passwordTokenRepository;
+    private CustomerResetPasswordTokenRepository passwordTokenRepository;
 
     @Autowired
     private CustomerRepository customerRepository;
