@@ -1,7 +1,7 @@
 package lt.ivl.webExternalApp.security;
 
 import lt.ivl.components.domain.Customer;
-import lt.ivl.webExternalApp.exception.CustomerNotFoundInDBException;
+import lt.ivl.components.exception.CustomerNotFoundInDBException;
 import lt.ivl.webExternalApp.service.ExternalCustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
