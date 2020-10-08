@@ -78,10 +78,11 @@ public class CustomerService {
     }
 
     public CustomerVerificationToken generateNewVerificationTokenForCustomerAccount(String existingVerificationToken) {
-        CustomerVerificationToken token = tokenRepository.findByToken(existingVerificationToken);
+        Optional<CustomerVerificationToken> verificationToken = tokenRepository.findByToken(existingVerificationToken);
+        CustomerVerificationToken verificationTokenFromDb = verificationToken.get();
         String newToken = UUID.randomUUID().toString();
-        token.updateToken(newToken);
-        return tokenRepository.save(token);
+        verificationTokenFromDb.updateToken(newToken);
+        return tokenRepository.save(verificationTokenFromDb);
     }
 
     public CustomerResetPasswordToken createPasswordResetTokenForCustomerAccount(Customer customer) {
@@ -95,16 +96,17 @@ public class CustomerService {
         if (token == null) throw new TokenInvalidException();
 
         // jei tokenas nerastas ismetame klaida
-        CustomerVerificationToken verificationToken = tokenRepository.findByToken(token);
-        if (verificationToken == null) throw new TokenInvalidException();
+        Optional<CustomerVerificationToken> verificationToken = tokenRepository.findByToken(token);
+        if (verificationToken.isEmpty()) throw new TokenInvalidException();
 
         // jei tokenas negalioja, ismetame klaida
-        Timestamp verificationTokenExpiryDate = verificationToken.getExpiryDate();
+        CustomerVerificationToken verificationTokenFromDb = verificationToken.get();
+        Timestamp verificationTokenExpiryDate = verificationTokenFromDb.getExpiryDate();
         if (validateIsTokenExpired(verificationTokenExpiryDate)) {
             throw new TokenExpiredException();
         }
 
-        return verificationToken;
+        return verificationTokenFromDb;
     }
 
     public CustomerResetPasswordToken verifyCustomerAccountPasswordResetToken(String token) throws TokenInvalidException, TokenExpiredException {
