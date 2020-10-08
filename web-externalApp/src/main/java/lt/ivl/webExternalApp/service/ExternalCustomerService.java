@@ -93,12 +93,8 @@ public class ExternalCustomerService {
             throw new PasswordDontMatchException();
         }
 
-        // change password
-        customer.setPassword(passwordEncoder.encode(password));
-        componentCustomerService.saveCustomer(customer);
-
-        // delete token
-        passwordTokenRepository.delete(resetPasswordToken);
+        String newPassword = passwordEncoder.encode(password);
+        componentCustomerService.resetCustomerAccountPassword(customer, newPassword, resetPasswordToken);
     }
 
     public void createVerificationTokenForCustomerAccount(Customer customer, String token) {

@@ -1,6 +1,7 @@
 package lt.ivl.components.service;
 
 import lt.ivl.components.domain.Customer;
+import lt.ivl.components.domain.CustomerResetPasswordToken;
 import lt.ivl.components.exception.CustomerNotFoundInDBException;
 import lt.ivl.components.repository.CustomerRepository;
 import lt.ivl.components.repository.CustomerResetPasswordTokenRepository;
@@ -46,5 +47,14 @@ public class CustomerService {
         }
 
         return customer.get();
+    }
+
+    public void resetCustomerAccountPassword(Customer customer, String newPassword, CustomerResetPasswordToken resetPasswordToken) {
+        // change password
+        customer.setPassword(newPassword);
+        saveCustomer(customer);
+
+        // delete token
+        passwordTokenRepository.delete(resetPasswordToken);
     }
 }
