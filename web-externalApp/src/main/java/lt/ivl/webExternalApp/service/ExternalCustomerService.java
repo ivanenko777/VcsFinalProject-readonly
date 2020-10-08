@@ -89,7 +89,7 @@ public class ExternalCustomerService {
         // password validation
         String password = passwordDto.getPassword();
         String passwordVerify = passwordDto.getPasswordVerify();
-        if (!validateIsPasswordPass(password, passwordVerify)) {
+        if (!password.equals(passwordVerify)) {
             throw new PasswordDontMatchException();
         }
 
@@ -121,11 +121,6 @@ public class ExternalCustomerService {
         CustomerResetPasswordToken myToken = new CustomerResetPasswordToken(token, customer);
         passwordTokenRepository.save(myToken);
         return myToken;
-    }
-
-
-    private boolean validateIsPasswordPass(String password, String passwordVerify) {
-        return password.equals(passwordVerify);
     }
 
     private boolean validateIsTokenExpired(Timestamp tokenExpiryDate) {
