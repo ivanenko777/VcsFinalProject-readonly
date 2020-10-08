@@ -79,4 +79,10 @@ public class CustomerService {
         token.updateToken(newToken);
         return tokenRepository.save(token);
     }
+
+    public CustomerResetPasswordToken createPasswordResetTokenForCustomerAccount(Customer customer) {
+        String token = UUID.randomUUID().toString();
+        CustomerResetPasswordToken newToken = new CustomerResetPasswordToken(token, customer);
+        return passwordTokenRepository.save(newToken);
+    }
 }

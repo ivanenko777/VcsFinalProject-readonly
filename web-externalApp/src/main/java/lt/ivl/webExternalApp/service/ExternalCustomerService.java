@@ -107,10 +107,7 @@ public class ExternalCustomerService {
     }
 
     public CustomerResetPasswordToken createPasswordResetTokenForCustomerAccount(Customer customer) {
-        String token = UUID.randomUUID().toString();
-        CustomerResetPasswordToken myToken = new CustomerResetPasswordToken(token, customer);
-        passwordTokenRepository.save(myToken);
-        return myToken;
+        return componentCustomerService.createPasswordResetTokenForCustomerAccount(customer);
     }
 
     private boolean validateIsTokenExpired(Timestamp tokenExpiryDate) {
