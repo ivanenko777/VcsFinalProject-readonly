@@ -2,6 +2,7 @@ package lt.ivl.components.service;
 
 import lt.ivl.components.domain.Customer;
 import lt.ivl.components.domain.CustomerResetPasswordToken;
+import lt.ivl.components.domain.CustomerVerificationToken;
 import lt.ivl.components.exception.CustomerNotFoundInDBException;
 import lt.ivl.components.repository.CustomerRepository;
 import lt.ivl.components.repository.CustomerResetPasswordTokenRepository;
@@ -56,5 +57,12 @@ public class CustomerService {
 
         // delete token
         passwordTokenRepository.delete(resetPasswordToken);
+    }
+
+    public void activateCustomerAccount(CustomerVerificationToken verificationToken) {
+        Customer customer = verificationToken.getCustomer();
+        customer.setActive(true);
+        saveCustomer(customer);
+        tokenRepository.delete(verificationToken);
     }
 }

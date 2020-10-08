@@ -75,10 +75,7 @@ public class ExternalCustomerService {
     }
 
     public void activateCustomerAccount(CustomerVerificationToken verificationToken) {
-        Customer customer = verificationToken.getCustomer();
-        customer.setActive(true);
-        componentCustomerService.saveCustomer(customer);
-        tokenRepository.delete(verificationToken);
+        componentCustomerService.activateCustomerAccount(verificationToken);
     }
 
     public void resetCustomerAccountPassword(
