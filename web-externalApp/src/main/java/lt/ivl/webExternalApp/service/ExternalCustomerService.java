@@ -54,7 +54,7 @@ public class ExternalCustomerService {
         try {
             customer = componentCustomerService.findCustomerByEmail(email);
             // A
-            if(!customer.getPassword().isEmpty()) throw new UsernameExistsInDatabaseException();
+            if (!customer.getPassword().isEmpty()) throw new UsernameExistsInDatabaseException();
             // B
             // customer.setEmail(customerDto.getEmail());
             customer.setPassword(passwordEncoder.encode(customerDto.getPassword()));
