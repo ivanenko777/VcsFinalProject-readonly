@@ -6,6 +6,7 @@ import lt.ivl.components.domain.CustomerVerificationToken;
 import lt.ivl.components.exception.PasswordDontMatchException;
 import lt.ivl.components.exception.TokenExpiredException;
 import lt.ivl.components.exception.TokenInvalidException;
+import lt.ivl.components.service.CustomerService;
 import lt.ivl.webExternalApp.dto.CustomerDto;
 import lt.ivl.webExternalApp.dto.ResetPasswordDto;
 import lt.ivl.webExternalApp.exception.*;
@@ -33,6 +34,9 @@ public class ExternalCustomerService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private CustomerService componentCustomerService;
 
     public Customer registerNewCustomerAccount(CustomerDto customerDto) throws UsernameExistsInDatabaseException, PasswordDontMatchException {
         String password = customerDto.getPassword();
