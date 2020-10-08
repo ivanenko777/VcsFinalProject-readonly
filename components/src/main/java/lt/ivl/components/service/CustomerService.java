@@ -72,4 +72,11 @@ public class CustomerService {
         CustomerVerificationToken myToken = new CustomerVerificationToken(token, customer);
         return tokenRepository.save(myToken);
     }
+
+    public CustomerVerificationToken generateNewVerificationTokenForCustomerAccount(String existingVerificationToken) {
+        CustomerVerificationToken token = tokenRepository.findByToken(existingVerificationToken);
+        String newToken = UUID.randomUUID().toString();
+        token.updateToken(newToken);
+        return tokenRepository.save(token);
+    }
 }

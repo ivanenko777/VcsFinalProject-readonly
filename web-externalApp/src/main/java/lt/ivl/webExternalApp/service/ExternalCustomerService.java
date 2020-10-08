@@ -99,9 +99,7 @@ public class ExternalCustomerService {
     }
 
     public CustomerVerificationToken generateNewVerificationTokenForCustomerAccount(String existingVerificationToken) {
-        CustomerVerificationToken token = tokenRepository.findByToken(existingVerificationToken);
-        token.updateToken(UUID.randomUUID().toString());
-        return tokenRepository.save(token);
+        return componentCustomerService.generateNewVerificationTokenForCustomerAccount(existingVerificationToken);
     }
 
     public Customer findCustomerAccountByEmail(String email) throws CustomerNotFoundInDBException {
