@@ -94,9 +94,8 @@ public class ExternalCustomerService {
         componentCustomerService.resetCustomerAccountPassword(customer, newPassword, resetPasswordToken);
     }
 
-    public void createVerificationTokenForCustomerAccount(Customer customer, String token) {
-        CustomerVerificationToken myToken = new CustomerVerificationToken(token, customer);
-        tokenRepository.save(myToken);
+    public CustomerVerificationToken createVerificationTokenForCustomerAccount(Customer customer) {
+        return componentCustomerService.createVerificationTokenForCustomerAccount(customer);
     }
 
     public CustomerVerificationToken generateNewVerificationTokenForCustomerAccount(String existingVerificationToken) {

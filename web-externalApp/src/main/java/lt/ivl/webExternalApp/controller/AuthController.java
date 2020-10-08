@@ -9,7 +9,7 @@ import lt.ivl.components.exception.TokenExpiredException;
 import lt.ivl.components.exception.TokenInvalidException;
 import lt.ivl.webExternalApp.dto.CustomerDto;
 import lt.ivl.webExternalApp.dto.ResetPasswordDto;
-import lt.ivl.webExternalApp.exception.*;
+import lt.ivl.webExternalApp.exception.UsernameExistsInDatabaseException;
 import lt.ivl.webExternalApp.service.ExternalCustomerService;
 import lt.ivl.webExternalApp.service.MailSender;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.UUID;
 
 @Controller
 @RequestMapping("/")
@@ -54,8 +53,8 @@ public class AuthController {
         }
         try {
             Customer customer = externalCustomerService.registerNewCustomerAccount(customerDto);
-            String token = UUID.randomUUID().toString();
-            externalCustomerService.createVerificationTokenForCustomerAccount(customer, token);
+            CustomerVerificationToken verificationToken = externalCustomerService.createVerificationTokenForCustomerAccount(customer);
+            String token = verificationToken.getToken();
             mailSender.sendAccountVerificationEmailToCustomer(customer, token);
             model.addAttribute("messageInfo", "Patvirtinkite registraciją. Instrukcijas rasite laiške.");
             return "auth/activation";

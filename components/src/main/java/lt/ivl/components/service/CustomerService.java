@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class CustomerService {
@@ -64,5 +65,11 @@ public class CustomerService {
         customer.setActive(true);
         saveCustomer(customer);
         tokenRepository.delete(verificationToken);
+    }
+
+    public CustomerVerificationToken createVerificationTokenForCustomerAccount(Customer customer) {
+        String token = UUID.randomUUID().toString();
+        CustomerVerificationToken myToken = new CustomerVerificationToken(token, customer);
+        return tokenRepository.save(myToken);
     }
 }
