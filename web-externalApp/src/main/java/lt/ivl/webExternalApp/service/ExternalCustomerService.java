@@ -10,14 +10,10 @@ import lt.ivl.components.exception.TokenInvalidException;
 import lt.ivl.components.service.CustomerService;
 import lt.ivl.webExternalApp.dto.CustomerDto;
 import lt.ivl.webExternalApp.dto.ResetPasswordDto;
-import lt.ivl.webExternalApp.exception.UsernameExistsInDatabaseException;
+import lt.ivl.webExternalApp.exception.CustomerExistsInDatabaseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.UUID;
 
 @Service
 public class ExternalCustomerService {
@@ -28,7 +24,7 @@ public class ExternalCustomerService {
     private CustomerService componentCustomerService;
 
     // register by Customer
-    public Customer registerNewCustomerAccount(CustomerDto customerDto) throws UsernameExistsInDatabaseException, PasswordDontMatchException {
+    public Customer registerNewCustomerAccount(CustomerDto customerDto) throws CustomerExistsInDatabaseException, PasswordDontMatchException {
         String password = customerDto.getPassword();
         String passwordVerify = customerDto.getPasswordVerify();
         if (!password.equals(passwordVerify)) {
@@ -44,7 +40,7 @@ public class ExternalCustomerService {
         try {
             customer = componentCustomerService.findCustomerByEmail(email);
             // A
-            if (!customer.getPassword().isEmpty()) throw new UsernameExistsInDatabaseException();
+            if (!customer.getPassword().isEmpty()) throw new CustomerExistsInDatabaseException();
             // B
             // customer.setEmail(customerDto.getEmail());
             customer.setPassword(passwordEncoder.encode(customerDto.getPassword()));

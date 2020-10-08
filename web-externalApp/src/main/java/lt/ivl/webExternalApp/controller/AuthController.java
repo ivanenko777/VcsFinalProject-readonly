@@ -9,7 +9,7 @@ import lt.ivl.components.exception.TokenExpiredException;
 import lt.ivl.components.exception.TokenInvalidException;
 import lt.ivl.webExternalApp.dto.CustomerDto;
 import lt.ivl.webExternalApp.dto.ResetPasswordDto;
-import lt.ivl.webExternalApp.exception.UsernameExistsInDatabaseException;
+import lt.ivl.webExternalApp.exception.CustomerExistsInDatabaseException;
 import lt.ivl.webExternalApp.service.ExternalCustomerService;
 import lt.ivl.webExternalApp.service.MailSender;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +58,7 @@ public class AuthController {
             mailSender.sendAccountVerificationEmailToCustomer(customer, token);
             model.addAttribute("messageInfo", "Patvirtinkite registraciją. Instrukcijas rasite laiške.");
             return "auth/activation";
-        } catch (UsernameExistsInDatabaseException e) {
+        } catch (CustomerExistsInDatabaseException e) {
             model.addAttribute("messageError", e.getMessage() + " Jei pamiršote prisijungimo duomenis, pasinaudokite slaptažodžio priminimo funkcija.");
             return "auth/registration";
         } catch (PasswordDontMatchException e) {
