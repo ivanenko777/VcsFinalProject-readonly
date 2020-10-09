@@ -3,6 +3,7 @@ package lt.ivl.components.service;
 import lt.ivl.components.domain.Customer;
 import lt.ivl.components.domain.CustomerResetPasswordToken;
 import lt.ivl.components.domain.CustomerVerificationToken;
+import lt.ivl.components.exception.CustomerExistsInDatabaseException;
 import lt.ivl.components.exception.CustomerNotFoundInDBException;
 import lt.ivl.components.exception.TokenExpiredException;
 import lt.ivl.components.exception.TokenInvalidException;
@@ -130,6 +131,11 @@ public class CustomerService {
         }
 
         return resetPasswordToken;
+    }
+
+    public void verifyIsCustomerExists(String email) throws CustomerExistsInDatabaseException {
+        Optional<Customer> customer = customerRepository.findByEmail(email);
+        if (customer.isPresent()) throw new CustomerExistsInDatabaseException();
     }
 
     private boolean validateIsTokenExpired(Timestamp tokenExpiryDate) {
