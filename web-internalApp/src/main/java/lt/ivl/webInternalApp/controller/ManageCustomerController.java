@@ -57,4 +57,38 @@ public class ManageCustomerController {
             return "manage-customer/add";
         }
     }
+
+    @GetMapping("{customer}/edit")
+    public String showUpdateForm(@PathVariable("customer") Customer customer, Model model) {
+        CustomerDto customerDto = new CustomerDto(customer);
+        int customerId = customer.getId();
+
+        model.addAttribute("customerDto", customerDto);
+        model.addAttribute("customerId", customerId);
+        return "manage-customer/edit";
+    }
+
+    @PostMapping("{customer}/edit")
+    public String update(
+            @PathVariable("customer") Customer customer,
+            @Valid @ModelAttribute("customerDto") CustomerDto customerDto,
+            BindingResult bindingResult,
+            Model model
+    ) {
+        int customerId = customer.getId();
+        model.addAttribute("customerDto", customerDto);
+        model.addAttribute("customerId", customerId);
+
+        if (bindingResult.hasErrors()) {
+            return "manage-customer/edit";
+        }
+
+        try {
+            internalCustomerService.updateCustomer(customer, customerDto);
+        } catch (CustomerExistsInDatabaseException e) {
+            model.addAttribute("messageError", "Klientas su tokiu el. pašto adresu jau užregistruota.");
+            return "manage-customer/add";
+        }
+        return "redirect:/manage-customer/{customer}/view";
+    }
 }

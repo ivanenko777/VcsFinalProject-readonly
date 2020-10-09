@@ -1,5 +1,7 @@
 package lt.ivl.webInternalApp.dto;
 
+import lt.ivl.components.domain.Customer;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -19,6 +21,16 @@ public class CustomerDto {
     @NotNull
     @NotEmpty(message = "Laukas negali būti tuščias.")
     private String phone;
+
+    public CustomerDto() {
+    }
+
+    public CustomerDto(Customer customer) {
+        this.firstName = customer.getFirstName();
+        this.lastName = customer.getLastName();
+        this.email = customer.getEmail();
+        this.phone = customer.getPhone();
+    }
 
     public String getEmail() {
         return email;
