@@ -3,14 +3,10 @@ package lt.ivl.webExternalApp.service;
 import lt.ivl.components.domain.Customer;
 import lt.ivl.components.domain.CustomerResetPasswordToken;
 import lt.ivl.components.domain.CustomerVerificationToken;
-import lt.ivl.components.exception.CustomerNotFoundInDBException;
-import lt.ivl.components.exception.PasswordDontMatchException;
-import lt.ivl.components.exception.TokenExpiredException;
-import lt.ivl.components.exception.TokenInvalidException;
+import lt.ivl.components.exception.*;
 import lt.ivl.components.service.CustomerService;
 import lt.ivl.webExternalApp.dto.CustomerDto;
 import lt.ivl.webExternalApp.dto.ResetPasswordDto;
-import lt.ivl.components.exception.CustomerExistsInDatabaseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -40,7 +36,7 @@ public class ExternalCustomerService {
         try {
             customer = componentCustomerService.findCustomerByEmail(email);
             // A
-            if (!customer.getPassword().isEmpty()) throw new CustomerExistsInDatabaseException();
+            if (customer.getPassword() != null) throw new CustomerExistsInDatabaseException();
             // B
             // customer.setEmail(customerDto.getEmail());
             customer.setPassword(passwordEncoder.encode(customerDto.getPassword()));
