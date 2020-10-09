@@ -51,7 +51,8 @@ public class ManageCustomerController {
 
         try {
             Customer customer = internalCustomerService.createCustomer(customerDto);
-            return "redirect:/manage-customer/" + customer.getId() + "/view";
+            int customerId = customer.getId();
+            return "redirect:/manage-customer/" + customerId + "/view";
         } catch (CustomerExistsInDatabaseException e) {
             model.addAttribute("messageError", "Klientas su tokiu el. pašto adresu jau užregistruota.");
             return "manage-customer/add";
