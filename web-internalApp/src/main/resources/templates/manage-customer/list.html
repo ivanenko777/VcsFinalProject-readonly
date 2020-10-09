@@ -35,8 +35,8 @@
                 <td th:text="${customer.firstName + ' ' + customer.lastName}"></td>
                 <td th:text="${customer.email}"></td>
                 <td th:text="${customer.phone}"></td>
-                <td th:text="${!customer.password.isEmpty()}"></td>
-                <td th:text="${customer.active}"></td>
+                <td th:text="${customer.isAccount} ? 'Taip' : 'Ne'"></td>
+                <td th:text="${customer.isAccountActive} ? 'Taip' : 'Ne'"></td>
 
                 <td class="text-right">
                     <a class="btn btn-sm btn-outline-primary font-weight-bold"

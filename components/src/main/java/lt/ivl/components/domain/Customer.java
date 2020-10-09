@@ -83,4 +83,12 @@ public class Customer {
     public void setRepairs(List<Repair> repairs) {
         this.repairs = repairs;
     }
+
+    public boolean getIsAccount(){
+        return password != null && password.length() > 0;
+    }
+
+    public boolean getIsAccountActive(){
+        return password != null && password.length() > 0 && active;
+    }
 }

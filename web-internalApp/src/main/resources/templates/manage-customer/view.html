@@ -44,11 +44,11 @@
             </div>
             <div class="row mb-1">
                 <div class="col-md-6 font-weight-bold text-right">El. vartotojas</div>
-                <div class="col-md-6" th:text="${!customer.password.isEmpty()}"></div>
+                <div class="col-md-6" th:text="${customer.isAccount} ? 'Taip' : 'Ne'"></div>
             </div>
             <div class="row mb-1">
                 <div class="col-md-6 font-weight-bold text-right">Aktyvus</div>
-                <div class="col-md-6" th:text="${customer.active}"></div>
+                <div class="col-md-6" th:text="${customer.isAccountActive} ? 'Taip' : 'Ne'"></div>
             </div>
         </div>
     </div>
