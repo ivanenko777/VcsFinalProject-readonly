@@ -16,6 +16,7 @@
 WIP [#2][i2]
 
 ## Modules
+* components (Entities, Repositories, Services, Exceptions)
 * web-externalApp
 * web-internalApp
 
@@ -52,6 +53,8 @@ WIP [#2][i2]
 * [x] Logoff -> [#15][i15]
 * [x] Remember password -> [#15][i15]
 * [x] Reset password -> [#15][i15]
+* [x] Employees managment -> [#17][i17]
+  * [x] Create, Update, Manage roles-> [#17][i17]
 
 
 [i1]: https://github.com/ivanevla/VCS_final-project/pull/1
@@ -62,3 +65,4 @@ WIP [#2][i2]
 [i9]: https://github.com/ivanevla/VCS_final-project/pull/9
 [i12]: https://github.com/ivanevla/VCS_final-project/pull/12
 [i15]: https://github.com/ivanevla/VCS_final-project/pull/15
+[i17]: https://github.com/ivanevla/VCS_final-project/pull/17
