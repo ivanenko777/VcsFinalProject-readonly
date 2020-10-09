@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -30,6 +31,10 @@ public class CustomerService {
 
     public Customer saveCustomer(Customer customer) {
         return customerRepository.save(customer);
+    }
+
+    public List<Customer> findAll() {
+        return (List<Customer>) customerRepository.findAll();
     }
 
     public Customer findCustomerAccountByEmail(String email) throws CustomerNotFoundInDBException {

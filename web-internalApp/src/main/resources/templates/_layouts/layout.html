@@ -33,6 +33,8 @@
                 <a class="nav-link" th:href="@{/}">Pradžia</a>
                 <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/manage-employee/list}">
                     Darbuotojų valdymas</a>
+                <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/manage-customer/list}">
+                    Klientų valdymas</a>
             </div>
             <div class="navbar-nav ml-auto">
                 <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/login}">Prisijungti</a>
