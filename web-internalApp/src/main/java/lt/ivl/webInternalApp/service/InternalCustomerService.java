@@ -2,7 +2,6 @@ package lt.ivl.webInternalApp.service;
 
 import lt.ivl.components.domain.Customer;
 import lt.ivl.components.exception.CustomerExistsInDatabaseException;
-import lt.ivl.components.exception.CustomerNotFoundInDBException;
 import lt.ivl.components.service.CustomerService;
 import lt.ivl.webInternalApp.dto.CustomerDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +23,7 @@ public class InternalCustomerService {
         componentCustomerService.verifyIsCustomerExists(email);
 
         Customer customer = new Customer();
-        customer.setEmail(customerDto.getEmail());
-        customer.setFirstName(customerDto.getFirstName());
-        customer.setLastName(customerDto.getLastName());
-        customer.setPhone(customerDto.getPhone());
+        customer = fillCustomerFields(customer, customerDto);
         return componentCustomerService.saveCustomer(customer);
     }
 
@@ -38,10 +34,16 @@ public class InternalCustomerService {
             componentCustomerService.verifyIsCustomerExists(newEmail);
         }
 
+        customer = fillCustomerFields(customer, customerDto);
+        return componentCustomerService.saveCustomer(customer);
+    }
+
+    private Customer fillCustomerFields(Customer customer, CustomerDto customerDto) {
         customer.setEmail(customerDto.getEmail());
         customer.setFirstName(customerDto.getFirstName());
         customer.setLastName(customerDto.getLastName());
         customer.setPhone(customerDto.getPhone());
-        return componentCustomerService.saveCustomer(customer);
+        return customer;
     }
+
 }
