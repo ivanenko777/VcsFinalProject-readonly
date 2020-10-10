@@ -17,7 +17,7 @@ public class MailSender {
     private JavaMailSender mailSender;
 
     @Autowired
-    private EmailTemplate emailTemplate;
+    private EmailTemplate mailTemplate;
 
     @Value("${app.url}")
     private String appUrl;
@@ -36,28 +36,28 @@ public class MailSender {
 
     @Async
     public void sendAccountVerificationEmailToCustomer(Customer customer, String token) {
-        Email template = emailTemplate.customerAccountVerificationEmailTemplate(customer, token, emailFrom, appUrl);
+        Email template = mailTemplate.customerAccountVerificationEmailTemplate(customer, token, emailFrom, appUrl);
         SimpleMailMessage email = constructEmail(template);
         mailSender.send(email);
     }
 
     @Async
     public void sendAccountActivatedEmailToCustomer(Customer customer) {
-        Email template = emailTemplate.customerAccountActivatedEmailTemplate(customer, emailFrom, appUrl);
+        Email template = mailTemplate.customerAccountActivatedEmailTemplate(customer, emailFrom, appUrl);
         SimpleMailMessage email = constructEmail(template);
         mailSender.send(email);
     }
 
     @Async
     public void sendResetPasswordEmailToCustomer(Customer customer, String token) {
-        Email template = emailTemplate.customerAccountResetPasswordEmailTemplate(customer, token, emailFrom, appUrl);
+        Email template = mailTemplate.customerAccountResetPasswordEmailTemplate(customer, token, emailFrom, appUrl);
         SimpleMailMessage email = constructEmail(template);
         mailSender.send(email);
     }
 
     @Async
     public void sendRepairRequestToCustomer(Customer customer, Repair repair) {
-        Email template = emailTemplate.customerRepairRequestEmailTemplate(customer, repair, emailFrom, appUrl);
+        Email template = mailTemplate.customerRepairRequestEmailTemplate(customer, repair, emailFrom, appUrl);
         SimpleMailMessage email = constructEmail(template);
         mailSender.send(email);
     }
