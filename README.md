@@ -44,6 +44,7 @@ WIP [#2][i2]
 
 ### Module: web-internalApp
 #### Roles
+  > -> [#17][i17]
 * ADMIN
 * MANAGER
 * TECHNICAN
@@ -53,8 +54,10 @@ WIP [#2][i2]
 * [x] Logoff -> [#15][i15]
 * [x] Remember password -> [#15][i15]
 * [x] Reset password -> [#15][i15]
-* [x] Employees managment -> [#17][i17]
-  * [x] Create, Update, Manage roles-> [#17][i17]
+* [x] Employees management -> [#17][i17]
+  * [x] View, Create, Update, Manage roles -> [#17][i17]
+* [x] Customers management -> [#18][i18]
+  * [x] View, Create, Update -> [#18][i18]
 
 
 [i1]: https://github.com/ivanevla/VCS_final-project/pull/1
@@ -66,3 +69,4 @@ WIP [#2][i2]
 [i12]: https://github.com/ivanevla/VCS_final-project/pull/12
 [i15]: https://github.com/ivanevla/VCS_final-project/pull/15
 [i17]: https://github.com/ivanevla/VCS_final-project/pull/17
+[i18]: https://github.com/ivanevla/VCS_final-project/pull/18
