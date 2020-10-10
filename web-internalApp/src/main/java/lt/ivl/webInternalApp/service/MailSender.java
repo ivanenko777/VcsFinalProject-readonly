@@ -26,7 +26,7 @@ public class MailSender {
 
     private SimpleMailMessage constructEmail(Email template) {
         SimpleMailMessage email = new SimpleMailMessage();
-        email.setFrom(template.getFrom());
+        email.setFrom(this.emailFrom);
         email.setTo(template.getTo());
         email.setSubject(template.getSubject());
         email.setText(template.getMessage());
@@ -35,21 +35,21 @@ public class MailSender {
 
     @Async
     public void sendAccountVerificationEmailToEmployee(Employee employee, String token) {
-        Email template = mailTemplate.employeeAccountVerificationEmailTemplate(employee, token, emailFrom, appUrl);
+        Email template = mailTemplate.employeeAccountVerificationEmailTemplate(employee, token, appUrl);
         SimpleMailMessage email = constructEmail(template);
         mailSender.send(email);
     }
 
     @Async
     public void sendAccountActivatedEmailToEmployee(Employee employee) {
-        Email template = mailTemplate.employeeAccountActivatedEmailTemplate(employee, emailFrom, appUrl);
+        Email template = mailTemplate.employeeAccountActivatedEmailTemplate(employee, appUrl);
         SimpleMailMessage email = constructEmail(template);
         mailSender.send(email);
     }
 
     @Async
     public void sendResetPasswordEmailToEmployee(Employee employee, String token) {
-        Email template = mailTemplate.employeeAccountResetPasswordEmailTemplate(employee, token, emailFrom, appUrl);
+        Email template = mailTemplate.employeeAccountResetPasswordEmailTemplate(employee, token, appUrl);
         SimpleMailMessage email = constructEmail(template);
         mailSender.send(email);
     }

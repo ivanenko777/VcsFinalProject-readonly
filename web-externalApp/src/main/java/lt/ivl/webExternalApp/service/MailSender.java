@@ -27,7 +27,7 @@ public class MailSender {
 
     private SimpleMailMessage constructEmail(Email template) {
         SimpleMailMessage email = new SimpleMailMessage();
-        email.setFrom(template.getFrom());
+        email.setFrom(this.emailFrom);
         email.setTo(template.getTo());
         email.setSubject(template.getSubject());
         email.setText(template.getMessage());
@@ -36,28 +36,28 @@ public class MailSender {
 
     @Async
     public void sendAccountVerificationEmailToCustomer(Customer customer, String token) {
-        Email template = mailTemplate.customerAccountVerificationEmailTemplate(customer, token, emailFrom, appUrl);
+        Email template = mailTemplate.customerAccountVerificationEmailTemplate(customer, token, appUrl);
         SimpleMailMessage email = constructEmail(template);
         mailSender.send(email);
     }
 
     @Async
     public void sendAccountActivatedEmailToCustomer(Customer customer) {
-        Email template = mailTemplate.customerAccountActivatedEmailTemplate(customer, emailFrom, appUrl);
+        Email template = mailTemplate.customerAccountActivatedEmailTemplate(customer, appUrl);
         SimpleMailMessage email = constructEmail(template);
         mailSender.send(email);
     }
 
     @Async
     public void sendResetPasswordEmailToCustomer(Customer customer, String token) {
-        Email template = mailTemplate.customerAccountResetPasswordEmailTemplate(customer, token, emailFrom, appUrl);
+        Email template = mailTemplate.customerAccountResetPasswordEmailTemplate(customer, token, appUrl);
         SimpleMailMessage email = constructEmail(template);
         mailSender.send(email);
     }
 
     @Async
     public void sendRepairRequestToCustomer(Customer customer, Repair repair) {
-        Email template = mailTemplate.customerRepairRequestEmailTemplate(customer, repair, emailFrom, appUrl);
+        Email template = mailTemplate.customerRepairRequestEmailTemplate(customer, repair, appUrl);
         SimpleMailMessage email = constructEmail(template);
         mailSender.send(email);
     }

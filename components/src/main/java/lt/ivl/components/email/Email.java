@@ -1,7 +1,6 @@
 package lt.ivl.components.email;
 
 public class Email {
-    private String from;
     private String to;
     private String subject;
     private String message;
@@ -9,19 +8,10 @@ public class Email {
     public Email() {
     }
 
-    public Email(String from, String to, String subject, String message) {
-        this.from = from;
+    public Email(String to, String subject, String message) {
         this.to = to;
         this.subject = subject;
         this.message = message;
-    }
-
-    public String getFrom() {
-        return from;
-    }
-
-    public void setFrom(String from) {
-        this.from = from;
     }
 
     public String getTo() {
