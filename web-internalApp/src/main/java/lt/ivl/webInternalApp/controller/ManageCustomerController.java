@@ -86,10 +86,10 @@ public class ManageCustomerController {
 
         try {
             internalCustomerService.updateCustomer(customer, customerDto);
+            return "redirect:/manage-customer/{customer}/view";
         } catch (CustomerExistsInDatabaseException e) {
             model.addAttribute("messageError", "Klientas su tokiu el. pašto adresu jau užregistruota.");
             return "manage-customer/add";
         }
-        return "redirect:/manage-customer/{customer}/view";
     }
 }
