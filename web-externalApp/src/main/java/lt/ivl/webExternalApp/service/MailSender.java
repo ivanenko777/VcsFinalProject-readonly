@@ -2,8 +2,10 @@ package lt.ivl.webExternalApp.service;
 
 import lt.ivl.components.domain.Customer;
 import lt.ivl.components.domain.Repair;
+import lt.ivl.components.email.Email;
+import lt.ivl.components.email.EmailTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
@@ -15,89 +17,48 @@ public class MailSender {
     private JavaMailSender mailSender;
 
     @Autowired
-    private Environment environment;
+    private EmailTemplate emailTemplate;
+
+    @Value("${app.url}")
+    private String appUrl;
+
+    @Value(("${support.email}"))
+    private String emailFrom;
+
+    private SimpleMailMessage constructEmail(Email template) {
+        SimpleMailMessage email = new SimpleMailMessage();
+        email.setFrom(template.getFrom());
+        email.setTo(template.getTo());
+        email.setSubject(template.getSubject());
+        email.setText(template.getMessage());
+        return email;
+    }
 
     @Async
     public void sendAccountVerificationEmailToCustomer(Customer customer, String token) {
-        final SimpleMailMessage email = constructCustomerVerificationEmail(customer, token);
+        Email template = emailTemplate.customerAccountVerificationEmailTemplate(customer, token, emailFrom, appUrl);
+        SimpleMailMessage email = constructEmail(template);
         mailSender.send(email);
     }
 
     @Async
     public void sendAccountActivatedEmailToCustomer(Customer customer) {
-        final SimpleMailMessage email = constructCustomerActivatatedEmail(customer);
+        Email template = emailTemplate.customerAccountActivatedEmailTemplate(customer, emailFrom, appUrl);
+        SimpleMailMessage email = constructEmail(template);
         mailSender.send(email);
     }
 
     @Async
     public void sendResetPasswordEmailToCustomer(Customer customer, String token) {
-        final SimpleMailMessage email = constructCustomerResetPasswordEmail(customer, token);
+        Email template = emailTemplate.customerAccountResetPasswordEmailTemplate(customer, token, emailFrom, appUrl);
+        SimpleMailMessage email = constructEmail(template);
         mailSender.send(email);
     }
 
     @Async
     public void sendRepairRequestToCustomer(Customer customer, Repair repair) {
-        final SimpleMailMessage email = constructCustomerRepairRequestEmail(customer, repair);
+        Email template = emailTemplate.customerRepairRequestEmailTemplate(customer, repair, emailFrom, appUrl);
+        SimpleMailMessage email = constructEmail(template);
         mailSender.send(email);
-    }
-
-    private SimpleMailMessage constructEmail(String recipientAddress, String subject, String message) {
-        final SimpleMailMessage email = new SimpleMailMessage();
-        email.setFrom(environment.getProperty("support.email"));
-        email.setTo(recipientAddress);
-        email.setSubject(subject);
-        email.setText(message);
-        return email;
-    }
-
-    private SimpleMailMessage constructCustomerVerificationEmail(Customer customer, String token) {
-        final String message1 = String.format("Sveiki, %s %s,", customer.getFirstName(), customer.getLastName());
-        final String message2 = "Jūs sėkmingai užsiregistravote. Paspauskite žemiau esančią nuorodą, kad patvirtintumėte registraciją.";
-        final String appUrl = environment.getProperty("app.url");
-        final String confirmationUrl = appUrl + "activation?token=" + token;
-
-        final String recipientAddress = customer.getEmail();
-        final String subject = "Registracijos patvirtinimas";
-        final String message = message1 + " \r\n" + message2 + " \r\n" + confirmationUrl;
-        return constructEmail(recipientAddress, subject, message);
-    }
-
-    private SimpleMailMessage constructCustomerActivatatedEmail(Customer customer) {
-        final String message1 = String.format("Sveiki, %s %s,", customer.getFirstName(), customer.getLastName());
-        final String message2 = "Jūsų registracija patvirtinta. Paspauskite žemiau esančią nuorodą, kad prisijungtumėte.";
-        final String appUrl = environment.getProperty("app.url");
-        final String loginUrl = appUrl + "login";
-
-        final String recipientAddress = customer.getEmail();
-        final String subject = "Registracija patvirtinta";
-        final String message = message1 + " \r\n" + message2 + " \r\n" + loginUrl;
-        return constructEmail(recipientAddress, subject, message);
-    }
-
-    private SimpleMailMessage constructCustomerResetPasswordEmail(Customer customer, String token) {
-        final String appUrl = environment.getProperty("app.url");
-        final String resetPasswordUrl = appUrl + "reset-password?token=" + token;
-        final String message1 = String.format("Sveiki, %s %s,", customer.getFirstName(), customer.getLastName());
-        final String message2 = "Paspauskite žemiau esančią nuorodą, kad pakeisti slaptažodį.";
-
-        final String recipientAddress = customer.getEmail();
-        final String subject = "Slaptažodžio pakeitimas";
-        final String message = message1 + " \r\n" + message2 + " \r\n" + resetPasswordUrl;
-        return constructEmail(recipientAddress, subject, message);
-    }
-
-    private SimpleMailMessage constructCustomerRepairRequestEmail(Customer customer, Repair repair) {
-        // remonto paraiska, STATUS -> PENDING
-        final int repairId = repair.getId();
-
-        final String appUrl = environment.getProperty("app.url");
-        final String repairViewUrl = appUrl + "repair/" + repairId + "/view";
-        final String message1 = String.format("Sveiki, %s %s,", customer.getFirstName(), customer.getLastName());
-        final String message2 = "Remonto paraiška užregistruota. Sekite info žemiau esančioje nuorodoje.";
-
-        final String recipientAddress = customer.getEmail();
-        final String subject = "Užsakymo paraiška #" + repairId;
-        final String message = message1 + " \r\n" + message2 + " \r\n" + repairViewUrl;
-        return constructEmail(recipientAddress, subject, message);
     }
 }
