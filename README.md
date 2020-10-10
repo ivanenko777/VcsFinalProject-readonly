@@ -1,4 +1,4 @@
-# Repair Service App (Vilnius Codind School Final Project)
+# Repair Service App (Vilnius Coding School Final Project)
   > Buitinės technikos ir elektronikos serviso webapp'sas
 
 ## Technologies
@@ -52,10 +52,10 @@ WIP [#2][i2]
 #### Pages
 * [x] Login -> [#15][i15]
 * [x] Logoff -> [#15][i15]
-* [x] Remember password -> [#15][i15]
+* [x] Remember password + email-> [#15][i15]
 * [x] Reset password -> [#15][i15]
 * [x] Employees management -> [#17][i17]
-  * [x] View, Create, Update, Manage roles -> [#17][i17]
+  * [x] View, Create + email, Update, Manage roles -> [#17][i17]
 * [x] Customers management -> [#18][i18]
   * [x] View, Create, Update -> [#18][i18]
 
