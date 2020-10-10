@@ -53,7 +53,13 @@ public class InternalEmployeeService {
         componentEmployeeService.resetPasswordAndActivateEmployeeAccount(employee, newPassword, resetPasswordToken);
     }
 
-    public Employee updateEmployeeAccount(Employee employee, EmployeeDto employeeDto) {
+    public Employee updateEmployeeAccount(Employee employee, EmployeeDto employeeDto) throws EmployeeAccountExistsInDatabaseException {
+        String email = employee.getEmail();
+        String newEmail = employeeDto.getEmail();
+        if (!email.equals(newEmail)) {
+            componentEmployeeService.verifyIsEmployeeAccountExists(newEmail);
+        }
+
         employee = fillEmployeeFields(employee, employeeDto);
         return componentEmployeeService.saveEmployee(employee);
     }

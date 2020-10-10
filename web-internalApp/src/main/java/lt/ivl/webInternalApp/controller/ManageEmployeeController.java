@@ -99,7 +99,13 @@ public class ManageEmployeeController {
             model.addAttribute("messageError", "Formoje yra klaidų");
             return "manage-employee/edit";
         }
-        internalEmployeeService.updateEmployeeAccount(employee, employeeDto);
-        return "redirect:/manage-employee/{employee}/view";
+
+        try {
+            internalEmployeeService.updateEmployeeAccount(employee, employeeDto);
+            return "redirect:/manage-employee/{employee}/view";
+        } catch (EmployeeAccountExistsInDatabaseException e) {
+            model.addAttribute("messageError", e.getMessage());
+            return "manage-employee/add";
+        }
     }
 }
