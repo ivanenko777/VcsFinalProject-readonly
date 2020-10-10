@@ -1,7 +1,6 @@
-package lt.ivl.webExternalApp.service;
+package lt.ivl.webInternalApp.service;
 
-import lt.ivl.components.domain.Customer;
-import lt.ivl.components.domain.Repair;
+import lt.ivl.components.domain.Employee;
 import lt.ivl.components.email.Email;
 import lt.ivl.components.email.EmailTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,29 +34,22 @@ public class MailSender {
     }
 
     @Async
-    public void sendAccountVerificationEmailToCustomer(Customer customer, String token) {
-        Email template = mailTemplate.customerAccountVerificationEmailTemplate(customer, token, appUrl);
+    public void sendAccountVerificationEmailToEmployee(Employee employee, String token) {
+        Email template = mailTemplate.employeeAccountVerificationEmailTemplate(employee, token, appUrl);
         SimpleMailMessage email = constructEmail(template);
         mailSender.send(email);
     }
 
     @Async
-    public void sendAccountActivatedEmailToCustomer(Customer customer) {
-        Email template = mailTemplate.customerAccountActivatedEmailTemplate(customer, appUrl);
+    public void sendAccountActivatedEmailToEmployee(Employee employee) {
+        Email template = mailTemplate.employeeAccountActivatedEmailTemplate(employee, appUrl);
         SimpleMailMessage email = constructEmail(template);
         mailSender.send(email);
     }
 
     @Async
-    public void sendResetPasswordEmailToCustomer(Customer customer, String token) {
-        Email template = mailTemplate.customerAccountResetPasswordEmailTemplate(customer, token, appUrl);
-        SimpleMailMessage email = constructEmail(template);
-        mailSender.send(email);
-    }
-
-    @Async
-    public void sendRepairRequestToCustomer(Customer customer, Repair repair) {
-        Email template = mailTemplate.customerRepairRequestEmailTemplate(customer, repair, appUrl);
+    public void sendResetPasswordEmailToEmployee(Employee employee, String token) {
+        Email template = mailTemplate.employeeAccountResetPasswordEmailTemplate(employee, token, appUrl);
         SimpleMailMessage email = constructEmail(template);
         mailSender.send(email);
     }

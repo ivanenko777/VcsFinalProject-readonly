@@ -43,6 +43,12 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- SPRING MAIL -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+
         <!-- THYMELEAF-->
         <dependency>
             <groupId>org.thymeleaf</groupId>

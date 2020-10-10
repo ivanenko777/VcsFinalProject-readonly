@@ -8,6 +8,7 @@ import lt.ivl.components.exception.TokenExpiredException;
 import lt.ivl.components.exception.TokenInvalidException;
 import lt.ivl.webInternalApp.dto.ResetPasswordDto;
 import lt.ivl.webInternalApp.service.InternalEmployeeService;
+import lt.ivl.webInternalApp.service.MailSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +23,9 @@ import javax.validation.Valid;
 public class AuthController {
     @Autowired
     private InternalEmployeeService internalEmployeeService;
+
+    @Autowired
+    private MailSender mailSender;
 
     @GetMapping("/login")
     public String login() {
@@ -42,7 +46,7 @@ public class AuthController {
             Employee employee = internalEmployeeService.findEmployeeAccountByEmail(employeeEmail);
             EmployeeResetPasswordToken resetPasswordToken = internalEmployeeService.createPasswordResetTokenForEmployeeAccount(employee);
             String token = resetPasswordToken.getToken();
-            // TODO: send email
+            mailSender.sendResetPasswordEmailToEmployee(employee, token);
             model.addAttribute("messageInfo", "Slaptažodžio keitimo instrukcijos išsiųstos į el. paštą.");
         } catch (EmployeeNotFoundInDbException e) {
             model.addAttribute("messageError", e.getMessage());
@@ -90,6 +94,10 @@ public class AuthController {
             EmployeeResetPasswordToken resetPasswordToken = internalEmployeeService.verifyEmployeeAccountPasswordResetToken(token);
             Employee employee = resetPasswordToken.getEmployee();
             internalEmployeeService.resetPasswordAndActivateEmployeeAccount(employee, resetPasswordDto, resetPasswordToken);
+            if (!employee.isActive()) {
+                // siunciam laiskus tik neaktyvuotiems darbuotojams
+                mailSender.sendAccountActivatedEmailToEmployee(employee);
+            }
             model.addAttribute("pageHideForm", true);
             model.addAttribute("messageInfo", "Slaptažodis pakeistas.");
         } catch (TokenInvalidException e) {
