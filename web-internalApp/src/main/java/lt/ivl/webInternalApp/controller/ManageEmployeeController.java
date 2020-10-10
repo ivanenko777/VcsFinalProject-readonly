@@ -6,6 +6,7 @@ import lt.ivl.components.domain.EmployeeRole;
 import lt.ivl.components.exception.EmployeeAccountExistsInDatabaseException;
 import lt.ivl.webInternalApp.dto.EmployeeDto;
 import lt.ivl.webInternalApp.service.InternalEmployeeService;
+import lt.ivl.webInternalApp.service.MailSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +22,9 @@ import java.util.List;
 public class ManageEmployeeController {
     @Autowired
     private InternalEmployeeService internalEmployeeService;
+
+    @Autowired
+    private MailSender mailSender;
 
     @GetMapping("/list")
     public String list(Model model) {
@@ -60,9 +64,10 @@ public class ManageEmployeeController {
 
         try {
             Employee employee = internalEmployeeService.createEmployeeAccount(employeeDto);
-            EmployeeResetPasswordToken passwordResetToken = internalEmployeeService.createPasswordResetTokenForEmployeeAccount(employee);
+            EmployeeResetPasswordToken resetPasswordToken = internalEmployeeService.createPasswordResetTokenForEmployeeAccount(employee);
+            String token = resetPasswordToken.getToken();
+            mailSender.sendAccountVerificationEmailToEmployee(employee, token);
             int employeeId = employee.getId();
-            // TODO: send activation email
             return "redirect:/manage-employee/" + employeeId + "/view";
         } catch (EmployeeAccountExistsInDatabaseException e) {
             model.addAttribute("roles", roleList);

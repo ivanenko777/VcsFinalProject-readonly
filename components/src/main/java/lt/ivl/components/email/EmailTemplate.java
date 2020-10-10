@@ -1,6 +1,7 @@
 package lt.ivl.components.email;
 
 import lt.ivl.components.domain.Customer;
+import lt.ivl.components.domain.Employee;
 import lt.ivl.components.domain.Repair;
 import org.springframework.stereotype.Component;
 
@@ -64,4 +65,36 @@ public class EmailTemplate {
     }
 
 
+    public Email employeeAccountVerificationEmailTemplate(Employee employee, String token, String from, String appUrl) {
+        final String message1 = String.format("Sveiki, %s %s,", employee.getFirstName(), employee.getLastName());
+        final String message2 = "Paspauskite žemiau esančią nuorodą, kad aktyvuoti savo paskyrą ir pakeisti slaptažodį.";
+        final String confirmationUrl = appUrl + "reset-password?token=" + token;
+
+        final String to = employee.getEmail();
+        final String subject = "Paskyros aktyvacija (darbuotojams)";
+        final String message = message1 + " \r\n" + message2 + " \r\n" + confirmationUrl;
+        return new Email(from, to, subject, message);
+    }
+
+    public Email employeeAccountActivatedEmailTemplate(Employee employee, String from, String appUrl) {
+        final String message1 = String.format("Sveiki, %s %s,", employee.getFirstName(), employee.getLastName());
+        final String message2 = "Jūsų registracija patvirtinta. Paspauskite žemiau esančią nuorodą, kad prisijungtumėte.";
+        final String loginUrl = appUrl + "login";
+
+        final String to = employee.getEmail();
+        final String subject = "Paskyra aktyvuota (darbuotojams)";
+        final String message = message1 + " \r\n" + message2 + " \r\n" + loginUrl;
+        return new Email(from, to, subject, message);
+    }
+
+    public Email employeeAccountResetPasswordEmailTemplate(Employee employee, String token, String from, String appUrl) {
+        final String message1 = String.format("Sveiki, %s %s,", employee.getFirstName(), employee.getLastName());
+        final String message2 = "Paspauskite žemiau esančią nuorodą, kad pakeisti slaptažodį.";
+        final String resetPasswordUrl = appUrl + "reset-password?token=" + token;
+
+        final String to = employee.getEmail();
+        final String subject = "Slaptažodžio pakeitimas (darbuotojams)";
+        final String message = message1 + " \r\n" + message2 + " \r\n" + resetPasswordUrl;
+        return new Email(from, to, subject, message);
+    }
 }
