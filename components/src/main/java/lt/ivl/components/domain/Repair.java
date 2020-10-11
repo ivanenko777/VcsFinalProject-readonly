@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
-@Table(indexes = {@Index(name = "repair__created_by_customer_id__index", columnList = "created_by_customer_id")})
+@Table(indexes = {@Index(name = "repair__customer_id__index", columnList = "customer_id")})
 public class Repair {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -20,8 +20,8 @@ public class Repair {
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "created_by_customer_id", nullable = false)
-    private Customer createdByCustomer;
+    @JoinColumn(name = "customer_id", nullable = false)
+    private Customer customer;
 
     private Timestamp createdAt;
     private Timestamp updatedAt;
@@ -38,7 +38,7 @@ public class Repair {
             String deviceSerialNo,
             String description
     ) {
-        this.createdByCustomer = customer;
+        this.customer = customer;
         this.status = RepairStatus.PENDING;
         this.deviceType = deviceType;
         this.deviceManufacturer = deviceManufacturer;
@@ -54,12 +54,12 @@ public class Repair {
         return id;
     }
 
-    public Customer getCreatedByCustomer() {
-        return createdByCustomer;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setCreatedByCustomer(Customer createdByCustomer) {
-        this.createdByCustomer = createdByCustomer;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     public Timestamp getCreatedAt() {

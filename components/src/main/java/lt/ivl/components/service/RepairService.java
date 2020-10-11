@@ -21,11 +21,11 @@ public class RepairService {
     }
 
     public List<Repair> findAllCustomerRepairs(Customer customer) {
-        return repairRepository.findAllByCreatedByCustomerOrderByCreatedAtDesc(customer);
+        return repairRepository.findAllByCustomerOrderByCreatedAtDesc(customer);
     }
 
     public Repair findCustomerRepair(Customer customer, int id) throws ItemNotFoundException {
-        Optional<Repair> repairFromDb = repairRepository.findByIdAndCreatedByCustomer(id, customer);
+        Optional<Repair> repairFromDb = repairRepository.findByIdAndCustomer(id, customer);
         if (repairFromDb.isEmpty()) {
             throw new ItemNotFoundException();
         }
@@ -35,7 +35,7 @@ public class RepairService {
 
     public Repair findCustomerRepairToDelete(Customer customer, int id) throws ItemNotFoundException {
         // panasus i findCustomerRepair(), bet yra papildoma salyga RepairStatus == PENDING
-        Optional<Repair> repairFromDb = repairRepository.findByIdAndCreatedByCustomer(id, customer);
+        Optional<Repair> repairFromDb = repairRepository.findByIdAndCustomer(id, customer);
         if (repairFromDb.isEmpty() || repairFromDb.get().getStatus() != RepairStatus.PENDING) {
             throw new ItemNotFoundException();
         }

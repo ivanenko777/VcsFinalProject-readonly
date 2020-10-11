@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface RepairRepository extends CrudRepository<Repair, Integer> {
-    List<Repair> findAllByCreatedByCustomerOrderByCreatedAtDesc(Customer customer);
+    List<Repair> findAllByCustomerOrderByCreatedAtDesc(Customer customer);
 
-    Optional<Repair> findByIdAndCreatedByCustomer(Integer integer, Customer customer);
+    Optional<Repair> findByIdAndCustomer(Integer integer, Customer customer);
 }
