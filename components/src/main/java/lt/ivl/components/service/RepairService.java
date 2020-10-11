@@ -42,4 +42,9 @@ public class RepairService {
 
         return repairFromDb.get();
     }
+
+    public void deleteCustomerRepair(Customer customer, int id) throws ItemNotFoundException {
+        Repair repair = findCustomerRepairToDelete(customer, id);
+        repairRepository.delete(repair);
+    }
 }

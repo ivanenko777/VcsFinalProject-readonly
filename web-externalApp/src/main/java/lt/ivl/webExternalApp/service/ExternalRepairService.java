@@ -44,8 +44,7 @@ public class ExternalRepairService {
         return componentRepairService.findCustomerRepairToDelete(customer, id);
     }
 
-    public void deleteByCustomer(Customer customer, int id) throws ItemNotFoundException {
-        Repair repair = findCustomerRepairToDelete(customer, id).get();
-        repairRepository.delete(repair);
+    public void deleteCustomerRepair(Customer customer, int id) throws ItemNotFoundException {
+        componentRepairService.deleteCustomerRepair(customer, id);
     }
 }
