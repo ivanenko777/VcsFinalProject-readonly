@@ -47,7 +47,7 @@ public class RepairController {
             int repairId = Integer.parseInt(id);
             Customer customer = customerPrincipal.getCustomer();
 
-            Repair repair = externalRepairService.findByCustomer(customer, repairId);
+            Repair repair = externalRepairService.findCustomerRepair(customer, repairId);
             model.addAttribute("repair", repair);
         } catch (ItemNotFoundException | NumberFormatException e) {
             model.addAttribute("messageError", e.getMessage());

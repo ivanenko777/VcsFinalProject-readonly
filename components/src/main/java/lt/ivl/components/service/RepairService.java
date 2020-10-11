@@ -2,11 +2,13 @@ package lt.ivl.components.service;
 
 import lt.ivl.components.domain.Customer;
 import lt.ivl.components.domain.Repair;
+import lt.ivl.components.exception.ItemNotFoundException;
 import lt.ivl.components.repository.RepairRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RepairService {
@@ -19,5 +21,14 @@ public class RepairService {
 
     public List<Repair> findAllCustomerRepairs(Customer customer) {
         return repairRepository.findAllByCreatedByCustomerOrderByCreatedAtDesc(customer);
+    }
+
+    public Repair findCustomerRepair(Customer customer, int id) throws ItemNotFoundException {
+        Optional<Repair> repairFromDb = repairRepository.findByIdAndCreatedByCustomer(id, customer);
+        if (repairFromDb.isEmpty()) {
+            throw new ItemNotFoundException();
+        }
+
+        return repairFromDb.get();
     }
 }
