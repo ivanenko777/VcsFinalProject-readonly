@@ -30,6 +30,8 @@
                         Darbuotojų valdymas</a>
                     <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/manage-customer/list}">
                         Klientų valdymas</a>
+                    <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/repair/list}">
+                        Remontų valdymas</a>
                 </div>
                 <div class="navbar-nav ml-auto">
                     <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/login}">Prisijungti</a>

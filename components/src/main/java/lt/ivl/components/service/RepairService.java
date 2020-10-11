@@ -22,6 +22,10 @@ public class RepairService {
     @Autowired
     private RepairStatusHistoryRepository repairStatusHistoryRepository;
 
+    public List<Repair> findAll() {
+        return (List<Repair>) repairRepository.findAll();
+    }
+
     public Repair saveRepair(Repair repair) {
         return repairRepository.save(repair);
     }

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en"
+      layout:decorate="~{_layouts/layout-filter}"
+      th:with="pageName=${'Remontų sąrašas'}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE" th:text="${pageName}">...</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="row pt-2">
+        <div class="col-md-3">
+            <h3 class="pb-2" th:text="${pageName}"></h3>
+            <a class="btn btn-success btn-block font-weight-bold" th:href="@{/repair/add}">Pridėti naują remontą</a>
+            <h5 class="pt-3">Filtras</h5>
+        </div>
+        <div class="col-md-9">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">&num;</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Patvirtinta</th>
+                    <th scope="col">Tipas</th>
+                    <th scope="col">Gamintojas</th>
+                    <th scope="col">Modelis</th>
+                    <th scope="col">Saugomas</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody th:each="repair : ${repairList}">
+                <tr>
+                    <td scope="row" th:text="${repair.id}"></td>
+                    <td th:text="${repair.status.getMessageForEmployee()}"></td>
+                    <td th:text="${#dates.format(repair.createdAt, 'yyyy-MM-dd')} + ' + Kas'"></td>
+                    <td th:text="${repair.deviceType}"></td>
+                    <td th:text="${repair.deviceManufacturer}"></td>
+                    <td th:text="${repair.deviceModel}"></td>
+                    <td th:text="${repair.stored}"></td>
+                    <td class="text-right">
+                        <a class="btn btn-sm btn-outline-primary font-weight-bold"
+                           th:href="@{/repair/{id}/view(id=${repair.id})}">Info &raquo;</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
