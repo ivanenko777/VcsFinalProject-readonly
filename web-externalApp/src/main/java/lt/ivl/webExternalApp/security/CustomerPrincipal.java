@@ -18,7 +18,7 @@ public class CustomerPrincipal implements UserDetails {
     }
 
     public String getFullName() {
-        return this.customer.getFirstName() + " " + this.customer.getLastName();
+        return customer.getFullName();
     }
 
     @Override

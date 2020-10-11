@@ -22,7 +22,7 @@ public class EmployeePrincipal implements UserDetails {
     }
 
     public String getFullName() {
-        return employee.getFirstName() + " " + employee.getLastName();
+        return employee.getFullName();
     }
 
     @Override

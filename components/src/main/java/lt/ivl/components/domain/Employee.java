@@ -86,4 +86,8 @@ public class Employee {
     public void setRoles(Set<EmployeeRole> roles) {
         this.roles = roles;
     }
+
+    public String getFullName() {
+        return firstName + ' ' + lastName;
+    }
 }
