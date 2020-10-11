@@ -1,6 +1,7 @@
 package lt.ivl.webInternalApp.controller;
 
 import lt.ivl.components.domain.Repair;
+import lt.ivl.components.domain.RepairStatusHistory;
 import lt.ivl.webInternalApp.service.InternalRepairService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,5 +29,13 @@ public class ManageRepairController {
     public String view(@PathVariable("repair") Repair repair, Model model) {
         model.addAttribute("repair", repair);
         return "repair/view";
+    }
+
+    @GetMapping("/{repair}/history")
+    public String statusHistory(@PathVariable("repair") Repair repair, Model model) {
+        List<RepairStatusHistory> statusHistoryList = repair.getStatusHistory();
+        model.addAttribute("statusHistoryList", statusHistoryList);
+        model.addAttribute("repair", repair);
+        return "repair/history";
     }
 }
