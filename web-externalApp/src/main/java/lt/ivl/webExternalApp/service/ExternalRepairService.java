@@ -40,18 +40,12 @@ public class ExternalRepairService {
         return componentRepairService.findCustomerRepair(customer, id);
     }
 
-    public Optional<Repair> findToDeleteByCustomer(Customer customer, int id) throws ItemNotFoundException {
-        Optional<Repair> repairFromDb = repairRepository.findByIdAndCreatedByCustomer(id, customer);
-
-        if (repairFromDb.isEmpty() || repairFromDb.get().getStatus() != RepairStatus.PENDING) {
-            throw new ItemNotFoundException();
-        }
-
-        return repairFromDb;
+    public Repair findCustomerRepairToDelete(Customer customer, int id) throws ItemNotFoundException {
+        return componentRepairService.findCustomerRepairToDelete(customer, id);
     }
 
     public void deleteByCustomer(Customer customer, int id) throws ItemNotFoundException {
-        Repair repair = findToDeleteByCustomer(customer, id).get();
+        Repair repair = findCustomerRepairToDelete(customer, id).get();
         repairRepository.delete(repair);
     }
 }

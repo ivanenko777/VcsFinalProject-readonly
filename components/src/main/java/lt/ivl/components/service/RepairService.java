@@ -2,6 +2,7 @@ package lt.ivl.components.service;
 
 import lt.ivl.components.domain.Customer;
 import lt.ivl.components.domain.Repair;
+import lt.ivl.components.domain.RepairStatus;
 import lt.ivl.components.exception.ItemNotFoundException;
 import lt.ivl.components.repository.RepairRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,16 @@ public class RepairService {
     public Repair findCustomerRepair(Customer customer, int id) throws ItemNotFoundException {
         Optional<Repair> repairFromDb = repairRepository.findByIdAndCreatedByCustomer(id, customer);
         if (repairFromDb.isEmpty()) {
+            throw new ItemNotFoundException();
+        }
+
+        return repairFromDb.get();
+    }
+
+    public Repair findCustomerRepairToDelete(Customer customer, int id) throws ItemNotFoundException {
+        // panasus i findCustomerRepair(), bet yra papildoma salyga RepairStatus == PENDING
+        Optional<Repair> repairFromDb = repairRepository.findByIdAndCreatedByCustomer(id, customer);
+        if (repairFromDb.isEmpty() || repairFromDb.get().getStatus() != RepairStatus.PENDING) {
             throw new ItemNotFoundException();
         }
 
