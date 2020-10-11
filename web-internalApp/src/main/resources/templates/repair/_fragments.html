@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+<div th:fragment="repairNav">
+    <div class="nav flex-column nav-pills">
+        <a class="nav-link" th:href="@{/repair/list}">&laquo; Atgal</a>
+        <a class="nav-link"
+           th:classappend="${#httpServletRequest.getRequestURI() == '/repair/' + repair.id + '/view' ? 'active':''}"
+           th:href="@{/repair/{id}/view(id=${repair.id})}">Informacija</a>
+
+        <a class="nav-link"
+           th:classappend="${#httpServletRequest.getRequestURI() == '/repair/' + repair.id + '/history' ? 'active':''}"
+           th:href="@{/repair/{id}/history(id=${repair.id})}"
+        >Statusų istorija</a>
+    </div>
+</div>
+
+</body>
+</html>

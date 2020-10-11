@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en"
+      layout:decorate="~{_layouts/layout-filter}"
+      th:with="pageName=${'Remontas: #' + repair.id}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE" th:text="${pageName}">...</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="row pt-2">
+        <div class="col-md-3">
+            <h3 class="pb-2" th:text="${pageName}"></h3>
+            <div th:replace="repair/_fragments :: repairNav"></div>
+        </div>
+
+        <div class="col-md-9">
+            <div class="row">
+                <h5>Klientas</h5>
+            </div>
+            <div class="row mb-1">
+                <div class="col-md-3 font-weight-bold text-right">Vardas, Pavardė</div>
+                <div class="col-md-3" th:text="${repair.customer.firstName + ' ' + repair.customer.lastName}"></div>
+                <div class="col-md-3 font-weight-bold text-right">Telefonas</div>
+                <div class="col-md-3" th:text="${repair.customer.phone}"></div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-md-3 font-weight-bold text-right">El. pašto adresas</div>
+                <div class="col-md-3" th:text="${repair.customer.email}"></div>
+            </div>
+
+            <div class="row mt-1">
+                <h5>Informacija</h5>
+            </div>
+            <div class="row mb-1">
+                <div class="col-md-3 font-weight-bold text-right">Status</div>
+                <div class="col-md-3" th:text="${repair.status.getMessageForEmployee()}"></div>
+                <div class="col-md-3 font-weight-bold text-right">Sukūrimo data</div>
+                <div class="col-md-3" th:text="${#dates.format(repair.createdAt, 'yyyy-MM-dd HH:mm')}"></div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-md-3 font-weight-bold text-right">Patvirtinimo data</div>
+                <div class="col-md-3">TODO</div>
+                <div class="col-md-3 font-weight-bold text-right">Modifikavimo data</div>
+                <div class="col-md-3" th:text="${#dates.format(repair.updatedAt, 'yyyy-MM-dd HH:mm')}"></div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-md-3 font-weight-bold text-right">Saugojimo vieta</div>
+                <div class="col-md-3" th:text="${repair.stored}"></div>
+            </div>
+
+            <div class="row mt-1">
+                <h5>Aprašymas</h5>
+            </div>
+            <div class="row mb-1">
+                <div class="col-md-3 font-weight-bold text-right">Tipas</div>
+                <div class="col-md-3" th:text="${repair.deviceType}"></div>
+                <div class="col-md-3 font-weight-bold text-right">Serijinis numeris</div>
+                <div class="col-md-3" th:text="${repair.deviceSerialNo}"></div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-md-3 font-weight-bold text-right">Gamintojas</div>
+                <div class="col-md-3" th:text="${repair.deviceManufacturer}"></div>
+                <div class="col-md-3 font-weight-bold text-right">Modelis</div>
+                <div class="col-md-3" th:text="${repair.deviceModel}"></div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 font-weight-bold text-right">Gedimo aprašymas</div>
+                <div class="col-md-9" th:utext="${#strings.replace(repair.description, '&#10;', '&lt;br&gt;')}"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
