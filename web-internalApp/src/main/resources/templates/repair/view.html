@@ -22,7 +22,7 @@
             </div>
             <div class="row mb-1">
                 <div class="col-md-3 font-weight-bold text-right">Vardas, Pavardė</div>
-                <div class="col-md-3" th:text="${repair.customer.firstName + ' ' + repair.customer.lastName}"></div>
+                <div class="col-md-3" th:text="${repair.customer.fullName}"></div>
                 <div class="col-md-3 font-weight-bold text-right">Telefonas</div>
                 <div class="col-md-3" th:text="${repair.customer.phone}"></div>
             </div>
