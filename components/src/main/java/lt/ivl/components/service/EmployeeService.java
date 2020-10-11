@@ -10,8 +10,8 @@ import lt.ivl.components.repository.EmployeeRepository;
 import lt.ivl.components.repository.EmployeeResetPasswordTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.List;

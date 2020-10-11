@@ -2,6 +2,7 @@ package lt.ivl.components.domain;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @Table(indexes = {@Index(name = "repair__customer_id__index", columnList = "customer_id")})
@@ -13,13 +14,20 @@ public class Repair {
     @Enumerated(EnumType.STRING)
     private RepairStatus status;
 
+    private String stored;
+
+    @OneToMany(mappedBy = "repair", fetch = FetchType.LAZY)
+    private List<RepairStatusHistory> statusHistory;
+
     private String deviceType;
     private String deviceManufacturer;
     private String deviceModel;
     private String deviceSerialNo;
+
+    @Column(columnDefinition = "TEXT")
     private String description;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
@@ -39,7 +47,6 @@ public class Repair {
             String description
     ) {
         this.customer = customer;
-        this.status = RepairStatus.PENDING;
         this.deviceType = deviceType;
         this.deviceManufacturer = deviceManufacturer;
         this.deviceModel = deviceModel;
@@ -124,6 +131,22 @@ public class Repair {
 
     public void setStatus(RepairStatus status) {
         this.status = status;
+    }
+
+    public List<RepairStatusHistory> getStatusHistory() {
+        return statusHistory;
+    }
+
+    public void setStatusHistory(List<RepairStatusHistory> statusHistory) {
+        this.statusHistory = statusHistory;
+    }
+
+    public String getStored() {
+        return stored;
+    }
+
+    public void setStored(String stored) {
+        this.stored = stored;
     }
 
     private Timestamp timeNow() {
