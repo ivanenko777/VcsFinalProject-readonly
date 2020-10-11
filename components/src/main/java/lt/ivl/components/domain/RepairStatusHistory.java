@@ -16,8 +16,10 @@ public class RepairStatusHistory {
     @Enumerated(EnumType.STRING)
     private RepairStatus status;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", nullable = true)
     private String notes;
+
+    @Column(nullable = true)
     private String store;
 
     @ManyToOne(fetch = FetchType.LAZY)

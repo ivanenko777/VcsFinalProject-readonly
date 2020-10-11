@@ -45,7 +45,6 @@ public class Repair {
             String description
     ) {
         this.customer = customer;
-        this.status = RepairStatus.PENDING;
         this.deviceType = deviceType;
         this.deviceManufacturer = deviceManufacturer;
         this.deviceModel = deviceModel;

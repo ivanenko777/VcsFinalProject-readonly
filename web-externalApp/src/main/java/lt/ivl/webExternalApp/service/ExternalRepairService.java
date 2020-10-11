@@ -2,12 +2,15 @@ package lt.ivl.webExternalApp.service;
 
 import lt.ivl.components.domain.Customer;
 import lt.ivl.components.domain.Repair;
+import lt.ivl.components.domain.RepairStatus;
+import lt.ivl.components.domain.RepairStatusHistory;
 import lt.ivl.components.exception.ItemNotFoundException;
 import lt.ivl.components.service.RepairService;
 import lt.ivl.webExternalApp.dto.RepairDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -22,8 +25,10 @@ public class ExternalRepairService {
         String deviceSerialNo = repairDto.getDeviceSerialNo();
         String description = repairDto.getDescription();
 
+        RepairStatus status = RepairStatus.PENDING;
         Repair repair = new Repair(customer, deviceType, deviceManufacturer, deviceModel, deviceSerialNo, description);
-        return componentRepairService.saveRepair(repair);
+
+        return componentRepairService.saveAndChangeRepairStatus(repair, status, null, null);
     }
 
     public List<Repair> findAllCustomerRepairs(Customer customer) {
