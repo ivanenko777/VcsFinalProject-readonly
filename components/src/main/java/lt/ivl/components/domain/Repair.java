@@ -17,6 +17,8 @@ public class Repair {
     private String deviceManufacturer;
     private String deviceModel;
     private String deviceSerialNo;
+
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
