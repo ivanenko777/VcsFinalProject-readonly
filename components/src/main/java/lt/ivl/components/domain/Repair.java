@@ -27,6 +27,27 @@ public class Repair {
     private Timestamp updatedAt;
 
     public Repair() {
+        this.updatedAt = timeNow();
+    }
+
+    public Repair(
+            Customer customer,
+            String deviceType,
+            String deviceManufacturer,
+            String deviceModel,
+            String deviceSerialNo,
+            String description
+    ) {
+        this.createdByCustomer = customer;
+        this.status = RepairStatus.PENDING;
+        this.deviceType = deviceType;
+        this.deviceManufacturer = deviceManufacturer;
+        this.deviceModel = deviceModel;
+        this.deviceSerialNo = deviceSerialNo;
+        this.description = description;
+
+        this.createdAt = timeNow();
+        this.updatedAt = timeNow();
     }
 
     public int getId() {
@@ -103,5 +124,9 @@ public class Repair {
 
     public void setStatus(RepairStatus status) {
         this.status = status;
+    }
+
+    private Timestamp timeNow() {
+        return new Timestamp(System.currentTimeMillis());
     }
 }

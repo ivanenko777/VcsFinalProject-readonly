@@ -3,6 +3,7 @@ package lt.ivl.webExternalApp.service;
 import lt.ivl.components.domain.Customer;
 import lt.ivl.components.domain.Repair;
 import lt.ivl.components.domain.RepairStatus;
+import lt.ivl.components.service.RepairService;
 import lt.ivl.webExternalApp.dto.RepairDto;
 import lt.ivl.webExternalApp.exception.ItemNotFoundException;
 import lt.ivl.components.repository.RepairRepository;
@@ -16,23 +17,20 @@ import java.util.Optional;
 @Service
 public class ExternalRepairService {
     @Autowired
+    private RepairService componentRepairService;
+
+    @Autowired
     private RepairRepository repairRepository;
 
     public Repair createNewRepairItemByCustomer(Customer customer, RepairDto repairDto) {
-        Repair repair = new Repair();
-        repair.setCreatedByCustomer(customer);
-        repair.setStatus(RepairStatus.PENDING);
+        String deviceType = repairDto.getDeviceType();
+        String deviceManufacturer = repairDto.getDeviceManufacturer();
+        String deviceModel = repairDto.getDeviceModel();
+        String deviceSerialNo = repairDto.getDeviceSerialNo();
+        String description = repairDto.getDescription();
 
-        repair.setDeviceType(repairDto.getDeviceType());
-        repair.setDeviceManufacturer(repairDto.getDeviceManufacturer());
-        repair.setDeviceModel(repairDto.getDeviceModel());
-        repair.setDeviceSerialNo(repairDto.getDeviceSerialNo());
-        repair.setDescription(repairDto.getDescription());
-        Timestamp timeNow = new Timestamp(System.currentTimeMillis());
-        repair.setCreatedAt(timeNow);
-        repair.setUpdatedAt(timeNow);
-
-        return repairRepository.save(repair);
+        Repair repair = new Repair(customer, deviceType, deviceManufacturer, deviceModel, deviceSerialNo, description);
+        return componentRepairService.saveRepair(repair);
     }
 
     public List<Repair> findWithStatusesByCustomer(Customer customer, Iterable<RepairStatus> statuses) {
