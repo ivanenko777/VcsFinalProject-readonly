@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
-@Table(indexes = {@Index(name = "repair__created_by_customer_id__index", columnList = "created_by_customer_id")})
+@Table(indexes = {@Index(name = "repair__customer_id__index", columnList = "customer_id")})
 public class Repair {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -20,25 +20,46 @@ public class Repair {
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "created_by_customer_id", nullable = false)
-    private Customer createdByCustomer;
+    @JoinColumn(name = "customer_id", nullable = false)
+    private Customer customer;
 
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
     public Repair() {
+        this.updatedAt = timeNow();
+    }
+
+    public Repair(
+            Customer customer,
+            String deviceType,
+            String deviceManufacturer,
+            String deviceModel,
+            String deviceSerialNo,
+            String description
+    ) {
+        this.customer = customer;
+        this.status = RepairStatus.PENDING;
+        this.deviceType = deviceType;
+        this.deviceManufacturer = deviceManufacturer;
+        this.deviceModel = deviceModel;
+        this.deviceSerialNo = deviceSerialNo;
+        this.description = description;
+
+        this.createdAt = timeNow();
+        this.updatedAt = timeNow();
     }
 
     public int getId() {
         return id;
     }
 
-    public Customer getCreatedByCustomer() {
-        return createdByCustomer;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setCreatedByCustomer(Customer createdByCustomer) {
-        this.createdByCustomer = createdByCustomer;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     public Timestamp getCreatedAt() {
@@ -103,5 +124,9 @@ public class Repair {
 
     public void setStatus(RepairStatus status) {
         this.status = status;
+    }
+
+    private Timestamp timeNow() {
+        return new Timestamp(System.currentTimeMillis());
     }
 }
