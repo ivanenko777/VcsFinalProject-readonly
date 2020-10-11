@@ -2,24 +2,18 @@ package lt.ivl.webExternalApp.service;
 
 import lt.ivl.components.domain.Customer;
 import lt.ivl.components.domain.Repair;
-import lt.ivl.components.domain.RepairStatus;
 import lt.ivl.components.exception.ItemNotFoundException;
-import lt.ivl.components.repository.RepairRepository;
 import lt.ivl.components.service.RepairService;
 import lt.ivl.webExternalApp.dto.RepairDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ExternalRepairService {
     @Autowired
     private RepairService componentRepairService;
-
-    @Autowired
-    private RepairRepository repairRepository;
 
     public Repair createNewRepairItemByCustomer(Customer customer, RepairDto repairDto) {
         String deviceType = repairDto.getDeviceType();
