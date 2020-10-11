@@ -20,7 +20,7 @@ public class RepairStatusHistory {
     private String note;
 
     @Column(nullable = true)
-    private String store;
+    private String stored;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id", nullable = true)
@@ -59,12 +59,12 @@ public class RepairStatusHistory {
         this.note = notes;
     }
 
-    public String getStore() {
-        return store;
+    public String getStored() {
+        return stored;
     }
 
-    public void setStore(String store) {
-        this.store = store;
+    public void setStored(String stored) {
+        this.stored = stored;
     }
 
     public Employee getEmployee() {

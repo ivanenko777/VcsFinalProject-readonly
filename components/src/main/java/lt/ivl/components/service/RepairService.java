@@ -27,12 +27,14 @@ public class RepairService {
     }
 
     @Transactional
-    public Repair changeRepairStatus(Repair repair, RepairStatus status, String note, String store) {
+    public Repair changeRepairStatus(Repair repair, RepairStatus status, String note, String stored) {
         RepairStatusHistory statusHistory = new RepairStatusHistory();
         statusHistory.setRepair(repair);
         statusHistory.setStatus(status);
         statusHistory.setNote(note);
-        statusHistory.setStore(store);
+        statusHistory.setStored(stored);
+
+        repair.setStatus(status);
         statusHistory.getRepair().setStatus(status);
 
         repair.setStored(store);
