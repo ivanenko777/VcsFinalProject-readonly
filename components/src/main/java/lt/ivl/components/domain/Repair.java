@@ -19,7 +19,7 @@ public class Repair {
     private String deviceSerialNo;
     private String description;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
