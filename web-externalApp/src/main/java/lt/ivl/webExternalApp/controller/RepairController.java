@@ -7,7 +7,7 @@ import lt.ivl.webExternalApp.dto.RepairDto;
 import lt.ivl.webExternalApp.exception.ItemNotFoundException;
 import lt.ivl.webExternalApp.security.CustomerPrincipal;
 import lt.ivl.webExternalApp.service.MailSender;
-import lt.ivl.webExternalApp.service.RepairService;
+import lt.ivl.webExternalApp.service.ExternalRepairService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -23,7 +23,7 @@ import java.util.List;
 @RequestMapping("/repair")
 public class RepairController {
     @Autowired
-    private RepairService repairService;
+    private ExternalRepairService externalRepairService;
 
     @Autowired
     private MailSender mailSender;
@@ -35,7 +35,7 @@ public class RepairController {
     ) {
         Customer customer = customerPrincipal.getCustomer();
         List<RepairStatus> statusPending = Collections.singletonList(RepairStatus.PENDING);
-        List<Repair> repairsWithStatusPending = repairService.findWithStatusesByCustomer(customer, statusPending);
+        List<Repair> repairsWithStatusPending = externalRepairService.findWithStatusesByCustomer(customer, statusPending);
         model.addAttribute("pendingRepairs", repairsWithStatusPending);
         return "repair/index";
     }
@@ -50,7 +50,7 @@ public class RepairController {
             int repairId = Integer.parseInt(id);
             Customer customer = customerPrincipal.getCustomer();
 
-            Repair repair = repairService.findByCustomer(customer, repairId);
+            Repair repair = externalRepairService.findByCustomer(customer, repairId);
             model.addAttribute("repair", repair);
         } catch (ItemNotFoundException | NumberFormatException e) {
             model.addAttribute("messageError", e.getMessage());
@@ -76,7 +76,7 @@ public class RepairController {
             return "repair/add";
         }
         Customer customer = customerPrincipal.getCustomer();
-        Repair newRepair = repairService.createNewRepairItemByCustomer(customer, repairDto);
+        Repair newRepair = externalRepairService.createNewRepairItemByCustomer(customer, repairDto);
         mailSender.sendRepairRequestToCustomer(customer, newRepair);
         return "redirect:/repair/index";
     }
@@ -90,7 +90,7 @@ public class RepairController {
         try {
             int repairId = Integer.parseInt(id);
             Customer customer = customerPrincipal.getCustomer();
-            Repair repair = repairService.findToDeleteByCustomer(customer, repairId).get();
+            Repair repair = externalRepairService.findToDeleteByCustomer(customer, repairId).get();
             model.addAttribute("repair", repair);
         } catch (ItemNotFoundException | NumberFormatException e) {
             model.addAttribute("messageError", e.getMessage());
@@ -108,7 +108,7 @@ public class RepairController {
         try {
             int repairId = Integer.parseInt(id);
             Customer customer = customerPrincipal.getCustomer();
-            repairService.deleteByCustomer(customer, repairId);
+            externalRepairService.deleteByCustomer(customer, repairId);
         } catch (ItemNotFoundException e) {
             model.addAttribute("messageError", e.getMessage());
             return "repair/delete";
