@@ -14,6 +14,7 @@ public class Repair {
     @Enumerated(EnumType.STRING)
     private RepairStatus status;
 
+    @Column(name = "store")
     private String stored;
 
     @OneToMany(mappedBy = "repair", fetch = FetchType.LAZY)

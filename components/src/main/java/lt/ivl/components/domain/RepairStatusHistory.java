@@ -19,7 +19,7 @@ public class RepairStatusHistory {
     @Column(columnDefinition = "TEXT", nullable = true)
     private String note;
 
-    @Column(nullable = true)
+    @Column(name = "store")
     private String stored;
 
     @ManyToOne(fetch = FetchType.LAZY)
