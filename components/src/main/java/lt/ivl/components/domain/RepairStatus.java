@@ -1,7 +1,7 @@
 package lt.ivl.components.domain;
 
 public enum RepairStatus {
-    PENDING("Laukiama", "Laukiama"),
+    PENDING("Laukiama", "Laukiama");
 
     private String messageForCustomer;
     private String messageForEmployee;
