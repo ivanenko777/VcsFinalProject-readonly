@@ -33,8 +33,8 @@ public class ExternalRepairService {
         return componentRepairService.saveRepair(repair);
     }
 
-    public List<Repair> findWithStatusesByCustomer(Customer customer, Iterable<RepairStatus> statuses) {
-        return repairRepository.findAllByCreatedByCustomerAndStatusInOrderByCreatedAtDesc(customer, statuses);
+    public List<Repair> findAllCustomerRepairs(Customer customer) {
+        return componentRepairService.findAllCustomerRepairs(customer);
     }
 
     public Repair findByCustomer(Customer customer, int id) throws ItemNotFoundException {

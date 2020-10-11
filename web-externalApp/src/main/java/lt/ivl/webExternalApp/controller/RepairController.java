@@ -34,9 +34,8 @@ public class RepairController {
             Model model
     ) {
         Customer customer = customerPrincipal.getCustomer();
-        List<RepairStatus> statusPending = Collections.singletonList(RepairStatus.PENDING);
-        List<Repair> repairsWithStatusPending = externalRepairService.findWithStatusesByCustomer(customer, statusPending);
-        model.addAttribute("pendingRepairs", repairsWithStatusPending);
+        List<Repair> repairs = externalRepairService.findAllCustomerRepairs(customer);
+        model.addAttribute("repairList", repairs);
         return "repair/index";
     }
 
