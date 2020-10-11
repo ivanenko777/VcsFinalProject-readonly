@@ -17,7 +17,7 @@ public class RepairStatusHistory {
     private RepairStatus status;
 
     @Column(columnDefinition = "TEXT", nullable = true)
-    private String notes;
+    private String note;
 
     @Column(nullable = true)
     private String store;
@@ -51,12 +51,12 @@ public class RepairStatusHistory {
         this.status = status;
     }
 
-    public String getNotes() {
-        return notes;
+    public String getNote() {
+        return note;
     }
 
-    public void setNotes(String notes) {
-        this.notes = notes;
+    public void setNote(String notes) {
+        this.note = notes;
     }
 
     public String getStore() {

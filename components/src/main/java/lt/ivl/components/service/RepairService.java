@@ -35,7 +35,7 @@ public class RepairService {
         RepairStatusHistory statusHistory = new RepairStatusHistory();
         statusHistory.setRepair(repair);
         statusHistory.setStatus(status);
-        statusHistory.setNotes(note);
+        statusHistory.setNote(note);
         statusHistory.setStore(store);
         repairStatusHistoryRepository.save(statusHistory);
 
