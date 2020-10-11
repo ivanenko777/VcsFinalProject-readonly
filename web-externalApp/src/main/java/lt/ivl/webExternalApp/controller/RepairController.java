@@ -106,7 +106,7 @@ public class RepairController {
             int repairId = Integer.parseInt(id);
             Customer customer = customerPrincipal.getCustomer();
             externalRepairService.deleteCustomerRepair(customer, repairId);
-        } catch (ItemNotFoundException e) {
+        } catch (ItemNotFoundException | NumberFormatException e) {
             model.addAttribute("messageError", e.getMessage());
             return "repair/delete";
         }
