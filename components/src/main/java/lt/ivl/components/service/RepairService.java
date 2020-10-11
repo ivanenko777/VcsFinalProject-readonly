@@ -77,4 +77,20 @@ public class RepairService {
         repairStatusHistoryRepository.deleteByRepairId(repair.getId());
         repairRepository.delete(repair);
     }
+
+
+    public Repair findRepairToDelete(int id) throws ItemNotFoundException {
+        Optional<Repair> repairFromDb = repairRepository.findById(id);
+        if (repairFromDb.isEmpty() || repairFromDb.get().getStatus() != RepairStatus.PENDING) {
+            throw new ItemNotFoundException();
+        }
+        return repairFromDb.get();
+    }
+
+    @Transactional
+    public void deleteRepair(int id) throws ItemNotFoundException {
+        Repair repair = findRepairToDelete(id);
+        repairStatusHistoryRepository.deleteByRepairId(id);
+        repairRepository.delete(repair);
+    }
 }
