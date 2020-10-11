@@ -14,6 +14,8 @@ public class Repair {
     @Enumerated(EnumType.STRING)
     private RepairStatus status;
 
+    private String stored;
+
     @OneToMany(mappedBy = "repair", fetch = FetchType.LAZY)
     private List<RepairStatusHistory> statusHistory;
 
@@ -137,6 +139,14 @@ public class Repair {
 
     public void setStatusHistory(List<RepairStatusHistory> statusHistory) {
         this.statusHistory = statusHistory;
+    }
+
+    public String getStored() {
+        return stored;
+    }
+
+    public void setStored(String stored) {
+        this.stored = stored;
     }
 
     private Timestamp timeNow() {
