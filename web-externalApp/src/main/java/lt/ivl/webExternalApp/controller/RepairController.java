@@ -2,9 +2,8 @@ package lt.ivl.webExternalApp.controller;
 
 import lt.ivl.components.domain.Customer;
 import lt.ivl.components.domain.Repair;
-import lt.ivl.components.domain.RepairStatus;
 import lt.ivl.webExternalApp.dto.RepairDto;
-import lt.ivl.webExternalApp.exception.ItemNotFoundException;
+import lt.ivl.components.exception.ItemNotFoundException;
 import lt.ivl.webExternalApp.security.CustomerPrincipal;
 import lt.ivl.webExternalApp.service.MailSender;
 import lt.ivl.webExternalApp.service.ExternalRepairService;
@@ -16,7 +15,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Collections;
 import java.util.List;
 
 @Controller
