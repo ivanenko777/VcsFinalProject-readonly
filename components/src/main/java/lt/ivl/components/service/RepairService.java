@@ -22,21 +22,18 @@ public class RepairService {
     @Autowired
     private RepairStatusHistoryRepository repairStatusHistoryRepository;
 
-    // TODO: delete
     public Repair saveRepair(Repair repair) {
         return repairRepository.save(repair);
     }
 
     @Transactional
-    public Repair saveAndChangeRepairStatus(Repair repair, RepairStatus status, String note, String store) {
-        repair.setStatus(status);
-        repair = repairRepository.save(repair);
-
+    public Repair changeRepairStatus(Repair repair, RepairStatus status, String note, String store) {
         RepairStatusHistory statusHistory = new RepairStatusHistory();
         statusHistory.setRepair(repair);
         statusHistory.setStatus(status);
         statusHistory.setNote(note);
         statusHistory.setStore(store);
+        statusHistory.getRepair().setStatus(status);
         repairStatusHistoryRepository.save(statusHistory);
 
         return repair;
