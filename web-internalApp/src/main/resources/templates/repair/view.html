@@ -24,6 +24,8 @@
             <a class="btn btn-outline-danger btn-block font-weight-bold"
                th:href="@{/repair/{id}/delete(id=${repair.id})}"
                th:if="${repair.status.name() == 'PENDING'}">Ištrinti</a>
+            <a class="btn btn-outline-secondary btn-block font-weight-bold"
+               th:href="@{/repair/{id}/export_confirmed_pdf(id=${repair.id})}">Patvirtinimo PDF</a>
         </div>
 
         <div class="col-md-9">
