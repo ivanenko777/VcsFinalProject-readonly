@@ -84,12 +84,13 @@ public class RepairController {
             @PathVariable("id") String id,
             Model model
     ) {
+        int repairId = Integer.parseInt(id);
+        model.addAttribute("repairId", repairId);
+
         try {
-            int repairId = Integer.parseInt(id);
             Customer customer = customerPrincipal.getCustomer();
-            Repair repair = externalRepairService.findCustomerRepairToDelete(customer, repairId);
-            model.addAttribute("repair", repair);
-        } catch (ItemNotFoundException | NumberFormatException e) {
+            externalRepairService.findCustomerRepairToDelete(customer, repairId);
+        } catch (ItemNotFoundException e) {
             model.addAttribute("messageError", e.getMessage());
         }
 
@@ -102,11 +103,13 @@ public class RepairController {
             @PathVariable("id") String id,
             Model model
     ) {
+        int repairId = Integer.parseInt(id);
+        model.addAttribute("repairId", repairId);
+
         try {
-            int repairId = Integer.parseInt(id);
             Customer customer = customerPrincipal.getCustomer();
             externalRepairService.deleteCustomerRepair(customer, repairId);
-        } catch (ItemNotFoundException | NumberFormatException e) {
+        } catch (ItemNotFoundException e) {
             model.addAttribute("messageError", e.getMessage());
             return "repair/delete";
         }
