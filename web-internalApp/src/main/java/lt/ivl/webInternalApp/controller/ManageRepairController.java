@@ -3,6 +3,7 @@ package lt.ivl.webInternalApp.controller;
 import lt.ivl.components.domain.Repair;
 import lt.ivl.components.domain.RepairStatusHistory;
 import lt.ivl.components.exception.ItemNotFoundException;
+import lt.ivl.webInternalApp.pdf.PdfGenerator;
 import lt.ivl.webInternalApp.service.InternalRepairService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Controller
@@ -19,6 +21,9 @@ import java.util.List;
 public class ManageRepairController {
     @Autowired
     private InternalRepairService internalRepairService;
+
+    @Autowired
+    private PdfGenerator pdfGenerator;
 
     @GetMapping("/list")
     public String list(Model model) {
@@ -66,5 +71,14 @@ public class ManageRepairController {
             return "repair/delete";
         }
         return "redirect:/repair/list";
+    }
+
+    @GetMapping(value = "{repair}/export_confirmed_pdf", produces = {"application/json", "application/x-pdf"})
+    public void exportConfirmedPdf(@PathVariable("repair") Repair repair, HttpServletResponse response) {
+        try {
+            pdfGenerator.generateRepairConfirmedPdf(repair, response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
