@@ -33,7 +33,7 @@
                 <tr>
                     <th scope="col">&num;</th>
                     <th scope="col">Status</th>
-                    <th scope="col">Data</th>
+                    <th scope="col">Patvirtinta</th>
                     <th scope="col">Tipas</th>
                     <th scope="col">Gamintojas</th>
                     <th scope="col">Modelis</th>
@@ -45,7 +45,7 @@
                 <tr>
                     <td scope="row" th:text="${repair.id}"></td>
                     <td th:text="${repair.status.getMessageForCustomer()}"></td>
-                    <td th:text="${#dates.format(repair.createdAt, 'yyyy-MM-dd')}"></td>
+                    <td th:text="${#dates.format(repair.confirmedAt, 'yyyy-MM-dd')}"></td>
                     <td th:text="${repair.deviceType}"></td>
                     <td th:text="${repair.deviceManufacturer}"></td>
                     <td th:text="${repair.deviceModel}"></td>

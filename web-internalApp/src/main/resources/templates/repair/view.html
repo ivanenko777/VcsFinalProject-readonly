@@ -15,6 +15,12 @@
             <h3 class="pb-2" th:text="${pageName}"></h3>
             <div th:replace="repair/_fragments :: repairNav"></div>
             <hr/>
+            <a class="btn btn-outline-primary btn-block font-weight-bold"
+               th:href="@{/repair/add}"
+               th:if="${repair.status.name() == 'PENDING'}">Redaguoti</a>
+            <a class="btn btn-outline-success btn-block font-weight-bold"
+               th:href="@{/repair/add}"
+               th:if="${repair.status.name() == 'PENDING'}">Patvirtinti</a>
             <a class="btn btn-outline-danger btn-block font-weight-bold"
                th:href="@{/repair/{id}/delete(id=${repair.id})}"
                th:if="${repair.status.name() == 'PENDING'}">Ištrinti</a>
@@ -41,18 +47,22 @@
             <div class="row mb-1">
                 <div class="col-md-3 font-weight-bold text-right">Status</div>
                 <div class="col-md-3" th:text="${repair.status.getMessageForEmployee()}"></div>
-                <div class="col-md-3 font-weight-bold text-right">Sukūrimo data</div>
-                <div class="col-md-3" th:text="${#dates.format(repair.createdAt, 'yyyy-MM-dd HH:mm')}"></div>
-            </div>
-            <div class="row mb-1">
-                <div class="col-md-3 font-weight-bold text-right">Patvirtinimo data</div>
-                <div class="col-md-3">TODO</div>
                 <div class="col-md-3 font-weight-bold text-right">Modifikavimo data</div>
                 <div class="col-md-3" th:text="${#dates.format(repair.updatedAt, 'yyyy-MM-dd HH:mm')}"></div>
             </div>
             <div class="row mb-1">
+                <div class="col-md-3 font-weight-bold text-right">Patvirtino</div>
+                <div class="col-md-3">
+                    <span th:if="${repair.confirmedBy}" th:text="${repair.confirmedBy.fullName}"></span>
+                </div>
+                <div class="col-md-3 font-weight-bold text-right">Patvirtinimo data</div>
+                <div class="col-md-3" th:text="${#dates.format(repair.confirmedAt, 'yyyy-MM-dd HH:mm')}">TODO</div>
+            </div>
+            <div class="row mb-1">
                 <div class="col-md-3 font-weight-bold text-right">Saugojimo vieta</div>
                 <div class="col-md-3" th:text="${repair.stored}"></div>
+                <div class="col-md-3 font-weight-bold text-right">Sukūrimo data</div>
+                <div class="col-md-3" th:text="${#dates.format(repair.createdAt, 'yyyy-MM-dd HH:mm')}"></div>
             </div>
 
             <div class="row mt-1">

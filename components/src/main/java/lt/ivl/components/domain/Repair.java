@@ -29,11 +29,16 @@ public class Repair {
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "confirmed_employee_id")
+    private Employee confirmedBy;
+
     @OneToMany(mappedBy = "repair", fetch = FetchType.LAZY)
     private List<RepairStatusHistory> statusHistory;
 
     private Timestamp createdAt;
     private Timestamp updatedAt;
+    private Timestamp confirmedAt;
 
     public Repair() {
         this.updatedAt = timeNow();
@@ -148,6 +153,22 @@ public class Repair {
 
     public void setStored(String stored) {
         this.stored = stored;
+    }
+
+    public Employee getConfirmedBy() {
+        return confirmedBy;
+    }
+
+    public void setConfirmedBy(Employee confirmedBy) {
+        this.confirmedBy = confirmedBy;
+    }
+
+    public Timestamp getConfirmedAt() {
+        return confirmedAt;
+    }
+
+    public void setConfirmedAt(Timestamp confirmedAt) {
+        this.confirmedAt = confirmedAt;
     }
 
     private Timestamp timeNow() {

@@ -22,8 +22,12 @@
                 <div class="col-md-6" th:text="${'#' + repair.id}"></div>
             </div>
             <div class="row mb-1">
-                <div class="col-md-6 font-weight-bold text-right">Data</div>
+                <div class="col-md-6 font-weight-bold text-right">Sukūrimo data</div>
                 <div class="col-md-6" th:text="${#dates.format(repair.createdAt, 'yyyy-MM-dd HH:mm')}"></div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-md-6 font-weight-bold text-right">Parvirtinimo data</div>
+                <div class="col-md-6" th:text="${#dates.format(repair.confirmedAt, 'yyyy-MM-dd HH:mm')}"></div>
             </div>
             <div class="row mb-1">
                 <div class="col-md-6 font-weight-bold text-right">Įrenginio tipas</div>

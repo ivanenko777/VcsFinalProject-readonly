@@ -34,7 +34,7 @@
                 <tr>
                     <td scope="row" th:text="${repair.id}"></td>
                     <td th:text="${repair.status.getMessageForEmployee()}"></td>
-                    <td th:text="${#dates.format(repair.createdAt, 'yyyy-MM-dd')} + ' + Kas'"></td>
+                    <td th:text="${#dates.format(repair.confirmedAt, 'yyyy-MM-dd')}"></td>
                     <td th:text="${repair.deviceType}"></td>
                     <td th:text="${repair.deviceManufacturer}"></td>
                     <td th:text="${repair.deviceModel}"></td>
