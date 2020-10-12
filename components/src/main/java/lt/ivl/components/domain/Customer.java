@@ -95,4 +95,8 @@ public class Customer {
     public String getFullName() {
         return firstName + ' ' + lastName;
     }
+
+    public String getFullNameWithEmail() {
+        return String.format("%s %s [ %s ]", firstName, lastName, email);
+    }
 }
