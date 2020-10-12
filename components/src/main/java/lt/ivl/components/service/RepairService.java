@@ -1,9 +1,6 @@
 package lt.ivl.components.service;
 
-import lt.ivl.components.domain.Customer;
-import lt.ivl.components.domain.Repair;
-import lt.ivl.components.domain.RepairStatus;
-import lt.ivl.components.domain.RepairStatusHistory;
+import lt.ivl.components.domain.*;
 import lt.ivl.components.exception.ItemNotFoundException;
 import lt.ivl.components.repository.RepairRepository;
 import lt.ivl.components.repository.RepairStatusHistoryRepository;
@@ -31,15 +28,19 @@ public class RepairService {
     }
 
     @Transactional
-    public Repair changeRepairStatus(Repair repair, RepairStatus status, String note, String stored) {
+    public Repair changeRepairStatus(Repair repair, RepairStatus status, Employee employee, String note, String stored) {
         RepairStatusHistory statusHistory = new RepairStatusHistory();
         statusHistory.setRepair(repair);
         statusHistory.setStatus(status);
+        statusHistory.setEmployee(employee);
         statusHistory.setNote(note);
         statusHistory.setStored(stored);
 
         repair.setStatus(status);
         statusHistory.getRepair().setStatus(status);
+
+        repair.setConfirmedBy(employee);
+        statusHistory.getRepair().setConfirmedBy(employee);
 
         repair.setStored(stored);
         statusHistory.getRepair().setStored(stored);

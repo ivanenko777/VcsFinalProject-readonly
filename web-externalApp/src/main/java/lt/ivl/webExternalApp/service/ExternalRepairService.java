@@ -28,7 +28,7 @@ public class ExternalRepairService {
         RepairStatus status = RepairStatus.PENDING;
         Repair repair = new Repair(customer, deviceType, deviceManufacturer, deviceModel, deviceSerialNo, description);
         repair = componentRepairService.saveRepair(repair);
-        repair = componentRepairService.changeRepairStatus(repair, status, null, null);
+        repair = componentRepairService.changeRepairStatus(repair, status, null, null, null);
         return repair;
     }
 
