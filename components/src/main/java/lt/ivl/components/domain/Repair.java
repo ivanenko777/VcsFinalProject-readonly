@@ -17,9 +17,6 @@ public class Repair {
     @Column(name = "store")
     private String stored;
 
-    @OneToMany(mappedBy = "repair", fetch = FetchType.LAZY)
-    private List<RepairStatusHistory> statusHistory;
-
     private String deviceType;
     private String deviceManufacturer;
     private String deviceModel;
@@ -31,6 +28,9 @@ public class Repair {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
+
+    @OneToMany(mappedBy = "repair", fetch = FetchType.LAZY)
+    private List<RepairStatusHistory> statusHistory;
 
     private Timestamp createdAt;
     private Timestamp updatedAt;
