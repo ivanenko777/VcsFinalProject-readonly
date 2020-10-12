@@ -15,12 +15,9 @@
             <h3 class="pb-2" th:text="${pageName}"></h3>
             <div th:replace="repair/_fragments :: repairNav"></div>
             <hr/>
-            <a class="btn btn-outline-primary btn-block font-weight-bold"
-               th:href="@{/repair/add}"
-               th:if="${repair.status.name() == 'PENDING'}">Redaguoti</a>
             <a class="btn btn-outline-success btn-block font-weight-bold"
-               th:href="@{/repair/add}"
-               th:if="${repair.status.name() == 'PENDING'}">Patvirtinti</a>
+               th:href="@{/repair/{id}/confirm(id=${repair.id})}"
+               th:if="${repair.status.name() == 'PENDING'}">Redaguoti ir patvirtinti</a>
             <a class="btn btn-outline-danger btn-block font-weight-bold"
                th:href="@{/repair/{id}/delete(id=${repair.id})}"
                th:if="${repair.status.name() == 'PENDING'}">Ištrinti</a>
