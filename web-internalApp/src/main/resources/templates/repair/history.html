@@ -24,13 +24,13 @@
                     <th scope="col">Data</th>
                     <th scope="col">Darbuotojas</th>
                     <th scope="col">Pastabos</th>
-                    <th scope="col">Saugojimo vieta</th>
+                    <th scope="col">Saugomas</th>
                 </tr>
                 </thead>
                 <tbody th:each="statusHistory : ${statusHistoryList}">
                 <tr>
                     <td th:text="${statusHistory.status.getMessageForEmployee()}"></td>
-                    <td th:text="${#dates.format(statusHistory.createdAt, 'yyyy-MM-dd HH:mm')} + ' + Kas'"></td>
+                    <td th:text="${#dates.format(statusHistory.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
                     <td>
                         <span th:if="${statusHistory.employee}"
                               th:text="${statusHistory.employee.fullName}"></span>
