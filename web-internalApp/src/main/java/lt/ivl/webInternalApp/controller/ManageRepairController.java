@@ -1,9 +1,6 @@
 package lt.ivl.webInternalApp.controller;
 
-import lt.ivl.components.domain.Customer;
-import lt.ivl.components.domain.Employee;
-import lt.ivl.components.domain.Repair;
-import lt.ivl.components.domain.RepairStatusHistory;
+import lt.ivl.components.domain.*;
 import lt.ivl.components.exception.CustomerNotFoundInDBException;
 import lt.ivl.components.exception.InvalidStatusException;
 import lt.ivl.components.exception.ItemNotFoundException;
@@ -88,8 +85,7 @@ public class ManageRepairController {
         try {
             Employee employee = employeePrincipal.getEmployee();
             Repair repair = internalRepairService.createRepair(repairDto, employee);
-            repair = internalRepairService.confirmRepair(repair, repairDto, employee);
-            mailSender.sendRepairConfirmedToCustomer(repair);
+            if (repair.getStatus() == RepairStatus.CONFIRMED) mailSender.sendRepairConfirmedToCustomer(repair);
 
             int repairId = repair.getId();
             return "redirect:/repair/" + repairId + "/view";
@@ -136,7 +132,7 @@ public class ManageRepairController {
         try {
             Employee employee = employeePrincipal.getEmployee();
             repair = internalRepairService.confirmRepair(repair, repairDto, employee);
-            mailSender.sendRepairConfirmedToCustomer(repair);
+            if (repair.getStatus() == RepairStatus.CONFIRMED) mailSender.sendRepairConfirmedToCustomer(repair);
             return "redirect:/repair/{repair}/view";
         } catch (CustomerNotFoundInDBException | InvalidStatusException e) {
             List<Customer> customerList = internalCustomerService.findAll();

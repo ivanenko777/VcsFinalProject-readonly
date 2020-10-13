@@ -39,10 +39,6 @@ public class InternalRepairService {
 
     @Transactional
     public Repair confirmRepair(Repair repair, RepairDto repairDto, Employee employee) throws CustomerNotFoundInDBException, InvalidStatusException {
-        RepairStatus currentStatus = repair.getStatus();
-        RepairStatus newStatus = RepairStatus.CONFIRMED;
-        componentRepairService.verifyNewStatus(currentStatus, newStatus);
-
         int customerId = repairDto.getCustomer();
         Customer customer = componentCustomerService.findById(customerId);
         repair.setCustomer(customer);
@@ -51,18 +47,21 @@ public class InternalRepairService {
         repair.setDeviceModel(repairDto.getDeviceModel());
         repair.setDeviceSerialNo(repairDto.getDeviceSerialNo());
         repair.setDescription(repairDto.getDescription());
-
-        repair.setConfirmedAt(new Timestamp(System.currentTimeMillis()));
         repair = componentRepairService.saveRepair(repair);
-        repair = componentRepairService.changeRepairStatus(repair, newStatus, employee, null, null);
 
+        boolean confirmRepair = repairDto.isConfirmRepair();
+        if (confirmRepair) {
+            RepairStatus currentStatus = repair.getStatus();
+            RepairStatus newStatus = RepairStatus.CONFIRMED;
+            repair = changeRepairStatus(repair, currentStatus, newStatus, employee, null, null);
+        }
         return repair;
     }
 
     @Transactional
     public Repair createRepair(RepairDto repairDto, Employee employee) throws InvalidStatusException, CustomerNotFoundInDBException {
-        RepairStatus newStatus = RepairStatus.PENDING;
-        componentRepairService.verifyNewStatus(null, newStatus);
+        RepairStatus currentStatus = null;
+        RepairStatus newStatus = null;
 
         int customerId = repairDto.getCustomer();
         Customer customer = componentCustomerService.findById(customerId);
@@ -72,9 +71,33 @@ public class InternalRepairService {
         String deviceSerialNo = repairDto.getDeviceSerialNo();
         String description = repairDto.getDescription();
         Repair repair = new Repair(customer, deviceType, deviceManufacturer, deviceModel, deviceSerialNo, description);
+
+        newStatus = RepairStatus.PENDING;
+        componentRepairService.verifyNewStatus(currentStatus, newStatus);
         repair = componentRepairService.saveRepair(repair);
         repair = componentRepairService.changeRepairStatus(repair, newStatus, employee, null, null);
 
+        boolean confirmRepair = repairDto.isConfirmRepair();
+        if (confirmRepair) {
+            currentStatus = repair.getStatus();
+            newStatus = RepairStatus.CONFIRMED;
+            repair = changeRepairStatus(repair, currentStatus, newStatus, employee, null, null);
+        }
+
+        return repair;
+    }
+
+    private Repair changeRepairStatus(
+            Repair repair,
+            RepairStatus currentStatus,
+            RepairStatus newStatus,
+            Employee employee,
+            String note,
+            String stored
+    ) throws InvalidStatusException {
+        componentRepairService.verifyNewStatus(currentStatus, newStatus);
+        repair.setConfirmedAt(new Timestamp(System.currentTimeMillis()));
+        repair = componentRepairService.changeRepairStatus(repair, newStatus, employee, note, stored);
         return repair;
     }
 }

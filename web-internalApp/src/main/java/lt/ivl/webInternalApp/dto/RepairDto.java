@@ -31,6 +31,8 @@ public class RepairDto {
     @NotEmpty(message = "Laukas negali būti tuščias.")
     private String description;
 
+    private boolean confirmRepair;
+
     public RepairDto() {
     }
 
@@ -89,5 +91,13 @@ public class RepairDto {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isConfirmRepair() {
+        return confirmRepair;
+    }
+
+    public void setConfirmRepair(boolean confirmRepair) {
+        this.confirmRepair = confirmRepair;
     }
 }
