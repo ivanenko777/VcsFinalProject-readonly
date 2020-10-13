@@ -31,6 +31,9 @@ public class RepairDto {
     @NotEmpty(message = "Laukas negali būti tuščias.")
     private String description;
 
+    @NotNull
+    private boolean deviceWarranty;
+
     private boolean confirmRepair;
 
     public RepairDto() {
@@ -43,6 +46,7 @@ public class RepairDto {
         this.deviceModel = repair.getDeviceModel();
         this.deviceSerialNo = repair.getDeviceSerialNo();
         this.description = repair.getDescription();
+        this.deviceWarranty = repair.isDeviceWarranty();
     }
 
     public int getCustomer() {
@@ -99,5 +103,13 @@ public class RepairDto {
 
     public void setConfirmRepair(boolean confirmRepair) {
         this.confirmRepair = confirmRepair;
+    }
+
+    public boolean isDeviceWarranty() {
+        return deviceWarranty;
+    }
+
+    public void setDeviceWarranty(boolean deviceWarranty) {
+        this.deviceWarranty = deviceWarranty;
     }
 }

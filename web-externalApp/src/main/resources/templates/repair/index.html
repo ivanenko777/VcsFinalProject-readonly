@@ -38,6 +38,7 @@
                     <th scope="col">Gamintojas</th>
                     <th scope="col">Modelis</th>
                     <th scope="col">Serijinis nr.</th>
+                    <th scope="col">Garantinis</th>
                     <th></th>
                 </tr>
                 </thead>
@@ -50,6 +51,7 @@
                     <td th:text="${repair.deviceManufacturer}"></td>
                     <td th:text="${repair.deviceModel}"></td>
                     <td th:text="${repair.deviceSerialNo}"></td>
+                    <td th:text="${repair.deviceWarranty} ? 'Taip' : 'Ne'"></td>
                     <td class="text-right">
                         <a class="btn btn-sm btn-outline-primary font-weight-bold"
                            th:href="@{/repair/{id}/view(id=${repair.id})}">Plačiau &raquo;</a>

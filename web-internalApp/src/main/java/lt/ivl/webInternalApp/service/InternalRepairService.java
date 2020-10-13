@@ -48,6 +48,7 @@ public class InternalRepairService {
         repair.setDeviceManufacturer(repairDto.getDeviceManufacturer());
         repair.setDeviceModel(repairDto.getDeviceModel());
         repair.setDeviceSerialNo(repairDto.getDeviceSerialNo());
+        repair.setDeviceWarranty(repairDto.isDeviceWarranty());
         repair.setDescription(repairDto.getDescription());
         repair = componentRepairService.saveRepair(repair);
 
@@ -71,8 +72,9 @@ public class InternalRepairService {
         String deviceManufacturer = repairDto.getDeviceManufacturer();
         String deviceModel = repairDto.getDeviceModel();
         String deviceSerialNo = repairDto.getDeviceSerialNo();
+        boolean deviceWarranty = repairDto.isDeviceWarranty();
         String description = repairDto.getDescription();
-        Repair repair = new Repair(customer, deviceType, deviceManufacturer, deviceModel, deviceSerialNo, description);
+        Repair repair = new Repair(customer, deviceType, deviceManufacturer, deviceModel, deviceSerialNo, deviceWarranty, description);
 
         newStatus = RepairStatus.PENDING;
         componentRepairService.verifyNewStatus(currentStatus, newStatus);
@@ -102,7 +104,7 @@ public class InternalRepairService {
         repair = changeRepairStatus(repair, currentStatus, newStatus, employee, note, stored);
         return repair;
     }
-    
+
     public Repair startDiagnostic(Repair repair, Employee employee) throws InvalidStatusException {
         RepairStatus currentStatus = repair.getStatus();
         RepairStatus newStatus = RepairStatus.DIAGNOSTIC;

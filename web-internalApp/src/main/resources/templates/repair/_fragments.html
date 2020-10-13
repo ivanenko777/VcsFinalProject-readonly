@@ -81,6 +81,12 @@
             </div>
 
             <div class="col-md-6 form-group form-check pt-3">
+                <input th:class="${#fields.errors('deviceWarranty').isEmpty()} ? 'form-check-label mt-4 ml-4' : 'form-check-label mt-4 is-invalid'"
+                       th:field="*{deviceWarranty}" type="checkbox"/>
+                <label th:for="deviceWarranty1">Ar galioja garantija?</label>
+                <div class="invalid-feedback" th:each="error: ${#fields.errors('deviceWarranty')}"
+                     th:text="${error}"></div>
+
                 <input th:class="${#fields.errors('confirmRepair').isEmpty()} ? 'form-check-label mt-4 ml-4' : 'form-check-label mt-4 is-invalid'"
                        th:field="*{confirmRepair}" type="checkbox"/>
                 <label th:for="confirmRepair1">Patvirtinti</label>

@@ -21,6 +21,7 @@ public class Repair {
     private String deviceManufacturer;
     private String deviceModel;
     private String deviceSerialNo;
+    private boolean deviceWarranty;
 
     @Column(columnDefinition = "TEXT")
     private String description;
@@ -50,6 +51,7 @@ public class Repair {
             String deviceManufacturer,
             String deviceModel,
             String deviceSerialNo,
+            boolean deviceWarranty,
             String description
     ) {
         this.customer = customer;
@@ -57,6 +59,7 @@ public class Repair {
         this.deviceManufacturer = deviceManufacturer;
         this.deviceModel = deviceModel;
         this.deviceSerialNo = deviceSerialNo;
+        this.deviceWarranty = deviceWarranty;
         this.description = description;
 
         this.createdAt = timeNow();
@@ -170,6 +173,14 @@ public class Repair {
     public void setConfirmedAt(Timestamp confirmedAt) {
         this.updatedAt = timeNow();
         this.confirmedAt = confirmedAt;
+    }
+
+    public boolean isDeviceWarranty() {
+        return deviceWarranty;
+    }
+
+    public void setDeviceWarranty(boolean deviceWarranty) {
+        this.deviceWarranty = deviceWarranty;
     }
 
     private Timestamp timeNow() {

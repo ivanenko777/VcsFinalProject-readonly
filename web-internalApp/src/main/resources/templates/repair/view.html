@@ -25,6 +25,8 @@
                th:href="@{/repair/{id}/stored(id=${repair.id})}">Paimti</a>
             <a class="btn btn-outline-info btn-block font-weight-bold"
                th:href="@{/repair/{id}/start-diagnostic(id=${repair.id})}">Pradėti diagnostiką</a>
+            <a class="btn btn-outline-info btn-block font-weight-bold"
+               th:href="@{/repair/{id}/end-diagnostic(id=${repair.id})}">Baigti diagnostiką</a>
         </div>
 
         <div class="col-md-9">
@@ -83,7 +85,11 @@
                 <div class="col-md-3 font-weight-bold text-right">Modelis</div>
                 <div class="col-md-3" th:text="${repair.deviceModel}"></div>
             </div>
-            <div class="row">
+            <div class="row mb-1">
+                <div class="col-md-3 font-weight-bold text-right">Ar galioja garantija?</div>
+                <div class="col-md-3" th:text="${repair.deviceWarranty} ? 'Taip' : 'Ne'"></div>
+            </div>
+            <div class="row mb-1">
                 <div class="col-md-3 font-weight-bold text-right">Gedimo aprašymas</div>
                 <div class="col-md-9" th:utext="${#strings.replace(repair.description, '&#10;', '&lt;br&gt;')}"></div>
             </div>

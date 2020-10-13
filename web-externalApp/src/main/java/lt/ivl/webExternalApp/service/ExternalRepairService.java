@@ -27,9 +27,10 @@ public class ExternalRepairService {
         String deviceManufacturer = repairDto.getDeviceManufacturer();
         String deviceModel = repairDto.getDeviceModel();
         String deviceSerialNo = repairDto.getDeviceSerialNo();
+        boolean deviceWarranty = repairDto.isDeviceWarranty();
         String description = repairDto.getDescription();
 
-        Repair repair = new Repair(customer, deviceType, deviceManufacturer, deviceModel, deviceSerialNo, description);
+        Repair repair = new Repair(customer, deviceType, deviceManufacturer, deviceModel, deviceSerialNo, deviceWarranty, description);
         repair = componentRepairService.saveRepair(repair);
         repair = componentRepairService.changeRepairStatus(repair, newStatus, null, null, null);
         return repair;

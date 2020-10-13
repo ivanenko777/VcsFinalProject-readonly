@@ -46,6 +46,10 @@
                 <div class="col-md-6" th:text="${repair.deviceSerialNo}"></div>
             </div>
             <div class="row mb-1">
+                <div class="col-md-6 font-weight-bold text-right">Ar galioja garantija?</div>
+                <div class="col-md-6" th:text="${repair.deviceWarranty} ? 'Taip' : 'Ne'"></div>
+            </div>
+            <div class="row mb-1">
                 <div class="col-md-6 font-weight-bold text-right">Gedimo aprašymas</div>
                 <div class="col-md-6"
                      th:utext="${#strings.replace(repair.description, '&#10;', '&lt;br&gt;')}"></div>
