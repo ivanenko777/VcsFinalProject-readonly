@@ -21,6 +21,8 @@
                th:href="@{/repair/{id}/delete(id=${repair.id})}">Ištrinti</a>
             <a class="btn btn-outline-secondary btn-block font-weight-bold"
                th:href="@{/repair/{id}/export_confirmed_pdf(id=${repair.id})}">Patvirtinimo PDF</a>
+            <a class="btn btn-outline-info btn-block font-weight-bold"
+               th:href="@{/repair/{id}/stored(id=${repair.id})}">Paimti</a>
         </div>
 
         <div class="col-md-9">

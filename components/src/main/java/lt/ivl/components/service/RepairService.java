@@ -103,6 +103,9 @@ public class RepairService {
             case CONFIRMED:
                 allowedStatuses.addAll(Collections.singletonList(RepairStatus.PENDING));
                 break;
+            case DIAGNOSTIC_WAITING:
+                allowedStatuses.addAll(Collections.singletonList(RepairStatus.CONFIRMED));
+                break;
         }
 
         if (currentStatus != null && !allowedStatuses.contains(currentStatus)) {

@@ -10,6 +10,8 @@ import lt.ivl.components.exception.ItemNotFoundException;
 import lt.ivl.components.service.CustomerService;
 import lt.ivl.components.service.RepairService;
 import lt.ivl.webInternalApp.dto.RepairDto;
+import lt.ivl.webInternalApp.dto.RepairStatusNoteDto;
+import lt.ivl.webInternalApp.dto.RepairStatusStoredDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -88,6 +90,20 @@ public class InternalRepairService {
             repair = changeRepairStatus(repair, currentStatus, newStatus, employee, null, null);
         }
 
+        return repair;
+    }
+
+    public Repair storeDevice(
+            Repair repair,
+            RepairStatusStoredDto repairStatusStoredDto,
+            RepairStatusNoteDto repairStatusNoteDto,
+            Employee employee
+    ) throws InvalidStatusException {
+        String stored = repairStatusStoredDto.getStored();
+        String note = repairStatusNoteDto.getNote();
+        RepairStatus currentStatus = repair.getStatus();
+        RepairStatus newStatus = RepairStatus.DIAGNOSTIC_WAITING;
+        repair = changeRepairStatus(repair, currentStatus, newStatus, employee, note, stored);
         return repair;
     }
 

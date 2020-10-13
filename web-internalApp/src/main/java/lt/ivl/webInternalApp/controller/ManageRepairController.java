@@ -5,6 +5,8 @@ import lt.ivl.components.exception.CustomerNotFoundInDBException;
 import lt.ivl.components.exception.InvalidStatusException;
 import lt.ivl.components.exception.ItemNotFoundException;
 import lt.ivl.webInternalApp.dto.RepairDto;
+import lt.ivl.webInternalApp.dto.RepairStatusNoteDto;
+import lt.ivl.webInternalApp.dto.RepairStatusStoredDto;
 import lt.ivl.webInternalApp.pdf.PdfGenerator;
 import lt.ivl.webInternalApp.security.EmployeePrincipal;
 import lt.ivl.webInternalApp.service.InternalCustomerService;
@@ -178,6 +180,43 @@ public class ManageRepairController {
             pdfGenerator.generateRepairConfirmedPdf(repair, response);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @GetMapping("{repair}/stored")
+    public String showStoredForm(@PathVariable("repair") Repair repair, Model model) {
+        model.addAttribute("repairStatusStoredDto", new RepairStatusStoredDto());
+        model.addAttribute("repairStatusNoteDto", new RepairStatusNoteDto());
+        model.addAttribute("repair", repair);
+        return "repair/store";
+    }
+
+    @PostMapping("{repair}/stored")
+    public String stored(
+            @AuthenticationPrincipal EmployeePrincipal employeePrincipal,
+            @PathVariable("repair") Repair repair,
+            @Valid @ModelAttribute("repairStatusStoredDto") RepairStatusStoredDto repairStatusStoredDto,
+            BindingResult repairStatusStoredDtoBindingResult,
+            @ModelAttribute("repairStatusNoteDto") RepairStatusNoteDto repairStatusNoteDto,
+            BindingResult repairStatusNoteDtoBindingResult,
+            Model model
+    ) {
+        model.addAttribute("repairStatusStoredDto", repairStatusStoredDto);
+        model.addAttribute("repairStatusNoteDto", repairStatusNoteDto);
+        model.addAttribute("repair", repair);
+
+        if (repairStatusStoredDtoBindingResult.hasErrors() || repairStatusNoteDtoBindingResult.hasErrors()) {
+            model.addAttribute("messageError", "Formoje yra klaidų");
+            return "repair/store";
+        }
+
+        try {
+            Employee employee = employeePrincipal.getEmployee();
+            internalRepairService.storeDevice(repair, repairStatusStoredDto, repairStatusNoteDto, employee);
+            return "redirect:/repair/{repair}/view";
+        } catch (InvalidStatusException e) {
+            model.addAttribute("messageError", e.getMessage());
+            return "repair/store";
         }
     }
 }

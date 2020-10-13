@@ -92,5 +92,36 @@
     </div>
 </div>
 
+<div th:fragment="RepairStatusNoteDto">
+    <div th:object="${repairStatusNoteDto}">
+        <div class="form-row">
+            <div class="col-md-12 form-group">
+                <label th:for="description">Pastabos</label>
+                <textarea rows="3"
+                          th:class="${#fields.errors('note').isEmpty()} ? 'form-control' : 'form-control is-invalid'"
+                          th:field="*{note}"></textarea>
+                <div class="invalid-feedback" th:each="error: ${#fields.errors('note')}"
+                     th:text="${error}"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div th:fragment="RepairStatusStoredDto">
+    <div th:object="${repairStatusStoredDto}">
+        <div class="form-row">
+            <div class="col-md-3 form-group">
+                <label th:for="firstName">Saugojimo vieta</label>
+                <input th:class="${#fields.errors('stored').isEmpty()} ? 'form-control' : 'form-control is-invalid'"
+                       th:field="*{stored}" type="text"/>
+                <div class="invalid-feedback" th:each="error: ${#fields.errors('stored')}"
+                     th:text="${error}"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 </body>
 </html>
