@@ -235,7 +235,7 @@ public class ManageRepairController {
         try {
             Employee employee = employeePrincipal.getEmployee();
             internalRepairService.startDiagnostic(repair, employee);
-            return "redirect:/repair/list";
+            return "redirect:/repair/{repair}/view";
         } catch (InvalidStatusException e) {
             model.addAttribute("repair", repair);
             model.addAttribute("messageError", e.getMessage());
