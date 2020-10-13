@@ -11,6 +11,7 @@ import lt.ivl.webInternalApp.pdf.PdfGenerator;
 import lt.ivl.webInternalApp.security.EmployeePrincipal;
 import lt.ivl.webInternalApp.service.InternalCustomerService;
 import lt.ivl.webInternalApp.service.InternalRepairService;
+import lt.ivl.webInternalApp.service.MailSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -33,6 +34,9 @@ public class ManageRepairController {
 
     @Autowired
     private PdfGenerator pdfGenerator;
+
+    @Autowired
+    private MailSender mailSender;
 
     @GetMapping("/list")
     public String list(Model model) {
@@ -87,8 +91,8 @@ public class ManageRepairController {
 
         try {
             Employee employee = employeePrincipal.getEmployee();
-            internalRepairService.confirmRepair(repair, repairDto, employee);
-            // TODO: Email
+            repair = internalRepairService.confirmRepair(repair, repairDto, employee);
+            mailSender.sendRepairConfirmedToCustomer(repair);
             return "redirect:/repair/{repair}/view";
         } catch (CustomerNotFoundInDBException e) {
             List<Customer> customerList = internalCustomerService.findAll();
@@ -99,7 +103,6 @@ public class ManageRepairController {
             model.addAttribute("messageError", e.getMessage());
             return "repair/confirm";
         }
-
     }
 
     @GetMapping("/{id}/delete")

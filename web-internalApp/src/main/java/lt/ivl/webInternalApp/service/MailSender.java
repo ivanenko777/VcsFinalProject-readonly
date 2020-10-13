@@ -1,6 +1,7 @@
 package lt.ivl.webInternalApp.service;
 
 import lt.ivl.components.domain.Employee;
+import lt.ivl.components.domain.Repair;
 import lt.ivl.components.email.Email;
 import lt.ivl.components.email.EmailTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class MailSender {
 
     @Value("${app.url}")
     private String appUrl;
+
+    @Value("${exApp.url}")
+    private String externalAppUrl;
 
     @Value(("${support.email}"))
     private String emailFrom;
@@ -50,6 +54,13 @@ public class MailSender {
     @Async
     public void sendResetPasswordEmailToEmployee(Employee employee, String token) {
         Email template = mailTemplate.employeeAccountResetPasswordEmailTemplate(employee, token, appUrl);
+        SimpleMailMessage email = constructEmail(template);
+        mailSender.send(email);
+    }
+
+    @Async
+    public void sendRepairConfirmedToCustomer(Repair repair) {
+        Email template = mailTemplate.customerRepairConfirmedEmailTemplate(repair, externalAppUrl);
         SimpleMailMessage email = constructEmail(template);
         mailSender.send(email);
     }

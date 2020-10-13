@@ -64,6 +64,20 @@ public class EmailTemplate {
         return new Email(to, subject, message);
     }
 
+    public Email customerRepairConfirmedEmailTemplate(Repair repair, String appUrl) {
+        // remonto paraiska, STATUS -> PENDING
+        final int repairId = repair.getId();
+        final Customer customer = repair.getCustomer();
+
+        final String message1 = String.format("Sveiki, %s %s,", customer.getFirstName(), customer.getLastName());
+        final String message2 = "Remontas patvirtintas. Sekite info žemiau esančioje nuorodoje.";
+        final String repairViewUrl = appUrl + "repair/" + repairId + "/view";
+
+        final String to = customer.getEmail();
+        final String subject = "Užsakymo patvirtinimas #" + repairId;
+        final String message = message1 + " \r\n" + message2 + " \r\n" + repairViewUrl;
+        return new Email(to, subject, message);
+    }
 
     public Email employeeAccountVerificationEmailTemplate(Employee employee, String token, String appUrl) {
         final String message1 = String.format("Sveiki, %s %s,", employee.getFirstName(), employee.getLastName());
