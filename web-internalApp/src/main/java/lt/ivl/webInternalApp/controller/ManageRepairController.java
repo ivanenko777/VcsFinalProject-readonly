@@ -1,19 +1,25 @@
 package lt.ivl.webInternalApp.controller;
 
+import lt.ivl.components.domain.Customer;
+import lt.ivl.components.domain.Employee;
 import lt.ivl.components.domain.Repair;
 import lt.ivl.components.domain.RepairStatusHistory;
+import lt.ivl.components.exception.CustomerNotFoundInDBException;
 import lt.ivl.components.exception.ItemNotFoundException;
+import lt.ivl.webInternalApp.dto.RepairDto;
 import lt.ivl.webInternalApp.pdf.PdfGenerator;
+import lt.ivl.webInternalApp.security.EmployeePrincipal;
+import lt.ivl.webInternalApp.service.InternalCustomerService;
 import lt.ivl.webInternalApp.service.InternalRepairService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -21,6 +27,9 @@ import java.util.List;
 public class ManageRepairController {
     @Autowired
     private InternalRepairService internalRepairService;
+
+    @Autowired
+    private InternalCustomerService internalCustomerService;
 
     @Autowired
     private PdfGenerator pdfGenerator;
@@ -44,6 +53,53 @@ public class ManageRepairController {
         model.addAttribute("statusHistoryList", statusHistoryList);
         model.addAttribute("repair", repair);
         return "repair/history";
+    }
+
+    @GetMapping("/{repair}/confirm")
+    public String showConfirmForm(@PathVariable("repair") Repair repair, Model model) {
+        List<Customer> customerList = internalCustomerService.findAll();
+        model.addAttribute("customerList", customerList);
+
+        RepairDto repairDto = new RepairDto(repair);
+        model.addAttribute("repairDto", repairDto);
+
+        model.addAttribute("repair", repair);
+        return "repair/confirm";
+    }
+
+    @PostMapping("/{repair}/confirm")
+    public String confirm(
+            @AuthenticationPrincipal EmployeePrincipal employeePrincipal,
+            @PathVariable("repair") Repair repair,
+            @ModelAttribute("repairDto") @Valid RepairDto repairDto,
+            BindingResult bindingResult,
+            Model model
+    ) {
+        if (bindingResult.hasErrors()) {
+            List<Customer> customerList = internalCustomerService.findAll();
+            model.addAttribute("customerList", customerList);
+            model.addAttribute("repairDto", repairDto);
+            model.addAttribute("repair", repair);
+
+            model.addAttribute("messageError", "Formoje yra klaidų");
+            return "repair/confirm";
+        }
+
+        try {
+            Employee employee = employeePrincipal.getEmployee();
+            internalRepairService.confirmRepair(repair, repairDto, employee);
+            // TODO: Email
+            return "redirect:/repair/{repair}/view";
+        } catch (CustomerNotFoundInDBException e) {
+            List<Customer> customerList = internalCustomerService.findAll();
+            model.addAttribute("customerList", customerList);
+            model.addAttribute("repairDto", repairDto);
+            model.addAttribute("repair", repair);
+
+            model.addAttribute("messageError", e.getMessage());
+            return "repair/confirm";
+        }
+
     }
 
     @GetMapping("/{id}/delete")
