@@ -28,7 +28,7 @@
                 </tr>
                 </thead>
                 <tbody th:each="statusHistory : ${statusHistoryList}">
-                <tr>
+                <tr th:classappend="${statusHistory.status.name() == 'PAYMENT_CONFIRM_WAITING'} ? 'table-warning' : ''">
                     <td th:text="${statusHistory.status.getMessageForEmployee()}"></td>
                     <td th:text="${#dates.format(statusHistory.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
                     <td>
