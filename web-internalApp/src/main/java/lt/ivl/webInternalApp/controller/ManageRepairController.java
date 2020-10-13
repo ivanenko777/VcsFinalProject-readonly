@@ -158,7 +158,7 @@ public class ManageRepairController {
         return "repair/delete";
     }
 
-    @PostMapping("{id}/delete")
+    @PostMapping("/{id}/delete")
     public String destroy(@PathVariable("id") String id, Model model) {
         int repairId = Integer.parseInt(id);
         model.addAttribute("repairId", repairId);
@@ -172,7 +172,7 @@ public class ManageRepairController {
         return "redirect:/repair/list";
     }
 
-    @GetMapping(value = "{repair}/export_confirmed_pdf", produces = {"application/json", "application/x-pdf"})
+    @GetMapping(value = "/{repair}/export_confirmed_pdf", produces = {"application/json", "application/x-pdf"})
     public void exportConfirmedPdf(@PathVariable("repair") Repair repair, HttpServletResponse response) {
         try {
             pdfGenerator.generateRepairConfirmedPdf(repair, response);
