@@ -16,7 +16,7 @@
             <div th:replace="repair/_fragments :: repairNav"></div>
             <hr/>
             <a class="btn btn-outline-success btn-block font-weight-bold"
-               th:href="@{/repair/{id}/confirm(id=${repair.id})}">Redaguoti</a>
+               th:href="@{/repair/{id}/edit(id=${repair.id})}">Redaguoti</a>
             <a class="btn btn-outline-danger btn-block font-weight-bold"
                th:href="@{/repair/{id}/delete(id=${repair.id})}">Ištrinti</a>
             <a class="btn btn-outline-secondary btn-block font-weight-bold"

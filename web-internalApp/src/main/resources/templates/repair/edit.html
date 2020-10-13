@@ -14,7 +14,7 @@
         <div class="col-md-12">
             <div th:replace="_layouts/_fragments :: messages"></div>
 
-            <form action="#" autocomplete="off" method="post" th:action="@{/repair/{id}/confirm(id=${repair.id})}">
+            <form action="#" autocomplete="off" method="post" th:action="@{/repair/{id}/edit(id=${repair.id})}">
 
                 <div th:replace="repair/_fragments :: repairDtoForm"></div>
 

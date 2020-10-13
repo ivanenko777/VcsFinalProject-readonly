@@ -99,8 +99,8 @@ public class ManageRepairController {
         }
     }
 
-    @GetMapping("/{repair}/confirm")
-    public String showConfirmForm(@PathVariable("repair") Repair repair, Model model) {
+    @GetMapping("/{repair}/edit")
+    public String showUpdateForm(@PathVariable("repair") Repair repair, Model model) {
         List<Customer> customerList = internalCustomerService.findAll();
         model.addAttribute("customerList", customerList);
 
@@ -108,11 +108,11 @@ public class ManageRepairController {
         model.addAttribute("repairDto", repairDto);
 
         model.addAttribute("repair", repair);
-        return "repair/confirm";
+        return "repair/edit";
     }
 
-    @PostMapping("/{repair}/confirm")
-    public String confirm(
+    @PostMapping("/{repair}/edit")
+    public String update(
             @AuthenticationPrincipal EmployeePrincipal employeePrincipal,
             @PathVariable("repair") Repair repair,
             @ModelAttribute("repairDto") @Valid RepairDto repairDto,
@@ -126,12 +126,12 @@ public class ManageRepairController {
             model.addAttribute("repair", repair);
 
             model.addAttribute("messageError", "Formoje yra klaidų");
-            return "repair/confirm";
+            return "repair/edit";
         }
 
         try {
             Employee employee = employeePrincipal.getEmployee();
-            repair = internalRepairService.confirmRepair(repair, repairDto, employee);
+            repair = internalRepairService.updateRepair(repair, repairDto, employee);
             if (repair.getStatus() == RepairStatus.CONFIRMED) mailSender.sendRepairConfirmedToCustomer(repair);
             return "redirect:/repair/{repair}/view";
         } catch (CustomerNotFoundInDBException | InvalidStatusException | ItemNotFoundException e) {
@@ -141,7 +141,7 @@ public class ManageRepairController {
             model.addAttribute("repair", repair);
 
             model.addAttribute("messageError", e.getMessage());
-            return "repair/confirm";
+            return "repair/edit";
         }
     }
 

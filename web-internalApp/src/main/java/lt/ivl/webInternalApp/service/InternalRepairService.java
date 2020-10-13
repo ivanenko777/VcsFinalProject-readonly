@@ -38,7 +38,7 @@ public class InternalRepairService {
     }
 
     @Transactional
-    public Repair confirmRepair(Repair repair, RepairDto repairDto, Employee employee) throws CustomerNotFoundInDBException, InvalidStatusException, ItemNotFoundException {
+    public Repair updateRepair(Repair repair, RepairDto repairDto, Employee employee) throws CustomerNotFoundInDBException, InvalidStatusException, ItemNotFoundException {
         if (repair.getStatus() != RepairStatus.PENDING) {
             throw new ItemNotFoundException();
         }
