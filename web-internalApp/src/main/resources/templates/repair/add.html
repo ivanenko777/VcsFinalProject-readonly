@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en"
+      layout:decorate="~{_layouts/layout-filter}"
+      th:with="pageName=${'Naujas remontas'}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE" th:text="${pageName}">...</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="row pt-2">
+        <div class="col-md-12">
+            <div th:replace="_layouts/_fragments :: messages"></div>
+
+            <form action="#" autocomplete="off" method="post" th:action="@{/repair/add}">
+
+                <div th:replace="repair/_fragments :: repairDtoForm"></div>
+
+                <div class="form-row">
+                    <div class="col-md-12 form-group">
+                        <div class="text-center">
+                            <a class="btn btn-outline-secondary font-weight-bold"
+                               th:href="@{/repair/list}">&laquo; Atgal</a>
+                            <input class="btn btn-success" type="submit" value="Išsaugoti ir patvirtinti">
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+</body>

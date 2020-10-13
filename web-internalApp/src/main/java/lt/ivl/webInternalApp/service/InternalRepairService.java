@@ -58,4 +58,23 @@ public class InternalRepairService {
 
         return repair;
     }
+
+    @Transactional
+    public Repair createRepair(RepairDto repairDto, Employee employee) throws InvalidStatusException, CustomerNotFoundInDBException {
+        RepairStatus newStatus = RepairStatus.PENDING;
+        componentRepairService.verifyNewStatus(null, newStatus);
+
+        int customerId = repairDto.getCustomer();
+        Customer customer = componentCustomerService.findById(customerId);
+        String deviceType = repairDto.getDeviceType();
+        String deviceManufacturer = repairDto.getDeviceManufacturer();
+        String deviceModel = repairDto.getDeviceModel();
+        String deviceSerialNo = repairDto.getDeviceSerialNo();
+        String description = repairDto.getDescription();
+        Repair repair = new Repair(customer, deviceType, deviceManufacturer, deviceModel, deviceSerialNo, description);
+        repair = componentRepairService.saveRepair(repair);
+        repair = componentRepairService.changeRepairStatus(repair, newStatus, employee, null, null);
+
+        return repair;
+    }
 }

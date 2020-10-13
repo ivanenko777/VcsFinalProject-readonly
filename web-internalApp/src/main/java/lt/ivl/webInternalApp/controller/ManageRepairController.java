@@ -60,6 +60,49 @@ public class ManageRepairController {
         return "repair/history";
     }
 
+    @GetMapping("/add")
+    public String showCreateForm(Model model) {
+        List<Customer> customerList = internalCustomerService.findAll();
+        model.addAttribute("customerList", customerList);
+
+        model.addAttribute("repairDto", new RepairDto());
+        return "repair/add";
+    }
+
+    @PostMapping("/add")
+    public String create(
+            @AuthenticationPrincipal EmployeePrincipal employeePrincipal,
+            @ModelAttribute("repairDto") @Valid RepairDto repairDto,
+            BindingResult bindingResult,
+            Model model
+    ) {
+        if (bindingResult.hasErrors()) {
+            List<Customer> customerList = internalCustomerService.findAll();
+            model.addAttribute("customerList", customerList);
+            model.addAttribute("repairDto", repairDto);
+
+            model.addAttribute("messageError", "Formoje yra klaidų");
+            return "repair/add";
+        }
+
+        try {
+            Employee employee = employeePrincipal.getEmployee();
+            Repair repair = internalRepairService.createRepair(repairDto, employee);
+            repair = internalRepairService.confirmRepair(repair, repairDto, employee);
+            mailSender.sendRepairConfirmedToCustomer(repair);
+
+            int repairId = repair.getId();
+            return "redirect:/repair/" + repairId + "/view";
+        } catch (CustomerNotFoundInDBException | InvalidStatusException e) {
+            List<Customer> customerList = internalCustomerService.findAll();
+            model.addAttribute("customerList", customerList);
+            model.addAttribute("repairDto", repairDto);
+
+            model.addAttribute("messageError", e.getMessage());
+            return "repair/add";
+        }
+    }
+
     @GetMapping("/{repair}/confirm")
     public String showConfirmForm(@PathVariable("repair") Repair repair, Model model) {
         List<Customer> customerList = internalCustomerService.findAll();

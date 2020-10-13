@@ -105,7 +105,7 @@ public class RepairService {
                 break;
         }
 
-        if (!allowedStatuses.contains(currentStatus)) {
+        if (currentStatus != null && !allowedStatuses.contains(currentStatus)) {
             throw new InvalidStatusException();
         }
     }

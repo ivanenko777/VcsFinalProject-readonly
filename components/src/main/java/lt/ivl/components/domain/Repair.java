@@ -168,6 +168,7 @@ public class Repair {
     }
 
     public void setConfirmedAt(Timestamp confirmedAt) {
+        this.updatedAt = timeNow();
         this.confirmedAt = confirmedAt;
     }
 
