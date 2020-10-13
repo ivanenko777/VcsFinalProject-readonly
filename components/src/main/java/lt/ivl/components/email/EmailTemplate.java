@@ -87,7 +87,7 @@ public class EmailTemplate {
 
         final String message1 = String.format("Sveiki, %s %s,", customer.getFirstName(), customer.getLastName());
         final String message2 = "Reikalingas mokėjimo patvirtinimas. Daugiau info žemiau esančioje nuorodoje.";
-        final String repairViewUrl = appUrl + "repair/" + repairId + "/confirm-payment";
+        final String repairViewUrl = appUrl + "repair/" + repairId + "/payment";
         final String message3 = "Meistro komentaras:";
 
         final String to = customer.getEmail();
