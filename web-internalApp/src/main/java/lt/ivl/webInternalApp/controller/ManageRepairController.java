@@ -75,11 +75,11 @@ public class ManageRepairController {
             BindingResult bindingResult,
             Model model
     ) {
-        if (bindingResult.hasErrors()) {
-            List<Customer> customerList = internalCustomerService.findAll();
-            model.addAttribute("customerList", customerList);
-            model.addAttribute("repairDto", repairDto);
+        List<Customer> customerList = internalCustomerService.findAll();
+        model.addAttribute("customerList", customerList);
+        model.addAttribute("repairDto", repairDto);
 
+        if (bindingResult.hasErrors()) {
             model.addAttribute("messageError", "Formoje yra klaidų");
             return "repair/add";
         }
@@ -92,10 +92,6 @@ public class ManageRepairController {
             int repairId = repair.getId();
             return "redirect:/repair/" + repairId + "/view";
         } catch (CustomerNotFoundInDBException | InvalidStatusException e) {
-            List<Customer> customerList = internalCustomerService.findAll();
-            model.addAttribute("customerList", customerList);
-            model.addAttribute("repairDto", repairDto);
-
             model.addAttribute("messageError", e.getMessage());
             return "repair/add";
         }
@@ -121,12 +117,12 @@ public class ManageRepairController {
             BindingResult bindingResult,
             Model model
     ) {
-        if (bindingResult.hasErrors()) {
-            List<Customer> customerList = internalCustomerService.findAll();
-            model.addAttribute("customerList", customerList);
-            model.addAttribute("repairDto", repairDto);
-            model.addAttribute("repair", repair);
+        List<Customer> customerList = internalCustomerService.findAll();
+        model.addAttribute("customerList", customerList);
+        model.addAttribute("repairDto", repairDto);
+        model.addAttribute("repair", repair);
 
+        if (bindingResult.hasErrors()) {
             model.addAttribute("messageError", "Formoje yra klaidų");
             return "repair/edit";
         }
@@ -137,11 +133,6 @@ public class ManageRepairController {
             if (repair.getStatus() == RepairStatus.CONFIRMED) mailSender.sendRepairConfirmedToCustomer(repair);
             return "redirect:/repair/{repair}/view";
         } catch (CustomerNotFoundInDBException | InvalidStatusException | ItemNotFoundException e) {
-            List<Customer> customerList = internalCustomerService.findAll();
-            model.addAttribute("customerList", customerList);
-            model.addAttribute("repairDto", repairDto);
-            model.addAttribute("repair", repair);
-
             model.addAttribute("messageError", e.getMessage());
             return "repair/edit";
         }
