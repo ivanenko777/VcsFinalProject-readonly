@@ -38,7 +38,11 @@ public class InternalRepairService {
     }
 
     @Transactional
-    public Repair confirmRepair(Repair repair, RepairDto repairDto, Employee employee) throws CustomerNotFoundInDBException, InvalidStatusException {
+    public Repair confirmRepair(Repair repair, RepairDto repairDto, Employee employee) throws CustomerNotFoundInDBException, InvalidStatusException, ItemNotFoundException {
+        if (repair.getStatus() != RepairStatus.PENDING) {
+            throw new ItemNotFoundException();
+        }
+
         int customerId = repairDto.getCustomer();
         Customer customer = componentCustomerService.findById(customerId);
         repair.setCustomer(customer);

@@ -134,7 +134,7 @@ public class ManageRepairController {
             repair = internalRepairService.confirmRepair(repair, repairDto, employee);
             if (repair.getStatus() == RepairStatus.CONFIRMED) mailSender.sendRepairConfirmedToCustomer(repair);
             return "redirect:/repair/{repair}/view";
-        } catch (CustomerNotFoundInDBException | InvalidStatusException e) {
+        } catch (CustomerNotFoundInDBException | InvalidStatusException | ItemNotFoundException e) {
             List<Customer> customerList = internalCustomerService.findAll();
             model.addAttribute("customerList", customerList);
             model.addAttribute("repairDto", repairDto);
