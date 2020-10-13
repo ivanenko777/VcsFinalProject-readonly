@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"
       layout:decorate="~{_layouts/layout-filter}"
-      th:with="pageName=${'#' + repair.id + ' patvirtinti'}"
+      th:with="pageName=${'#' + repair.id + ' redaguoti'}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -10,6 +10,9 @@
 </head>
 <body>
 <div layout:fragment="content">
+    <div class="row justify-content-center align-items-center pt-2 pt-2">
+        <h3 th:text="${pageName}"></h3>
+    </div>
     <div class="row pt-2">
         <div class="col-md-12">
             <div th:replace="_layouts/_fragments :: messages"></div>
