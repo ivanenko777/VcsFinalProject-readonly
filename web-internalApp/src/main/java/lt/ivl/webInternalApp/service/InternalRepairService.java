@@ -112,6 +112,22 @@ public class InternalRepairService {
         return repair;
     }
 
+    public Repair finishDiagnostic(
+            Repair repair,
+            RepairStatusStoredDto repairStatusStoredDto,
+            RepairStatusNoteDto repairStatusNoteDto,
+            Employee employee
+    ) throws InvalidStatusException {
+        String stored = repairStatusStoredDto.getStored();
+        String note = repairStatusNoteDto.getNote();
+        boolean deviceWarranty = repair.isDeviceWarranty();
+        RepairStatus currentStatus = repair.getStatus();
+        RepairStatus newStatus = deviceWarranty ? RepairStatus.REPAIR_WAITING : RepairStatus.PAYMENT_CONFIRM_WAITING;
+
+        repair = changeRepairStatus(repair, currentStatus, newStatus, employee, note, stored);
+        return repair;
+    }
+
     private Repair changeRepairStatus(
             Repair repair,
             RepairStatus currentStatus,

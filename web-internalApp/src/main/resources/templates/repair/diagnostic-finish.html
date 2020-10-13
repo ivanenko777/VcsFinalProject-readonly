@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en"
+      layout:decorate="~{_layouts/layout-filter}"
+      th:with="pageName=${'#' + repair.id + ' pabaigti diagnostiką'}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE" th:text="${pageName}">...</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="row justify-content-center align-items-center pt-2 pt-2">
+        <h3 th:text="${pageName}"></h3>
+    </div>
+    <div class="row pt-2">
+        <div class="col-md-12">
+            <div th:replace="_layouts/_fragments :: messages"></div>
+
+            <form action="#" autocomplete="off" method="post"
+                  th:action="@{/repair/{id}/finish-diagnostic(id=${repair.id})}">
+
+                <div th:replace="repair/_fragments :: RepairStatusStoredDto"></div>
+                <div th:replace="repair/_fragments :: RepairStatusNoteDto"></div>
+
+                <div class="form-row">
+                    <div class="col-md-12 form-group">
+                        <div class="text-center">
+                            <a class="btn btn-outline-secondary font-weight-bold"
+                               th:href="@{/repair/{id}/view(id=${repair.id})}">&laquo;
+                                Atgal</a>
+                            <input class="btn btn-success" type="submit" value="Išsaugoti">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>

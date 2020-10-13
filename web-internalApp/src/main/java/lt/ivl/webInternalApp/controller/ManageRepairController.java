@@ -242,4 +242,50 @@ public class ManageRepairController {
             return "repair/diagnostic-start";
         }
     }
+
+    @GetMapping("{repair}/finish-diagnostic")
+    public String showEndDiagnostic(@PathVariable("repair") Repair repair, Model model) {
+        boolean deviceWarranty = repair.isDeviceWarranty();
+        if (deviceWarranty) model.addAttribute("messageInfo", "Įrenginiui galioja garantija. Nemokamas remontas.");
+        else model.addAttribute("messageWarning", "Įrenginiui garantija negalioja. Mokamas remontas.");
+
+        model.addAttribute("repairStatusStoredDto", new RepairStatusStoredDto());
+        model.addAttribute("repairStatusNoteDto", new RepairStatusNoteDto());
+        model.addAttribute("repair", repair);
+        return "repair/diagnostic-finish";
+    }
+
+    @PostMapping("{repair}/finish-diagnostic")
+    public String endDiagnostic(
+            @AuthenticationPrincipal EmployeePrincipal employeePrincipal,
+            @PathVariable("repair") Repair repair,
+            @Valid @ModelAttribute("repairStatusStoredDto") RepairStatusStoredDto repairStatusStoredDto,
+            BindingResult repairStatusStoredDtoBindingResult,
+            @Valid @ModelAttribute("repairStatusNoteDto") RepairStatusNoteDto repairStatusNoteDto,
+            BindingResult repairStatusNoteDtoBindingResult,
+            Model model
+    ) {
+        boolean deviceWarranty = repair.isDeviceWarranty();
+        if (deviceWarranty) model.addAttribute("messageInfo", "Prieraisui galioja garantija");
+        else model.addAttribute("messageWarning", "Prieraisui  garantija negalioja");
+
+        model.addAttribute("repairStatusStoredDto", repairStatusStoredDto);
+        model.addAttribute("repairStatusNoteDto", repairStatusNoteDto);
+        model.addAttribute("repair", repair);
+
+        if (repairStatusStoredDtoBindingResult.hasErrors() || repairStatusNoteDtoBindingResult.hasErrors()) {
+            model.addAttribute("messageError", "Formoje yra klaidų");
+            return "repair/diagnostic-finish";
+        }
+
+        try {
+            Employee employee = employeePrincipal.getEmployee();
+            internalRepairService.finishDiagnostic(repair, repairStatusStoredDto, repairStatusNoteDto, employee);
+            // TODO email if PAYMENT_CONFIRM_WAITING + note
+            return "redirect:/repair/{repair}/view";
+        } catch (InvalidStatusException e) {
+            model.addAttribute("messageError", e.getMessage());
+            return "repair/diagnostic-finish";
+        }
+    }
 }
