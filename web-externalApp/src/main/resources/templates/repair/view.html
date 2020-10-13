@@ -64,6 +64,9 @@
             <a class="btn btn-danger font-weight-bold ml-auto" th:href="@{/repair/{id}/delete(id=${repair.id})}"
                th:if="${repair.status.name() == 'PENDING'}">
                 Ištrinti remontą</a>
+            <a class="btn btn-success font-weight-bold ml-auto" th:href="@{/repair/{id}/payment(id=${repair.id})}"
+               th:if="${repair.status.name() == 'PAYMENT_CONFIRM_WAITING'}">
+                Mokėjimo patvirtinimas arba atšaukimas</a>
         </div>
     </div>
 </div>

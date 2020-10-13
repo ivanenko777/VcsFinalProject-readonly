@@ -3,11 +3,11 @@ package lt.ivl.webExternalApp.controller;
 import lt.ivl.components.domain.Customer;
 import lt.ivl.components.domain.Repair;
 import lt.ivl.components.exception.InvalidStatusException;
-import lt.ivl.webExternalApp.dto.RepairDto;
 import lt.ivl.components.exception.ItemNotFoundException;
+import lt.ivl.webExternalApp.dto.RepairDto;
 import lt.ivl.webExternalApp.security.CustomerPrincipal;
-import lt.ivl.webExternalApp.service.MailSender;
 import lt.ivl.webExternalApp.service.ExternalRepairService;
+import lt.ivl.webExternalApp.service.MailSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -124,4 +124,35 @@ public class RepairController {
 
         return "redirect:/repair/index";
     }
+
+    @GetMapping("{repair}/payment")
+    public String confirmPaymentPage(@PathVariable("repair") Repair repair, Model model) {
+        model.addAttribute("repair", repair);
+        return "repair/confirm-payment";
+    }
+
+    @PostMapping("{repair}/confirm-payment")
+    public String confirmPayment(@PathVariable("repair") Repair repair, Model model) {
+        model.addAttribute("repair", repair);
+        try {
+            externalRepairService.confirmPaymentByCustomer(repair);
+            return "redirect:/repair/{repair}/view";
+        } catch (InvalidStatusException e) {
+            model.addAttribute("messageError", e.getMessage());
+            return "repair/confirm-payment";
+        }
+    }
+
+    @PostMapping("{repair}/cancel-payment")
+    public String cancelPayment(@PathVariable("repair") Repair repair, Model model) {
+        model.addAttribute("repair", repair);
+        try {
+            externalRepairService.cancelPaymentByCustomer(repair);
+            return "redirect:/repair/{repair}/view";
+        } catch (InvalidStatusException e) {
+            model.addAttribute("messageError", e.getMessage());
+            return "repair/confirm-payment";
+        }
+    }
+
 }

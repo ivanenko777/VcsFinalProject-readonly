@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -50,5 +51,40 @@ public class ExternalRepairService {
 
     public void deleteCustomerRepair(Customer customer, int id) throws ItemNotFoundException {
         componentRepairService.deleteCustomerRepair(customer, id);
+    }
+
+    @Transactional
+    public Repair confirmPaymentByCustomer(Repair repair) throws InvalidStatusException {
+        RepairStatus currentStatus = repair.getStatus();
+        RepairStatus newStatus = RepairStatus.PAYMENT_CONFIRMED;
+        repair = changeRepairStatus(repair, currentStatus, newStatus);
+
+        currentStatus = repair.getStatus();
+        newStatus = RepairStatus.REPAIR_WAITING;
+        repair = changeRepairStatus(repair, currentStatus, newStatus);
+        return repair;
+    }
+
+    @Transactional
+    public Repair cancelPaymentByCustomer(Repair repair) throws InvalidStatusException {
+        RepairStatus currentStatus = repair.getStatus();
+        RepairStatus newStatus = RepairStatus.PAYMENT_CANCELED;
+        repair = changeRepairStatus(repair, currentStatus, newStatus);
+
+        currentStatus = repair.getStatus();
+        newStatus = RepairStatus.RETURN;
+        repair = changeRepairStatus(repair, currentStatus, newStatus);
+        return repair;
+    }
+
+    private Repair changeRepairStatus(
+            Repair repair,
+            RepairStatus currentStatus,
+            RepairStatus newStatus
+    ) throws InvalidStatusException {
+        componentRepairService.verifyNewStatus(currentStatus, newStatus);
+        repair.setConfirmedAt(new Timestamp(System.currentTimeMillis()));
+        repair = componentRepairService.changeRepairStatus(repair, newStatus, null, null, null);
+        return repair;
     }
 }

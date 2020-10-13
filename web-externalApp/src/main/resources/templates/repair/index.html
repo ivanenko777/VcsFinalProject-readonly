@@ -43,7 +43,7 @@
                 </tr>
                 </thead>
                 <tbody th:each="repair : ${repairList}">
-                <tr>
+                <tr th:classappend="${repair.status.name() == 'PAYMENT_CONFIRM_WAITING'} ? 'table-warning' : ''">
                     <td scope="row" th:text="${repair.id}"></td>
                     <td th:text="${repair.status.getMessageForCustomer()}"></td>
                     <td th:text="${#dates.format(repair.confirmedAt, 'yyyy-MM-dd')}"></td>
@@ -54,7 +54,7 @@
                     <td th:text="${repair.deviceWarranty} ? 'Taip' : 'Ne'"></td>
                     <td class="text-right">
                         <a class="btn btn-sm btn-outline-primary font-weight-bold"
-                           th:href="@{/repair/{id}/view(id=${repair.id})}">Plačiau &raquo;</a>
+                           th:href="@{/repair/{id}/view(id=${repair.id})}">Plačiau</a>
                     </td>
                 </tr>
                 </tbody>

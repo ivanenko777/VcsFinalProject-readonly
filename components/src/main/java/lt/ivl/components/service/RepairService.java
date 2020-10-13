@@ -110,8 +110,17 @@ public class RepairService {
                 allowedStatuses.addAll(Collections.singletonList(RepairStatus.DIAGNOSTIC_WAITING));
                 break;
             case PAYMENT_CONFIRM_WAITING:
-            case REPAIR_WAITING:
                 allowedStatuses.addAll(Collections.singletonList(RepairStatus.DIAGNOSTIC));
+                break;
+            case PAYMENT_CONFIRMED:
+            case PAYMENT_CANCELED:
+                allowedStatuses.addAll(Collections.singletonList(RepairStatus.PAYMENT_CONFIRM_WAITING));
+                break;
+            case REPAIR_WAITING:
+                allowedStatuses.addAll(List.of(RepairStatus.DIAGNOSTIC, RepairStatus.PAYMENT_CONFIRMED));
+                break;
+            case RETURN:
+                allowedStatuses.addAll(List.of(RepairStatus.PAYMENT_CANCELED));
                 break;
         }
 
