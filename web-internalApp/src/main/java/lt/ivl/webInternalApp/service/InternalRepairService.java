@@ -5,6 +5,7 @@ import lt.ivl.components.domain.Employee;
 import lt.ivl.components.domain.Repair;
 import lt.ivl.components.domain.RepairStatus;
 import lt.ivl.components.exception.CustomerNotFoundInDBException;
+import lt.ivl.components.exception.InvalidStatusException;
 import lt.ivl.components.exception.ItemNotFoundException;
 import lt.ivl.components.service.CustomerService;
 import lt.ivl.components.service.RepairService;
@@ -37,7 +38,11 @@ public class InternalRepairService {
     }
 
     @Transactional
-    public Repair confirmRepair(Repair repair, RepairDto repairDto, Employee employee) throws CustomerNotFoundInDBException {
+    public Repair confirmRepair(Repair repair, RepairDto repairDto, Employee employee) throws CustomerNotFoundInDBException, InvalidStatusException {
+        RepairStatus currentStatus = repair.getStatus();
+        RepairStatus newStatus = RepairStatus.CONFIRMED;
+        componentRepairService.verifyNewStatus(currentStatus, newStatus);
+
         int customerId = repairDto.getCustomer();
         Customer customer = componentCustomerService.findById(customerId);
         repair.setCustomer(customer);
@@ -47,10 +52,9 @@ public class InternalRepairService {
         repair.setDeviceSerialNo(repairDto.getDeviceSerialNo());
         repair.setDescription(repairDto.getDescription());
 
-        RepairStatus status = RepairStatus.CONFIRMED;
         repair.setConfirmedAt(new Timestamp(System.currentTimeMillis()));
         repair = componentRepairService.saveRepair(repair);
-        repair = componentRepairService.changeRepairStatus(repair, status, employee, null, null);
+        repair = componentRepairService.changeRepairStatus(repair, newStatus, employee, null, null);
 
         return repair;
     }

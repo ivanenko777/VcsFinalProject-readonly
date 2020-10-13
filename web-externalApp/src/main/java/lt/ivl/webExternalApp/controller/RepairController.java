@@ -2,6 +2,7 @@ package lt.ivl.webExternalApp.controller;
 
 import lt.ivl.components.domain.Customer;
 import lt.ivl.components.domain.Repair;
+import lt.ivl.components.exception.InvalidStatusException;
 import lt.ivl.webExternalApp.dto.RepairDto;
 import lt.ivl.components.exception.ItemNotFoundException;
 import lt.ivl.webExternalApp.security.CustomerPrincipal;
@@ -72,10 +73,17 @@ public class RepairController {
             model.addAttribute("messageError", "Formoje yra klaidų");
             return "repair/add";
         }
-        Customer customer = customerPrincipal.getCustomer();
-        Repair newRepair = externalRepairService.createNewRepairItemByCustomer(customer, repairDto);
-        mailSender.sendRepairRequestToCustomer(customer, newRepair);
-        return "redirect:/repair/index";
+
+        try {
+            Customer customer = customerPrincipal.getCustomer();
+            Repair newRepair = externalRepairService.createNewRepairItemByCustomer(customer, repairDto);
+            mailSender.sendRepairRequestToCustomer(customer, newRepair);
+            return "redirect:/repair/index";
+        } catch (InvalidStatusException e) {
+            model.addAttribute("repair", repairDto);
+            model.addAttribute("messageError", e.getMessage());
+            return "repair/add";
+        }
     }
 
     @GetMapping("{id}/delete")

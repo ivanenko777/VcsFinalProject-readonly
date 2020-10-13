@@ -1,6 +1,7 @@
 package lt.ivl.components.service;
 
 import lt.ivl.components.domain.*;
+import lt.ivl.components.exception.InvalidStatusException;
 import lt.ivl.components.exception.ItemNotFoundException;
 import lt.ivl.components.repository.RepairRepository;
 import lt.ivl.components.repository.RepairStatusHistoryRepository;
@@ -8,8 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class RepairService {
@@ -93,5 +93,20 @@ public class RepairService {
         Repair repair = findRepairToDelete(id);
         repairStatusHistoryRepository.deleteByRepairId(id);
         repairRepository.delete(repair);
+    }
+
+    public void verifyNewStatus(RepairStatus currentStatus, RepairStatus newStatus) throws InvalidStatusException {
+        Set<RepairStatus> allowedStatuses = new HashSet<>();
+        switch (newStatus) {
+            case PENDING:
+                break;
+            case CONFIRMED:
+                allowedStatuses.addAll(Collections.singletonList(RepairStatus.PENDING));
+                break;
+        }
+
+        if (!allowedStatuses.contains(currentStatus)) {
+            throw new InvalidStatusException();
+        }
     }
 }

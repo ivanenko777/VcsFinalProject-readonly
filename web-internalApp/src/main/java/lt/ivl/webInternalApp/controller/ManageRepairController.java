@@ -5,6 +5,7 @@ import lt.ivl.components.domain.Employee;
 import lt.ivl.components.domain.Repair;
 import lt.ivl.components.domain.RepairStatusHistory;
 import lt.ivl.components.exception.CustomerNotFoundInDBException;
+import lt.ivl.components.exception.InvalidStatusException;
 import lt.ivl.components.exception.ItemNotFoundException;
 import lt.ivl.webInternalApp.dto.RepairDto;
 import lt.ivl.webInternalApp.pdf.PdfGenerator;
@@ -94,7 +95,7 @@ public class ManageRepairController {
             repair = internalRepairService.confirmRepair(repair, repairDto, employee);
             mailSender.sendRepairConfirmedToCustomer(repair);
             return "redirect:/repair/{repair}/view";
-        } catch (CustomerNotFoundInDBException e) {
+        } catch (CustomerNotFoundInDBException | InvalidStatusException e) {
             List<Customer> customerList = internalCustomerService.findAll();
             model.addAttribute("customerList", customerList);
             model.addAttribute("repairDto", repairDto);

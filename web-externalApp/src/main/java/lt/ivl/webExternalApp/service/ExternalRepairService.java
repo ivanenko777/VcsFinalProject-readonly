@@ -3,6 +3,7 @@ package lt.ivl.webExternalApp.service;
 import lt.ivl.components.domain.Customer;
 import lt.ivl.components.domain.Repair;
 import lt.ivl.components.domain.RepairStatus;
+import lt.ivl.components.exception.InvalidStatusException;
 import lt.ivl.components.exception.ItemNotFoundException;
 import lt.ivl.components.service.RepairService;
 import lt.ivl.webExternalApp.dto.RepairDto;
@@ -18,17 +19,19 @@ public class ExternalRepairService {
     private RepairService componentRepairService;
 
     @Transactional
-    public Repair createNewRepairItemByCustomer(Customer customer, RepairDto repairDto) {
+    public Repair createNewRepairItemByCustomer(Customer customer, RepairDto repairDto) throws InvalidStatusException {
+        RepairStatus newStatus = RepairStatus.PENDING;
+        componentRepairService.verifyNewStatus(null, newStatus);
+
         String deviceType = repairDto.getDeviceType();
         String deviceManufacturer = repairDto.getDeviceManufacturer();
         String deviceModel = repairDto.getDeviceModel();
         String deviceSerialNo = repairDto.getDeviceSerialNo();
         String description = repairDto.getDescription();
 
-        RepairStatus status = RepairStatus.PENDING;
         Repair repair = new Repair(customer, deviceType, deviceManufacturer, deviceModel, deviceSerialNo, description);
         repair = componentRepairService.saveRepair(repair);
-        repair = componentRepairService.changeRepairStatus(repair, status, null, null, null);
+        repair = componentRepairService.changeRepairStatus(repair, newStatus, null, null, null);
         return repair;
     }
 
