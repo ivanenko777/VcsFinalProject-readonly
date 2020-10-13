@@ -102,6 +102,13 @@ public class InternalRepairService {
         repair = changeRepairStatus(repair, currentStatus, newStatus, employee, note, stored);
         return repair;
     }
+    
+    public Repair startDiagnostic(Repair repair, Employee employee) throws InvalidStatusException {
+        RepairStatus currentStatus = repair.getStatus();
+        RepairStatus newStatus = RepairStatus.DIAGNOSTIC;
+        repair = changeRepairStatus(repair, currentStatus, newStatus, employee, null, null);
+        return repair;
+    }
 
     private Repair changeRepairStatus(
             Repair repair,

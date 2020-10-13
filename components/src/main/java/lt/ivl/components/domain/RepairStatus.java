@@ -3,7 +3,8 @@ package lt.ivl.components.domain;
 public enum RepairStatus {
     PENDING("Laukiama", "Laukiama"),
     CONFIRMED("Patvirtinta", "Vykdoma"),
-    DIAGNOSTIC_WAITING("Laukiama diagnostikos", "Vykdoma");
+    DIAGNOSTIC_WAITING("Laukiama diagnostikos", "Vykdoma"),
+    DIAGNOSTIC("Diagnostika", "Vykdoma");
 
     private String messageForCustomer;
     private String messageForEmployee;
