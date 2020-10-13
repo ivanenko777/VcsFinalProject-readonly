@@ -271,8 +271,11 @@ public class ManageRepairController {
 
         try {
             Employee employee = employeePrincipal.getEmployee();
-            internalRepairService.finishDiagnostic(repair, repairStatusStoredDto, repairStatusNoteDto, employee);
-            // TODO email if PAYMENT_CONFIRM_WAITING + note
+            repair = internalRepairService.finishDiagnostic(repair, repairStatusStoredDto, repairStatusNoteDto, employee);
+            if (repair.getStatus() == RepairStatus.PAYMENT_CONFIRM_WAITING) {
+                repair.getCustomer();
+                mailSender.sendRepairPaymentConfirmWaitingToCustomer(repair, repairStatusNoteDto);
+            }
             return "redirect:/repair/{repair}/view";
         } catch (InvalidStatusException e) {
             model.addAttribute("messageError", e.getMessage());

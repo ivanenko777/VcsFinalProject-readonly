@@ -79,6 +79,23 @@ public class EmailTemplate {
         return new Email(to, subject, message);
     }
 
+
+    public Email customerRepairPaymentConfirmEmailTemplate(Repair repair, String technicianNote, String appUrl) {
+        // remonto paraiska, STATUS -> PAYMENT_CONFIRM_WAITING
+        final int repairId = repair.getId();
+        final Customer customer = repair.getCustomer();
+
+        final String message1 = String.format("Sveiki, %s %s,", customer.getFirstName(), customer.getLastName());
+        final String message2 = "Reikalingas mokėjimo patvirtinimas. Daugiau info žemiau esančioje nuorodoje.";
+        final String repairViewUrl = appUrl + "repair/" + repairId + "/confirm-payment";
+        final String message3 = "Meistro komentaras:";
+
+        final String to = customer.getEmail();
+        final String subject = "Mokėjimo patvirtinimas #" + repairId;
+        final String message = message1 + " \r\n" + message2 + " \r\n" + repairViewUrl + " \r\n\r\n" + message3 + " \r\n" + technicianNote;
+        return new Email(to, subject, message);
+    }
+
     public Email employeeAccountVerificationEmailTemplate(Employee employee, String token, String appUrl) {
         final String message1 = String.format("Sveiki, %s %s,", employee.getFirstName(), employee.getLastName());
         final String message2 = "Paspauskite žemiau esančią nuorodą, kad aktyvuoti savo paskyrą ir pakeisti slaptažodį.";

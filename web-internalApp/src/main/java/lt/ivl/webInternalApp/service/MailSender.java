@@ -4,6 +4,7 @@ import lt.ivl.components.domain.Employee;
 import lt.ivl.components.domain.Repair;
 import lt.ivl.components.email.Email;
 import lt.ivl.components.email.EmailTemplate;
+import lt.ivl.webInternalApp.dto.RepairStatusNoteDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
@@ -61,6 +62,14 @@ public class MailSender {
     @Async
     public void sendRepairConfirmedToCustomer(Repair repair) {
         Email template = mailTemplate.customerRepairConfirmedEmailTemplate(repair, externalAppUrl);
+        SimpleMailMessage email = constructEmail(template);
+        mailSender.send(email);
+    }
+
+    @Async
+    public void sendRepairPaymentConfirmWaitingToCustomer(Repair repair, RepairStatusNoteDto repairStatusNoteDto) {
+        String technicianNote = repairStatusNoteDto.getNote();
+        Email template = mailTemplate.customerRepairPaymentConfirmEmailTemplate(repair, technicianNote, externalAppUrl);
         SimpleMailMessage email = constructEmail(template);
         mailSender.send(email);
     }
