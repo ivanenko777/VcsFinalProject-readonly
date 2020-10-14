@@ -35,6 +35,7 @@ public class Repair {
     private Employee confirmedBy;
 
     @OneToMany(mappedBy = "repair", fetch = FetchType.LAZY)
+    @OrderBy("createdAt DESC")
     private List<RepairStatusHistory> statusHistory;
 
     private Timestamp createdAt;
