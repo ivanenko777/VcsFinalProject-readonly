@@ -13,6 +13,7 @@ import lt.ivl.webInternalApp.security.EmployeePrincipal;
 import lt.ivl.webInternalApp.service.InternalCustomerService;
 import lt.ivl.webInternalApp.service.InternalRepairService;
 import lt.ivl.webInternalApp.service.MailSender;
+import lt.ivl.webInternalApp.utils.UtilsHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -48,6 +49,7 @@ public class ManageRepairController {
 
     @GetMapping("/{repair}/view")
     public String view(@PathVariable("repair") Repair repair, Model model) {
+        model.addAttribute("utils", UtilsHelper.getInstance());
         model.addAttribute("repair", repair);
         return "repair/view";
     }

@@ -9,7 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class RepairService {
@@ -96,15 +99,34 @@ public class RepairService {
     }
 
     public void verifyNewStatus(RepairStatus currentStatus, RepairStatus newStatus) throws InvalidStatusException {
+        Set<RepairStatus> allowedStatuses = allowedStatuses(newStatus);
+
+        if (currentStatus != null && !allowedStatuses.contains(currentStatus)) {
+            throw new InvalidStatusException();
+        }
+    }
+
+    public boolean checkButtonVisibility(String currentStatus, String newStatus) {
+        RepairStatus currentStatusEnum = RepairStatus.valueOf(currentStatus);
+        RepairStatus newStatusEnum = RepairStatus.valueOf(newStatus);
+
+        Set<RepairStatus> allowedStatuses = allowedStatuses(newStatusEnum);
+
+        return allowedStatuses.contains(currentStatusEnum);
+    }
+
+    private Set<RepairStatus> allowedStatuses(RepairStatus newStatus) {
         Set<RepairStatus> allowedStatuses = new HashSet<>();
         switch (newStatus) {
             case PENDING:
                 break;
             case CONFIRMED:
-                allowedStatuses.addAll(Collections.singletonList(RepairStatus.PENDING));
+                allowedStatuses.addAll(List.of(
+                        RepairStatus.PENDING));
                 break;
             case DIAGNOSTIC_WAITING:
-                allowedStatuses.addAll(List.of(RepairStatus.CONFIRMED));
+                allowedStatuses.addAll(List.of(
+                        RepairStatus.CONFIRMED));
                 break;
             case DIAGNOSTIC:
                 allowedStatuses.addAll(List.of(
@@ -112,11 +134,13 @@ public class RepairService {
                         RepairStatus.REPAIR_WAITING));
                 break;
             case PAYMENT_CONFIRM_WAITING:
-                allowedStatuses.addAll(Collections.singletonList(RepairStatus.DIAGNOSTIC));
+                allowedStatuses.addAll(List.of(
+                        RepairStatus.DIAGNOSTIC));
                 break;
             case PAYMENT_CONFIRMED:
             case PAYMENT_CANCELED:
-                allowedStatuses.addAll(Collections.singletonList(RepairStatus.PAYMENT_CONFIRM_WAITING));
+                allowedStatuses.addAll(List.of(
+                        RepairStatus.PAYMENT_CONFIRM_WAITING));
                 break;
             case REPAIR_WAITING:
                 allowedStatuses.addAll(List.of(
@@ -125,18 +149,17 @@ public class RepairService {
                         RepairStatus.REPAIR));
                 break;
             case REPAIR:
-                allowedStatuses.addAll(Collections.singletonList(RepairStatus.REPAIR_WAITING));
+                allowedStatuses.addAll(List.of(
+                        RepairStatus.REPAIR_WAITING));
             case RETURN:
                 allowedStatuses.addAll(List.of(
                         RepairStatus.PAYMENT_CANCELED,
                         RepairStatus.REPAIR));
                 break;
             case COMPLETED:
-                allowedStatuses.addAll(Collections.singletonList(RepairStatus.RETURN));
+                allowedStatuses.addAll(List.of(
+                        RepairStatus.RETURN));
         }
-
-        if (currentStatus != null && !allowedStatuses.contains(currentStatus)) {
-            throw new InvalidStatusException();
-        }
+        return allowedStatuses;
     }
 }

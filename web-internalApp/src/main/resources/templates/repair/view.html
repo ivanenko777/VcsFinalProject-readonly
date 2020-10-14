@@ -16,25 +16,45 @@
             <div th:replace="repair/_fragments :: repairNav"></div>
             <hr/>
             <a class="btn btn-outline-success btn-block font-weight-bold"
-               th:href="@{/repair/{id}/edit(id=${repair.id})}">Redaguoti</a>
+               th:href="@{/repair/{id}/edit(id=${repair.id})}"
+               th:if="${repair.status.name() == 'PENDING'}"
+            >Redaguoti</a>
             <a class="btn btn-outline-danger btn-block font-weight-bold"
-               th:href="@{/repair/{id}/delete(id=${repair.id})}">Ištrinti</a>
+               th:href="@{/repair/{id}/delete(id=${repair.id})}"
+               th:if="${repair.status.name() == 'PENDING'}"
+            >Ištrinti</a>
             <a class="btn btn-outline-secondary btn-block font-weight-bold"
-               th:href="@{/repair/{id}/export_confirmed_pdf(id=${repair.id})}">Patvirtinimo PDF</a>
+               th:href="@{/repair/{id}/export_confirmed_pdf(id=${repair.id})}"
+               th:if="${repair.status.name() != 'PENDING'}"
+            >Patvirtinimo PDF</a>
             <a class="btn btn-outline-info btn-block font-weight-bold"
-               th:href="@{/repair/{id}/stored(id=${repair.id})}">Paimti</a>
+               th:href="@{/repair/{id}/stored(id=${repair.id})}"
+               th:if="${utils.checkButtonVisibility(repair.status.name(), 'DIAGNOSTIC_WAITING')}"
+            >Paimti</a>
             <a class="btn btn-outline-info btn-block font-weight-bold"
-               th:href="@{/repair/{id}/start-diagnostic(id=${repair.id})}">Pradėti diagnostiką</a>
+               th:href="@{/repair/{id}/start-diagnostic(id=${repair.id})}"
+               th:if="${utils.checkButtonVisibility(repair.status.name(), 'DIAGNOSTIC')}"
+            >Pradėti diagnostiką</a>
             <a class="btn btn-outline-info btn-block font-weight-bold"
-               th:href="@{/repair/{id}/finish-diagnostic(id=${repair.id})}">Pabaigti diagnostiką</a>
+               th:href="@{/repair/{id}/finish-diagnostic(id=${repair.id})}"
+               th:if="${repair.status.name() == 'DIAGNOSTIC'}"
+            >Pabaigti diagnostiką</a>
             <a class="btn btn-outline-info btn-block font-weight-bold"
-               th:href="@{/repair/{id}/payment(id=${repair.id})}">Mokėjimo patvirtinimas</a>
+               th:href="@{/repair/{id}/payment(id=${repair.id})}"
+               th:if="${repair.status.name() == 'PAYMENT_CONFIRM_WAITING'}"
+            >Mokėjimo patvirtinimas</a>
             <a class="btn btn-outline-info btn-block font-weight-bold"
-               th:href="@{/repair/{id}/start-repair(id=${repair.id})}">Pradėti remontą</a>
+               th:href="@{/repair/{id}/start-repair(id=${repair.id})}"
+               th:if="${utils.checkButtonVisibility(repair.status.name(), 'REPAIR') && repair.status.name()!= 'REPAIR'}"
+            >Pradėti remontą</a>
             <a class="btn btn-outline-info btn-block font-weight-bold"
-               th:href="@{/repair/{id}/finish-repair(id=${repair.id})}">Pabaigti remontą</a>
+               th:href="@{/repair/{id}/finish-repair(id=${repair.id})}"
+               th:if="${repair.status.name() == 'REPAIR'}"
+            >Pabaigti remontą</a>
             <a class="btn btn-outline-info btn-block font-weight-bold"
-               th:href="@{/repair/{id}/return(id=${repair.id})}">Grąžinti</a>
+               th:href="@{/repair/{id}/return(id=${repair.id})}"
+               th:if="${utils.checkButtonVisibility(repair.status.name(), 'COMPLETED')}"
+            >Grąžinti</a>
         </div>
 
         <div class="col-md-9">
