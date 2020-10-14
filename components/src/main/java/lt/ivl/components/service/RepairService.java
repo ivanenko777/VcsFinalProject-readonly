@@ -119,6 +119,8 @@ public class RepairService {
             case REPAIR_WAITING:
                 allowedStatuses.addAll(List.of(RepairStatus.DIAGNOSTIC, RepairStatus.PAYMENT_CONFIRMED));
                 break;
+            case REPAIR:
+                allowedStatuses.addAll(Collections.singletonList(RepairStatus.REPAIR_WAITING));
             case RETURN:
                 allowedStatuses.addAll(List.of(RepairStatus.PAYMENT_CANCELED));
                 break;
