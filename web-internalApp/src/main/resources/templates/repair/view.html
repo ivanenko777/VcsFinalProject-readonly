@@ -62,7 +62,7 @@
                 <div class="col-md-3 font-weight-bold text-right">Modifikavimo data</div>
                 <div class="col-md-3" th:text="${#dates.format(repair.updatedAt, 'yyyy-MM-dd HH:mm')}"></div>
             </div>
-            <div class="row mb-1">
+            <div class="row mb-1" th:if="${repair.confirmedBy}">
                 <div class="col-md-3 font-weight-bold text-right">Patvirtino</div>
                 <div class="col-md-3">
                     <span th:if="${repair.confirmedBy}" th:text="${repair.confirmedBy.fullName}"></span>
