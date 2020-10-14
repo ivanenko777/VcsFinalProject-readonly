@@ -235,7 +235,7 @@ public class ManageRepairController {
     }
 
     @GetMapping("{repair}/finish-diagnostic")
-    public String showEndDiagnostic(@PathVariable("repair") Repair repair, Model model) {
+    public String showFinishDiagnostic(@PathVariable("repair") Repair repair, Model model) {
         boolean deviceWarranty = repair.isDeviceWarranty();
         if (deviceWarranty) model.addAttribute("messageInfo", "Įrenginiui galioja garantija. Nemokamas remontas.");
         else model.addAttribute("messageWarning", "Įrenginiui garantija negalioja. Mokamas remontas.");
@@ -247,7 +247,7 @@ public class ManageRepairController {
     }
 
     @PostMapping("{repair}/finish-diagnostic")
-    public String endDiagnostic(
+    public String finishDiagnostic(
             @AuthenticationPrincipal EmployeePrincipal employeePrincipal,
             @PathVariable("repair") Repair repair,
             @Valid @ModelAttribute("repairStatusStoredDto") RepairStatusStoredDto repairStatusStoredDto,
