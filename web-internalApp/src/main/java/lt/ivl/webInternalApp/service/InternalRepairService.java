@@ -164,6 +164,7 @@ public class InternalRepairService {
         return repair;
     }
 
+    @Transactional
     public Repair finishRepair(
             Repair repair,
             RepairStatusStoredDto repairStatusStoredDto,
@@ -179,6 +180,15 @@ public class InternalRepairService {
         RepairStatus newStatus = isRepaired ? RepairStatus.RETURN : RepairStatus.REPAIR_WAITING;
 
         repair = changeRepairStatus(repair, currentStatus, newStatus, employee, note, stored);
+        return repair;
+    }
+
+    @Transactional
+    public Repair completeRepair(Repair repair, RepairStatusNoteDto repairStatusNoteDto, Employee employee) throws InvalidStatusException {
+        String note = repairStatusNoteDto.getNote();
+        RepairStatus currentStatus = repair.getStatus();
+        RepairStatus newStatus = RepairStatus.COMPLETED;
+        repair = changeRepairStatus(repair, currentStatus, newStatus, employee, note, null);
         return repair;
     }
 

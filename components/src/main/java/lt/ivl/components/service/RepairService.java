@@ -131,6 +131,8 @@ public class RepairService {
                         RepairStatus.PAYMENT_CANCELED,
                         RepairStatus.REPAIR));
                 break;
+            case COMPLETED:
+                allowedStatuses.addAll(Collections.singletonList(RepairStatus.RETURN));
         }
 
         if (currentStatus != null && !allowedStatuses.contains(currentStatus)) {

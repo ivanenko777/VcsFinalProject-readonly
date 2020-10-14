@@ -389,4 +389,41 @@ public class ManageRepairController {
             return "repair/repair-finish";
         }
     }
+
+    @GetMapping("{repair}/return")
+    public String showCompleteForm(@PathVariable("repair") Repair repair, Model model) {
+        boolean deviceWarranty = repair.isDeviceWarranty();
+        if (deviceWarranty) model.addAttribute("messageInfo", "Įrenginiui galioja garantija. Nemokamas remontas.");
+        else model.addAttribute("messageWarning", "Įrenginiui garantija negalioja. Mokamas remontas.");
+
+        model.addAttribute("repairStatusNoteDto", new RepairStatusNoteDto());
+        model.addAttribute("repair", repair);
+        return "repair/return";
+    }
+
+    @PostMapping("{repair}/return")
+    public String complete(
+            @AuthenticationPrincipal EmployeePrincipal employeePrincipal,
+            @PathVariable("repair") Repair repair,
+            @Valid @ModelAttribute("repairStatusNoteDto") RepairStatusNoteDto repairStatusNoteDto,
+            BindingResult repairStatusNoteDtoBindingResult,
+            Model model
+    ) {
+        model.addAttribute("repairStatusNoteDto", repairStatusNoteDto);
+        model.addAttribute("repair", repair);
+
+        if (repairStatusNoteDtoBindingResult.hasErrors()) {
+            model.addAttribute("messageError", "Formoje yra klaidų");
+            return "repair/repair-finish";
+        }
+
+        try {
+            Employee employee = employeePrincipal.getEmployee();
+            internalRepairService.completeRepair(repair, repairStatusNoteDto, employee);
+            return "redirect:/repair/{repair}/view";
+        } catch (InvalidStatusException e) {
+            model.addAttribute("messageError", e.getMessage());
+            return "repair/repair-finish";
+        }
+    }
 }
