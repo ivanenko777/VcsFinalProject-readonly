@@ -273,7 +273,7 @@ public class ManageRepairController {
             Employee employee = employeePrincipal.getEmployee();
             repair = internalRepairService.finishDiagnostic(repair, repairStatusStoredDto, repairStatusNoteDto, employee);
             if (repair.getStatus() == RepairStatus.PAYMENT_CONFIRM_WAITING) {
-                repair.getCustomer();
+                repair.getCustomer().getId();
                 mailSender.sendRepairPaymentConfirmWaitingToCustomer(repair, repairStatusNoteDto);
             }
             return "redirect:/repair/{repair}/view";
