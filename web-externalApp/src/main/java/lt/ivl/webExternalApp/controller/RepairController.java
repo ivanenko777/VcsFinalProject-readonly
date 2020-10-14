@@ -128,7 +128,7 @@ public class RepairController {
     @GetMapping("{repair}/payment")
     public String confirmPaymentPage(@PathVariable("repair") Repair repair, Model model) {
         model.addAttribute("repair", repair);
-        return "repair/confirm-payment";
+        return "repair/payment";
     }
 
     @PostMapping("{repair}/confirm-payment")
@@ -139,7 +139,7 @@ public class RepairController {
             return "redirect:/repair/{repair}/view";
         } catch (InvalidStatusException e) {
             model.addAttribute("messageError", e.getMessage());
-            return "repair/confirm-payment";
+            return "repair/payment";
         }
     }
 
@@ -151,7 +151,7 @@ public class RepairController {
             return "redirect:/repair/{repair}/view";
         } catch (InvalidStatusException e) {
             model.addAttribute("messageError", e.getMessage());
-            return "repair/confirm-payment";
+            return "repair/payment";
         }
     }
 
