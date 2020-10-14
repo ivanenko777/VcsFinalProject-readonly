@@ -22,7 +22,7 @@
                 <tr>
                     <th scope="col">Status</th>
                     <th scope="col">Data</th>
-                    <th scope="col">Darbuotojas</th>
+                    <th scope="col">Vartotojas</th>
                     <th scope="col">Pastabos</th>
                     <th scope="col">Saugomas</th>
                 </tr>
@@ -32,8 +32,7 @@
                     <td th:text="${statusHistory.status.getMessageForEmployee()}"></td>
                     <td th:text="${#dates.format(statusHistory.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
                     <td>
-                        <span th:if="${statusHistory.employee}"
-                              th:text="${statusHistory.employee.fullName}"></span>
+                        <span th:text="${statusHistory.employee} ? ${statusHistory.employee.fullName} : '[ klientas ]'"></span>
                     </td>
                     <td th:utext="${#strings.replace(statusHistory.note, '&#10;', '&lt;br&gt;')}"></td>
                     <td th:text="${statusHistory.stored}"></td>
