@@ -130,6 +130,30 @@ public class InternalRepairService {
         return repair;
     }
 
+    @Transactional
+    public Repair confirmPayment(Repair repair, Employee employee) throws InvalidStatusException {
+        RepairStatus currentStatus = repair.getStatus();
+        RepairStatus newStatus = RepairStatus.PAYMENT_CONFIRMED;
+        repair = changeRepairStatus(repair, currentStatus, newStatus, employee, null, null);
+
+        currentStatus = repair.getStatus();
+        newStatus = RepairStatus.REPAIR_WAITING;
+        repair = changeRepairStatus(repair, currentStatus, newStatus, employee, null, null);
+        return repair;
+    }
+
+    @Transactional
+    public Repair cancelPayment(Repair repair, Employee employee) throws InvalidStatusException {
+        RepairStatus currentStatus = repair.getStatus();
+        RepairStatus newStatus = RepairStatus.PAYMENT_CANCELED;
+        repair = changeRepairStatus(repair, currentStatus, newStatus, employee, null, null);
+
+        currentStatus = repair.getStatus();
+        newStatus = RepairStatus.RETURN;
+        repair = changeRepairStatus(repair, currentStatus, newStatus, employee, null, null);
+        return repair;
+    }
+
     private Repair changeRepairStatus(
             Repair repair,
             RepairStatus currentStatus,

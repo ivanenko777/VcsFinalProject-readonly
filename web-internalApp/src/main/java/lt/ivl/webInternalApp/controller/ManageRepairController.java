@@ -282,4 +282,44 @@ public class ManageRepairController {
             return "repair/diagnostic-finish";
         }
     }
+
+    @GetMapping("{repair}/payment")
+    public String confirmPaymentPage(@PathVariable("repair") Repair repair, Model model) {
+        model.addAttribute("repair", repair);
+        return "repair/payment";
+    }
+
+    @PostMapping("{repair}/payment-confirm")
+    public String confirmPayment(
+            @AuthenticationPrincipal EmployeePrincipal employeePrincipal,
+            @PathVariable("repair") Repair repair,
+            Model model
+    ) {
+        model.addAttribute("repair", repair);
+        try {
+            Employee employee = employeePrincipal.getEmployee();
+            internalRepairService.confirmPayment(repair, employee);
+            return "redirect:/repair/{repair}/view";
+        } catch (InvalidStatusException e) {
+            model.addAttribute("messageError", e.getMessage());
+            return "repair/payment";
+        }
+    }
+
+    @PostMapping("{repair}/payment-cancel")
+    public String cancelPayment(
+            @AuthenticationPrincipal EmployeePrincipal employeePrincipal,
+            @PathVariable("repair") Repair repair,
+            Model model
+    ) {
+        model.addAttribute("repair", repair);
+        try {
+            Employee employee = employeePrincipal.getEmployee();
+            internalRepairService.cancelPayment(repair, employee);
+            return "redirect:/repair/{repair}/view";
+        } catch (InvalidStatusException e) {
+            model.addAttribute("messageError", e.getMessage());
+            return "repair/payment";
+        }
+    }
 }
