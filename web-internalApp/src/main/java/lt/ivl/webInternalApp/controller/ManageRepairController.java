@@ -404,7 +404,7 @@ public class ManageRepairController {
     public String complete(
             @AuthenticationPrincipal EmployeePrincipal employeePrincipal,
             @PathVariable("repair") Repair repair,
-            @Valid @ModelAttribute("repairStatusNoteDto") RepairStatusNoteDto repairStatusNoteDto,
+            @ModelAttribute("repairStatusNoteDto") RepairStatusNoteDto repairStatusNoteDto,
             BindingResult repairStatusNoteDtoBindingResult,
             Model model
     ) {
@@ -413,7 +413,7 @@ public class ManageRepairController {
 
         if (repairStatusNoteDtoBindingResult.hasErrors()) {
             model.addAttribute("messageError", "Formoje yra klaidų");
-            return "repair/repair-finish";
+            return "repair/return";
         }
 
         try {
@@ -423,7 +423,7 @@ public class ManageRepairController {
             return "redirect:/repair/{repair}/view";
         } catch (InvalidStatusException e) {
             model.addAttribute("messageError", e.getMessage());
-            return "repair/repair-finish";
+            return "repair/return";
         }
     }
 }
