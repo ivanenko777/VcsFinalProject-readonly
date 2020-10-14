@@ -91,6 +91,7 @@ public class InternalRepairService {
         return repair;
     }
 
+    @Transactional
     public Repair storeDevice(
             Repair repair,
             RepairStatusStoredDto repairStatusStoredDto,
@@ -105,6 +106,7 @@ public class InternalRepairService {
         return repair;
     }
 
+    @Transactional
     public Repair startDiagnostic(Repair repair, Employee employee) throws InvalidStatusException {
         RepairStatus currentStatus = repair.getStatus();
         RepairStatus newStatus = RepairStatus.DIAGNOSTIC;
