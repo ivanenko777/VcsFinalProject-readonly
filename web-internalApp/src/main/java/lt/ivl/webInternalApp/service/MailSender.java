@@ -73,4 +73,11 @@ public class MailSender {
         SimpleMailMessage email = constructEmail(template);
         mailSender.send(email);
     }
+
+    @Async
+    public void sendRepairCompeteToCustomer(Repair repair) {
+        Email template = mailTemplate.customerRepairCompleteEmailTemplate(repair, externalAppUrl);
+        SimpleMailMessage email = constructEmail(template);
+        mailSender.send(email);
+    }
 }

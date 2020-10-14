@@ -274,7 +274,6 @@ public class ManageRepairController {
             Employee employee = employeePrincipal.getEmployee();
             repair = internalRepairService.finishDiagnostic(repair, repairStatusStoredDto, repairStatusNoteDto, employee);
             if (repair.getStatus() == RepairStatus.PAYMENT_CONFIRM_WAITING) {
-                repair.getCustomer().getId();
                 mailSender.sendRepairPaymentConfirmWaitingToCustomer(repair, repairStatusNoteDto);
             }
             return "redirect:/repair/{repair}/view";
@@ -419,7 +418,8 @@ public class ManageRepairController {
 
         try {
             Employee employee = employeePrincipal.getEmployee();
-            internalRepairService.completeRepair(repair, repairStatusNoteDto, employee);
+            repair = internalRepairService.completeRepair(repair, repairStatusNoteDto, employee);
+            mailSender.sendRepairCompeteToCustomer(repair);
             return "redirect:/repair/{repair}/view";
         } catch (InvalidStatusException e) {
             model.addAttribute("messageError", e.getMessage());

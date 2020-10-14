@@ -122,6 +122,8 @@ public class InternalRepairService {
             RepairStatusNoteDto repairStatusNoteDto,
             Employee employee
     ) throws InvalidStatusException {
+        repair.getCustomer().getFirstName(); // fix email lazy exception
+
         String stored = repairStatusStoredDto.getStored();
         String note = repairStatusNoteDto.getNote();
         boolean deviceWarranty = repair.isDeviceWarranty();
@@ -185,6 +187,8 @@ public class InternalRepairService {
 
     @Transactional
     public Repair completeRepair(Repair repair, RepairStatusNoteDto repairStatusNoteDto, Employee employee) throws InvalidStatusException {
+        repair.getCustomer().getFirstName(); // fix email lazy exception
+
         String note = repairStatusNoteDto.getNote();
         RepairStatus currentStatus = repair.getStatus();
         RepairStatus newStatus = RepairStatus.COMPLETED;

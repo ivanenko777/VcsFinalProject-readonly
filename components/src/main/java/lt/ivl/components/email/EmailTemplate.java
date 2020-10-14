@@ -96,6 +96,21 @@ public class EmailTemplate {
         return new Email(to, subject, message);
     }
 
+    public Email customerRepairCompleteEmailTemplate(Repair repair, String appUrl) {
+        // remonto paraiska, STATUS -> COMPLETED
+        final int repairId = repair.getId();
+        final Customer customer = repair.getCustomer();
+
+        final String message1 = String.format("Sveiki, %s %s,", customer.getFirstName(), customer.getLastName());
+        final String message2 = "Jūsų užsakymas įvykdytas. Daugiau info žemiau esančioje nuorodoje.";
+        final String repairViewUrl = appUrl + "repair/" + repairId + "/payment";
+
+        final String to = customer.getEmail();
+        final String subject = "Užsakymas įvykdytas #" + repairId;
+        final String message = message1 + " \r\n" + message2 + " \r\n" + repairViewUrl;
+        return new Email(to, subject, message);
+    }
+
     public Email employeeAccountVerificationEmailTemplate(Employee employee, String token, String appUrl) {
         final String message1 = String.format("Sveiki, %s %s,", employee.getFirstName(), employee.getLastName());
         final String message2 = "Paspauskite žemiau esančią nuorodą, kad aktyvuoti savo paskyrą ir pakeisti slaptažodį.";
