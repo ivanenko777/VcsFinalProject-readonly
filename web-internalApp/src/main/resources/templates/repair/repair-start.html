@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en"
+      layout:decorate="~{_layouts/layout-filter}"
+      th:with="pageName=${'#' + repair.id + ' pradėti remontą'}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE" th:text="${pageName}">...</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="row pt-2">
+        <div class="col-md-12">
+            <div th:replace="_layouts/_fragments :: messages"></div>
+
+            <form action="#" autocomplete="off" method="post"
+                  th:action="@{/repair/{id}/start-repair(id=${repair.id})}">
+                <div class="form-row">
+                    <div class="col-md-12 form-group">
+                        <div class="text-center">
+                            <h3 class="pt-5 pb-3"
+                                th:text="${'Ar tikrai norite pradėti remontą #' + repair.id +'?'}"></h3>
+                            <a class="btn btn-outline-secondary font-weight-bold"
+                               th:href="@{/repair/{repair}/view(repair=${repair.id})}">&nbsp;&nbsp;&nbsp;Ne&nbsp;&nbsp;&nbsp;</a>
+                            <input class="btn btn-success font-weight-bold" type="submit"
+                                   value="&nbsp;&nbsp;Taip&nbsp;&nbsp;">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>

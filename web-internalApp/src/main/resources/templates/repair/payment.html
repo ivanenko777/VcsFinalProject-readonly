@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en"
+      layout:decorate="~{_layouts/layout-filter}"
+      th:with="pageName=${'#' + repair.id + ' patvirtinti mokėjimą'}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE" th:text="${pageName}">...</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="row pt-2">
+        <div class="col-md-12">
+            <div th:replace="_layouts/_fragments :: messages"></div>
+
+            <div class="text-center">
+                <h3 class="pt-5 pb-3" th:text="${'Ar tikrai norite patvirtinti mokėjimą #' + repair.id +'?'}"></h3>
+            </div>
+            <div class="text-center">
+                <ul class="list-inline">
+                    <li class="list-inline-item">
+                        <a class="btn btn-outline-secondary font-weight-bold"
+                           th:href="@{/repair/{id}/view(id=${repair.id})}">&nbsp;&nbsp;&nbsp;Atgal&nbsp;&nbsp;&nbsp;</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <form action="#" autocomplete="off" class="form-inline" method="post"
+                              th:action="@{/repair/{id}/payment-confirm(id=${repair.id})}">
+                            <input class="btn btn-success btn-lg font-weight-bold" type="submit" value="Patvirtinti">
+                        </form>
+                    </li>
+                    <li class="list-inline-item">
+                        <form action="#" autocomplete="off" class="form-inline" method="post"
+                              th:action="@{/repair/{id}/payment-cancel(id=${repair.id})}">
+                            <input class="btn btn-danger font-weight-bold" type="submit" value="Atmesti">
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</body>

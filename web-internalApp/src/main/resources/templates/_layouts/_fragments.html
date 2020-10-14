@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title></title>
@@ -8,7 +9,43 @@
 
 <div th:fragment="messages">
     <div class="alert alert-danger" th:if="${messageError}" th:text="${messageError}"></div>
+    <div class="alert alert-warning" th:if="${messageWarning}" th:text="${messageWarning}"></div>
     <div class="alert alert-info" th:if="${messageInfo}" th:text="${messageInfo}"></div>
+</div>
+
+<div th:fragment="navigation">
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #eefde3;">
+        <div class="container">
+
+            <h1 class="navbar-brand mb-0">Vidinė sistema</h1>
+
+            <button aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation"
+                    class="navbar-toggler"
+                    data-target="#navbarNavAltMarkup" data-toggle="collapse" type="button">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav mr-auto">
+                    <a class="nav-link" th:href="@{/}">Pradžia</a>
+                    <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/manage-employee/list}">
+                        Darbuotojų valdymas</a>
+                    <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/manage-customer/list}">
+                        Klientų valdymas</a>
+                    <a class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/repair/list}">
+                        Remontų valdymas</a>
+                </div>
+                <div class="navbar-nav ml-auto">
+                    <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/login}">Prisijungti</a>
+
+                    <a class="nav-link disabled" href="#" sec:authentication="principal.fullName"
+                       sec:authorize="isAuthenticated()">full name</a>
+                    <form method="post" sec:authorize="isAuthenticated()" th:action="@{/logout}">
+                        <input class="btn btn-sm btn-outline-secondary mt-1" type="submit" value="Atsijungti"/>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </nav>
 </div>
 
 </body>

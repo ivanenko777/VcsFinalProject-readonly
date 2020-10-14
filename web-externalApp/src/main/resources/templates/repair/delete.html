@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"
       layout:decorate="~{_layouts/layout}"
-      th:with="pageName=${'Ar tikrai norite ištrinti remontą #'+ repair.id + '?'}"
+      th:with="pageName=${'Ištrinti #'+ repairId + '?'}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -10,26 +10,25 @@
 </head>
 <body>
 <div layout:fragment="content">
-    <div class="row justify-content-center align-items-center pt-2 pt-2">
-        <h4 th:text="${pageName}"></h4>
-    </div>
-    <div class="row justify-content-center align-items-center pt-2 pt-2">
+    <div class="row pt-2">
+        <div class="col-md-12">
+            <div th:replace="_layouts/_fragments :: messages"></div>
 
-        <div th:replace="_layouts/_fragments :: messages"></div>
-
-        <form action="#" autocomplete="off" method="post" th:action="@{/repair/{id}/delete(id=${repair.id})}"
-              th:object="${repair}">
-            <div class="form-row">
-                <div class="col-md-12 form-group">
-                    <div class="text-center">
-                        <a class="btn btn-outline-secondary font-weight-bold"
-                           th:href="@{/repair/{id}/view(id=${repair.id})}">&laquo;
-                            Atgal</a>
-                        <input class="btn btn-danger font-weight-bold" type="submit" value="Ištrinti">
+            <form action="#" autocomplete="off" method="post"
+                  th:action="@{/repair/{id}/delete(id=${repairId})}"
+                  th:if="${repairId}">
+                <div class="form-row">
+                    <div class="col-md-12 form-group">
+                        <div class="text-center">
+                            <h3 class="pt-5 pb-3" th:text="${'Ar tikrai norite ištrinti #' + repairId +'?'}"></h3>
+                            <a class="btn btn-outline-secondary font-weight-bold"
+                               th:href="@{/repair/{id}/view(id=${repairId})}">&nbsp;&nbsp;&nbsp;Ne&nbsp;&nbsp;&nbsp;</a>
+                            <input class="btn btn-danger font-weight-bold" type="submit" value="Ištrinti">
+                        </div>
                     </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 </div>
 </body>

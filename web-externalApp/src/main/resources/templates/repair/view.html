@@ -22,8 +22,12 @@
                 <div class="col-md-6" th:text="${'#' + repair.id}"></div>
             </div>
             <div class="row mb-1">
-                <div class="col-md-6 font-weight-bold text-right">Data</div>
+                <div class="col-md-6 font-weight-bold text-right">Sukūrimo data</div>
                 <div class="col-md-6" th:text="${#dates.format(repair.createdAt, 'yyyy-MM-dd HH:mm')}"></div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-md-6 font-weight-bold text-right">Parvirtinimo data</div>
+                <div class="col-md-6" th:text="${#dates.format(repair.confirmedAt, 'yyyy-MM-dd HH:mm')}"></div>
             </div>
             <div class="row mb-1">
                 <div class="col-md-6 font-weight-bold text-right">Įrenginio tipas</div>
@@ -42,6 +46,10 @@
                 <div class="col-md-6" th:text="${repair.deviceSerialNo}"></div>
             </div>
             <div class="row mb-1">
+                <div class="col-md-6 font-weight-bold text-right">Ar galioja garantija?</div>
+                <div class="col-md-6" th:text="${repair.deviceWarranty} ? 'Taip' : 'Ne'"></div>
+            </div>
+            <div class="row mb-1">
                 <div class="col-md-6 font-weight-bold text-right">Gedimo aprašymas</div>
                 <div class="col-md-6"
                      th:utext="${#strings.replace(repair.description, '&#10;', '&lt;br&gt;')}"></div>
@@ -56,6 +64,9 @@
             <a class="btn btn-danger font-weight-bold ml-auto" th:href="@{/repair/{id}/delete(id=${repair.id})}"
                th:if="${repair.status.name() == 'PENDING'}">
                 Ištrinti remontą</a>
+            <a class="btn btn-success font-weight-bold ml-auto" th:href="@{/repair/{id}/payment(id=${repair.id})}"
+               th:if="${repair.status.name() == 'PAYMENT_CONFIRM_WAITING'}">
+                Mokėjimo patvirtinimas arba atšaukimas</a>
         </div>
     </div>
 </div>

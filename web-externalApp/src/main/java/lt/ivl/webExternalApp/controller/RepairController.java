@@ -2,11 +2,12 @@ package lt.ivl.webExternalApp.controller;
 
 import lt.ivl.components.domain.Customer;
 import lt.ivl.components.domain.Repair;
-import lt.ivl.webExternalApp.dto.RepairDto;
+import lt.ivl.components.exception.InvalidStatusException;
 import lt.ivl.components.exception.ItemNotFoundException;
+import lt.ivl.webExternalApp.dto.RepairDto;
 import lt.ivl.webExternalApp.security.CustomerPrincipal;
-import lt.ivl.webExternalApp.service.MailSender;
 import lt.ivl.webExternalApp.service.ExternalRepairService;
+import lt.ivl.webExternalApp.service.MailSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -72,10 +73,17 @@ public class RepairController {
             model.addAttribute("messageError", "Formoje yra klaidų");
             return "repair/add";
         }
-        Customer customer = customerPrincipal.getCustomer();
-        Repair newRepair = externalRepairService.createNewRepairItemByCustomer(customer, repairDto);
-        mailSender.sendRepairRequestToCustomer(customer, newRepair);
-        return "redirect:/repair/index";
+
+        try {
+            Customer customer = customerPrincipal.getCustomer();
+            Repair newRepair = externalRepairService.createNewRepairItemByCustomer(customer, repairDto);
+            mailSender.sendRepairRequestToCustomer(customer, newRepair);
+            return "redirect:/repair/index";
+        } catch (InvalidStatusException e) {
+            model.addAttribute("repair", repairDto);
+            model.addAttribute("messageError", e.getMessage());
+            return "repair/add";
+        }
     }
 
     @GetMapping("{id}/delete")
@@ -84,12 +92,13 @@ public class RepairController {
             @PathVariable("id") String id,
             Model model
     ) {
+        int repairId = Integer.parseInt(id);
+        model.addAttribute("repairId", repairId);
+
         try {
-            int repairId = Integer.parseInt(id);
             Customer customer = customerPrincipal.getCustomer();
-            Repair repair = externalRepairService.findCustomerRepairToDelete(customer, repairId);
-            model.addAttribute("repair", repair);
-        } catch (ItemNotFoundException | NumberFormatException e) {
+            externalRepairService.findCustomerRepairToDelete(customer, repairId);
+        } catch (ItemNotFoundException e) {
             model.addAttribute("messageError", e.getMessage());
         }
 
@@ -102,8 +111,10 @@ public class RepairController {
             @PathVariable("id") String id,
             Model model
     ) {
+        int repairId = Integer.parseInt(id);
+        model.addAttribute("repairId", repairId);
+
         try {
-            int repairId = Integer.parseInt(id);
             Customer customer = customerPrincipal.getCustomer();
             externalRepairService.deleteCustomerRepair(customer, repairId);
         } catch (ItemNotFoundException e) {
@@ -113,4 +124,35 @@ public class RepairController {
 
         return "redirect:/repair/index";
     }
+
+    @GetMapping("{repair}/payment")
+    public String confirmPaymentPage(@PathVariable("repair") Repair repair, Model model) {
+        model.addAttribute("repair", repair);
+        return "repair/payment";
+    }
+
+    @PostMapping("{repair}/payment-confirm")
+    public String confirmPayment(@PathVariable("repair") Repair repair, Model model) {
+        model.addAttribute("repair", repair);
+        try {
+            externalRepairService.confirmPaymentByCustomer(repair);
+            return "redirect:/repair/{repair}/view";
+        } catch (InvalidStatusException e) {
+            model.addAttribute("messageError", e.getMessage());
+            return "repair/payment";
+        }
+    }
+
+    @PostMapping("{repair}/payment-cancel")
+    public String cancelPayment(@PathVariable("repair") Repair repair, Model model) {
+        model.addAttribute("repair", repair);
+        try {
+            externalRepairService.cancelPaymentByCustomer(repair);
+            return "redirect:/repair/{repair}/view";
+        } catch (InvalidStatusException e) {
+            model.addAttribute("messageError", e.getMessage());
+            return "repair/payment";
+        }
+    }
+
 }

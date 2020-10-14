@@ -54,6 +54,15 @@
                     </div>
                 </div>
                 <div class="form-row">
+                    <div class="form-group form-check">
+                        <input th:class="${#fields.errors('deviceWarranty').isEmpty()} ? 'form-check-label' : 'form-check-label is-invalid'"
+                               th:field="*{deviceWarranty}" type="checkbox"/>
+                        <label th:for="deviceWarranty1">Ar galioja garantija?</label>
+                        <div class="invalid-feedback" th:each="error: ${#fields.errors('deviceWarranty')}"
+                             th:text="${error}"></div>
+                    </div>
+                </div>
+                <div class="form-row">
                     <div class="col-md-12 form-group">
                         <label th:for="description">Gedimo aprašymas</label>
                         <textarea

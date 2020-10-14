@@ -38,6 +38,15 @@ public class CustomerService {
         return (List<Customer>) customerRepository.findAll();
     }
 
+    public Customer findById(int id) throws CustomerNotFoundInDBException {
+        Optional<Customer> customer = customerRepository.findById(id);
+        if (customer.isEmpty()) {
+            throw new CustomerNotFoundInDBException();
+        }
+
+        return customer.get();
+    }
+
     public Customer findCustomerAccountByEmail(String email) throws CustomerNotFoundInDBException {
         Optional<Customer> customer = customerRepository.findByEmail(email);
         if (customer.isEmpty()) {

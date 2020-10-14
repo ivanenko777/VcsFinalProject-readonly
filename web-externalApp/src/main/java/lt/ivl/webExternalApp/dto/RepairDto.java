@@ -24,6 +24,9 @@ public class RepairDto {
     @NotEmpty(message = "Laukas negali būti tuščias.")
     private String description;
 
+    @NotNull
+    private boolean deviceWarranty;
+
     public String getDeviceType() {
         return deviceType;
     }
@@ -62,5 +65,13 @@ public class RepairDto {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isDeviceWarranty() {
+        return deviceWarranty;
+    }
+
+    public void setDeviceWarranty(boolean deviceWarranty) {
+        this.deviceWarranty = deviceWarranty;
     }
 }

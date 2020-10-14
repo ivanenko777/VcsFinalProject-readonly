@@ -14,15 +14,14 @@ public class Repair {
     @Enumerated(EnumType.STRING)
     private RepairStatus status;
 
+    @Column(name = "store")
     private String stored;
-
-    @OneToMany(mappedBy = "repair", fetch = FetchType.LAZY)
-    private List<RepairStatusHistory> statusHistory;
 
     private String deviceType;
     private String deviceManufacturer;
     private String deviceModel;
     private String deviceSerialNo;
+    private boolean deviceWarranty;
 
     @Column(columnDefinition = "TEXT")
     private String description;
@@ -31,8 +30,17 @@ public class Repair {
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "confirmed_employee_id")
+    private Employee confirmedBy;
+
+    @OneToMany(mappedBy = "repair", fetch = FetchType.LAZY)
+    @OrderBy("createdAt DESC")
+    private List<RepairStatusHistory> statusHistory;
+
     private Timestamp createdAt;
     private Timestamp updatedAt;
+    private Timestamp confirmedAt;
 
     public Repair() {
         this.updatedAt = timeNow();
@@ -44,6 +52,7 @@ public class Repair {
             String deviceManufacturer,
             String deviceModel,
             String deviceSerialNo,
+            boolean deviceWarranty,
             String description
     ) {
         this.customer = customer;
@@ -51,6 +60,7 @@ public class Repair {
         this.deviceManufacturer = deviceManufacturer;
         this.deviceModel = deviceModel;
         this.deviceSerialNo = deviceSerialNo;
+        this.deviceWarranty = deviceWarranty;
         this.description = description;
 
         this.createdAt = timeNow();
@@ -147,6 +157,31 @@ public class Repair {
 
     public void setStored(String stored) {
         this.stored = stored;
+    }
+
+    public Employee getConfirmedBy() {
+        return confirmedBy;
+    }
+
+    public void setConfirmedBy(Employee confirmedBy) {
+        this.confirmedBy = confirmedBy;
+    }
+
+    public Timestamp getConfirmedAt() {
+        return confirmedAt;
+    }
+
+    public void setConfirmedAt(Timestamp confirmedAt) {
+        this.updatedAt = timeNow();
+        this.confirmedAt = confirmedAt;
+    }
+
+    public boolean isDeviceWarranty() {
+        return deviceWarranty;
+    }
+
+    public void setDeviceWarranty(boolean deviceWarranty) {
+        this.deviceWarranty = deviceWarranty;
     }
 
     private Timestamp timeNow() {

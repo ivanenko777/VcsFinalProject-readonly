@@ -84,11 +84,19 @@ public class Customer {
         this.repairs = repairs;
     }
 
-    public boolean getIsAccount(){
+    public boolean getIsAccount() {
         return password != null && password.length() > 0;
     }
 
-    public boolean getIsAccountActive(){
+    public boolean getIsAccountActive() {
         return password != null && password.length() > 0 && active;
+    }
+
+    public String getFullName() {
+        return firstName + ' ' + lastName;
+    }
+
+    public String getFullNameWithEmail() {
+        return String.format("%s %s [ %s ]", firstName, lastName, email);
     }
 }
