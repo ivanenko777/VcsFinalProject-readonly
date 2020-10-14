@@ -10,7 +10,6 @@ public enum RepairStatus {
     PAYMENT_CANCELED("Mokėjimas atmestas", "Vykdoma"),
     REPAIR_WAITING("Laukiama remonto", "Vykdoma"),
     REPAIR("Remontas", "Vykdoma"),
-    RETURN_WITH_PAYMENT("Grąžinti su mokėjimu", "Laukiame atvykstant"),
     RETURN("Grąžinti", "Laukiame atvykstant"),
     COMPLETED("Užbaigtas", "Užbaigtas");
 
