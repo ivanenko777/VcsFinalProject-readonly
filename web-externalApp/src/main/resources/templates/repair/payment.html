@@ -24,13 +24,13 @@
                     </li>
                     <li class="list-inline-item">
                         <form action="#" autocomplete="off" class="form-inline" method="post"
-                              th:action="@{/repair/{id}/confirm-payment(id=${repair.id})}">
+                              th:action="@{/repair/{id}/payment-confirm(id=${repair.id})}">
                             <input class="btn btn-success btn-lg font-weight-bold" type="submit" value="Patvirtinti">
                         </form>
                     </li>
                     <li class="list-inline-item">
                         <form action="#" autocomplete="off" class="form-inline" method="post"
-                              th:action="@{/repair/{id}/cancel-payment(id=${repair.id})}">
+                              th:action="@{/repair/{id}/payment-cancel(id=${repair.id})}">
                             <input class="btn btn-danger font-weight-bold" type="submit" value="Atmesti">
                         </form>
                     </li>

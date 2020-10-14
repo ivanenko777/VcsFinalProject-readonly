@@ -131,7 +131,7 @@ public class RepairController {
         return "repair/payment";
     }
 
-    @PostMapping("{repair}/confirm-payment")
+    @PostMapping("{repair}/payment-confirm")
     public String confirmPayment(@PathVariable("repair") Repair repair, Model model) {
         model.addAttribute("repair", repair);
         try {
@@ -143,7 +143,7 @@ public class RepairController {
         }
     }
 
-    @PostMapping("{repair}/cancel-payment")
+    @PostMapping("{repair}/payment-cancel")
     public String cancelPayment(@PathVariable("repair") Repair repair, Model model) {
         model.addAttribute("repair", repair);
         try {
