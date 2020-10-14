@@ -11,6 +11,7 @@ import lt.ivl.components.service.CustomerService;
 import lt.ivl.components.service.RepairService;
 import lt.ivl.webInternalApp.dto.RepairDto;
 import lt.ivl.webInternalApp.dto.RepairStatusNoteDto;
+import lt.ivl.webInternalApp.dto.RepairStatusQuestionDto;
 import lt.ivl.webInternalApp.dto.RepairStatusStoredDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -160,6 +161,24 @@ public class InternalRepairService {
         RepairStatus currentStatus = repair.getStatus();
         RepairStatus newStatus = RepairStatus.REPAIR;
         repair = changeRepairStatus(repair, currentStatus, newStatus, employee, null, null);
+        return repair;
+    }
+
+    public Repair finishRepair(
+            Repair repair,
+            RepairStatusStoredDto repairStatusStoredDto,
+            RepairStatusNoteDto repairStatusNoteDto,
+            RepairStatusQuestionDto repairStatusQuestionDto,
+            Employee employee
+    ) throws InvalidStatusException {
+        boolean isRepaired = repairStatusQuestionDto.getAnswer();
+
+        String stored = repairStatusStoredDto.getStored();
+        String note = repairStatusNoteDto.getNote();
+        RepairStatus currentStatus = repair.getStatus();
+        RepairStatus newStatus = isRepaired ? RepairStatus.RETURN : RepairStatus.REPAIR_WAITING;
+
+        repair = changeRepairStatus(repair, currentStatus, newStatus, employee, note, stored);
         return repair;
     }
 

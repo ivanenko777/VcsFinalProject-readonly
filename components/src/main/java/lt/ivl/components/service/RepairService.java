@@ -104,10 +104,12 @@ public class RepairService {
                 allowedStatuses.addAll(Collections.singletonList(RepairStatus.PENDING));
                 break;
             case DIAGNOSTIC_WAITING:
-                allowedStatuses.addAll(Collections.singletonList(RepairStatus.CONFIRMED));
+                allowedStatuses.addAll(List.of(RepairStatus.CONFIRMED));
                 break;
             case DIAGNOSTIC:
-                allowedStatuses.addAll(Collections.singletonList(RepairStatus.DIAGNOSTIC_WAITING));
+                allowedStatuses.addAll(List.of(
+                        RepairStatus.DIAGNOSTIC_WAITING,
+                        RepairStatus.REPAIR_WAITING));
                 break;
             case PAYMENT_CONFIRM_WAITING:
                 allowedStatuses.addAll(Collections.singletonList(RepairStatus.DIAGNOSTIC));
@@ -117,12 +119,17 @@ public class RepairService {
                 allowedStatuses.addAll(Collections.singletonList(RepairStatus.PAYMENT_CONFIRM_WAITING));
                 break;
             case REPAIR_WAITING:
-                allowedStatuses.addAll(List.of(RepairStatus.DIAGNOSTIC, RepairStatus.PAYMENT_CONFIRMED));
+                allowedStatuses.addAll(List.of(
+                        RepairStatus.DIAGNOSTIC,
+                        RepairStatus.PAYMENT_CONFIRMED,
+                        RepairStatus.REPAIR));
                 break;
             case REPAIR:
                 allowedStatuses.addAll(Collections.singletonList(RepairStatus.REPAIR_WAITING));
             case RETURN:
-                allowedStatuses.addAll(List.of(RepairStatus.PAYMENT_CANCELED));
+                allowedStatuses.addAll(List.of(
+                        RepairStatus.PAYMENT_CANCELED,
+                        RepairStatus.REPAIR));
                 break;
         }
 

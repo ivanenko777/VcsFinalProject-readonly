@@ -6,6 +6,7 @@ import lt.ivl.components.exception.InvalidStatusException;
 import lt.ivl.components.exception.ItemNotFoundException;
 import lt.ivl.webInternalApp.dto.RepairDto;
 import lt.ivl.webInternalApp.dto.RepairStatusNoteDto;
+import lt.ivl.webInternalApp.dto.RepairStatusQuestionDto;
 import lt.ivl.webInternalApp.dto.RepairStatusStoredDto;
 import lt.ivl.webInternalApp.pdf.PdfGenerator;
 import lt.ivl.webInternalApp.security.EmployeePrincipal;
@@ -343,6 +344,49 @@ public class ManageRepairController {
             model.addAttribute("repair", repair);
             model.addAttribute("messageError", e.getMessage());
             return "repair/repair-start";
+        }
+    }
+
+    @GetMapping("{repair}/finish-repair")
+    public String showFinishRepair(@PathVariable("repair") Repair repair, Model model) {
+        model.addAttribute("repairStatusStoredDto", new RepairStatusStoredDto());
+        model.addAttribute("repairStatusNoteDto", new RepairStatusNoteDto());
+        model.addAttribute("repairStatusQuestionDto", new RepairStatusQuestionDto());
+        model.addAttribute("repair", repair);
+        return "repair/repair-finish";
+    }
+
+    @PostMapping("{repair}/finish-repair")
+    public String finishRepair(
+            @AuthenticationPrincipal EmployeePrincipal employeePrincipal,
+            @PathVariable("repair") Repair repair,
+            @Valid @ModelAttribute("repairStatusQuestionDto") RepairStatusQuestionDto repairStatusQuestionDto,
+            BindingResult repairStatusQuestionDtoBindingResult,
+            @Valid @ModelAttribute("repairStatusStoredDto") RepairStatusStoredDto repairStatusStoredDto,
+            BindingResult repairStatusStoredDtoBindingResult,
+            @Valid @ModelAttribute("repairStatusNoteDto") RepairStatusNoteDto repairStatusNoteDto,
+            BindingResult repairStatusNoteDtoBindingResult,
+            Model model
+    ) {
+        model.addAttribute("repairStatusStoredDto", repairStatusStoredDto);
+        model.addAttribute("repairStatusNoteDto", repairStatusNoteDto);
+        model.addAttribute("repairStatusQuestionDto", repairStatusQuestionDto);
+        model.addAttribute("repair", repair);
+
+        if (repairStatusStoredDtoBindingResult.hasErrors()
+                || repairStatusNoteDtoBindingResult.hasErrors()
+                || repairStatusQuestionDtoBindingResult.hasErrors()) {
+            model.addAttribute("messageError", "Formoje yra klaidų");
+            return "repair/repair-finish";
+        }
+
+        try {
+            Employee employee = employeePrincipal.getEmployee();
+            internalRepairService.finishRepair(repair, repairStatusStoredDto, repairStatusNoteDto, repairStatusQuestionDto, employee);
+            return "redirect:/repair/{repair}/view";
+        } catch (InvalidStatusException e) {
+            model.addAttribute("messageError", e.getMessage());
+            return "repair/repair-finish";
         }
     }
 }
