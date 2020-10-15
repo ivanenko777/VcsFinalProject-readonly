@@ -3,6 +3,7 @@
       layout:decorate="~{_layouts/layout-filter}"
       th:with="pageName=${'#' + repair.id + ' remontas'}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -16,42 +17,52 @@
             <div th:replace="repair/_fragments :: repairNav"></div>
             <hr/>
             <a class="btn btn-outline-success btn-block font-weight-bold"
+               sec:authorize="hasAnyAuthority('ADMIN', 'MANAGER')"
                th:href="@{/repair/{id}/edit(id=${repair.id})}"
                th:if="${repair.status.name() == 'PENDING'}"
             >Redaguoti</a>
             <a class="btn btn-outline-danger btn-block font-weight-bold"
+               sec:authorize="hasAnyAuthority('ADMIN', 'MANAGER')"
                th:href="@{/repair/{id}/delete(id=${repair.id})}"
                th:if="${repair.status.name() == 'PENDING'}"
             >Ištrinti</a>
             <a class="btn btn-outline-secondary btn-block font-weight-bold"
+               sec:authorize="hasAnyAuthority('ADMIN', 'MANAGER')"
                th:href="@{/repair/{id}/export_confirmed_pdf(id=${repair.id})}"
                th:if="${repair.status.name() != 'PENDING'}"
             >Patvirtinimo PDF</a>
             <a class="btn btn-outline-info btn-block font-weight-bold"
+               sec:authorize="hasAnyAuthority('ADMIN', 'MANAGER')"
                th:href="@{/repair/{id}/stored(id=${repair.id})}"
                th:if="${utils.checkButtonVisibility(repair.status.name(), 'DIAGNOSTIC_WAITING')}"
             >Paimti</a>
             <a class="btn btn-outline-info btn-block font-weight-bold"
+               sec:authorize="hasAnyAuthority('ADMIN', 'TECHNICIAN')"
                th:href="@{/repair/{id}/start-diagnostic(id=${repair.id})}"
                th:if="${utils.checkButtonVisibility(repair.status.name(), 'DIAGNOSTIC')}"
             >Pradėti diagnostiką</a>
             <a class="btn btn-outline-info btn-block font-weight-bold"
+               sec:authorize="hasAnyAuthority('ADMIN', 'TECHNICIAN')"
                th:href="@{/repair/{id}/finish-diagnostic(id=${repair.id})}"
                th:if="${repair.status.name() == 'DIAGNOSTIC'}"
             >Pabaigti diagnostiką</a>
             <a class="btn btn-outline-info btn-block font-weight-bold"
+               sec:authorize="hasAnyAuthority('ADMIN', 'MANAGER')"
                th:href="@{/repair/{id}/payment(id=${repair.id})}"
                th:if="${repair.status.name() == 'PAYMENT_CONFIRM_WAITING'}"
             >Mokėjimo patvirtinimas</a>
             <a class="btn btn-outline-info btn-block font-weight-bold"
+               sec:authorize="hasAnyAuthority('ADMIN', 'TECHNICIAN')"
                th:href="@{/repair/{id}/start-repair(id=${repair.id})}"
                th:if="${utils.checkButtonVisibility(repair.status.name(), 'REPAIR') && repair.status.name()!= 'REPAIR'}"
             >Pradėti remontą</a>
             <a class="btn btn-outline-info btn-block font-weight-bold"
+               sec:authorize="hasAnyAuthority('ADMIN', 'TECHNICIAN')"
                th:href="@{/repair/{id}/finish-repair(id=${repair.id})}"
                th:if="${repair.status.name() == 'REPAIR'}"
             >Pabaigti remontą</a>
             <a class="btn btn-outline-info btn-block font-weight-bold"
+               sec:authorize="hasAnyAuthority('ADMIN', 'MANAGER')"
                th:href="@{/repair/{id}/return(id=${repair.id})}"
                th:if="${utils.checkButtonVisibility(repair.status.name(), 'COMPLETED')}"
             >Grąžinti</a>

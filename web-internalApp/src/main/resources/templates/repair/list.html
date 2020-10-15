@@ -3,6 +3,7 @@
       layout:decorate="~{_layouts/layout-filter}"
       th:with="pageName=${'Remontų sąrašas'}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -13,7 +14,9 @@
     <div class="row pt-2">
         <div class="col-md-3">
             <h3 class="pb-2" th:text="${pageName}"></h3>
-            <a class="btn btn-success btn-block font-weight-bold" th:href="@{/repair/add}">Pridėti naują remontą</a>
+            <a class="btn btn-success btn-block font-weight-bold"
+               sec:authorize="hasAnyAuthority('ADMIN', 'MANAGER')"
+               th:href="@{/repair/add}">Pridėti naują remontą</a>
             <h5 class="pt-3">Filtras</h5>
         </div>
         <div class="col-md-9">

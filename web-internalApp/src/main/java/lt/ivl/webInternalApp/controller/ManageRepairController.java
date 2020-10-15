@@ -15,6 +15,7 @@ import lt.ivl.webInternalApp.service.InternalRepairService;
 import lt.ivl.webInternalApp.service.MailSender;
 import lt.ivl.webInternalApp.utils.UtilsHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -41,6 +42,7 @@ public class ManageRepairController {
     private MailSender mailSender;
 
     @GetMapping("/list")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER', 'TECHNICIAN')")
     public String list(Model model) {
         List<Repair> repairList = internalRepairService.findAll();
         model.addAttribute("repairList", repairList);
@@ -48,6 +50,7 @@ public class ManageRepairController {
     }
 
     @GetMapping("/{repair}/view")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER', 'TECHNICIAN')")
     public String view(@PathVariable("repair") Repair repair, Model model) {
         model.addAttribute("utils", UtilsHelper.getInstance());
         model.addAttribute("repair", repair);
@@ -55,6 +58,7 @@ public class ManageRepairController {
     }
 
     @GetMapping("/{repair}/history")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER', 'TECHNICIAN')")
     public String statusHistory(@PathVariable("repair") Repair repair, Model model) {
         List<RepairStatusHistory> statusHistoryList = repair.getStatusHistory();
         model.addAttribute("statusHistoryList", statusHistoryList);
@@ -63,6 +67,7 @@ public class ManageRepairController {
     }
 
     @GetMapping("/add")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     public String showCreateForm(Model model) {
         List<Customer> customerList = internalCustomerService.findAll();
         model.addAttribute("customerList", customerList);
@@ -72,6 +77,7 @@ public class ManageRepairController {
     }
 
     @PostMapping("/add")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     public String create(
             @AuthenticationPrincipal EmployeePrincipal employeePrincipal,
             @ModelAttribute("repairDto") @Valid RepairDto repairDto,
@@ -101,6 +107,7 @@ public class ManageRepairController {
     }
 
     @GetMapping("/{repair}/edit")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     public String showUpdateForm(@PathVariable("repair") Repair repair, Model model) {
         List<Customer> customerList = internalCustomerService.findAll();
         model.addAttribute("customerList", customerList);
@@ -113,6 +120,7 @@ public class ManageRepairController {
     }
 
     @PostMapping("/{repair}/edit")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     public String update(
             @AuthenticationPrincipal EmployeePrincipal employeePrincipal,
             @PathVariable("repair") Repair repair,
@@ -142,6 +150,7 @@ public class ManageRepairController {
     }
 
     @GetMapping("/{id}/delete")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     public String delete(@PathVariable("id") String id, Model model) {
         int repairId = Integer.parseInt(id);
         model.addAttribute("repairId", repairId);
@@ -155,6 +164,7 @@ public class ManageRepairController {
     }
 
     @PostMapping("/{id}/delete")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     public String destroy(@PathVariable("id") String id, Model model) {
         int repairId = Integer.parseInt(id);
         model.addAttribute("repairId", repairId);
@@ -169,6 +179,7 @@ public class ManageRepairController {
     }
 
     @GetMapping(value = "/{repair}/export_confirmed_pdf", produces = {"application/json", "application/x-pdf"})
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     public void exportConfirmedPdf(@PathVariable("repair") Repair repair, HttpServletResponse response) {
         try {
             pdfGenerator.generateRepairConfirmedPdf(repair, response);
@@ -178,6 +189,7 @@ public class ManageRepairController {
     }
 
     @GetMapping("{repair}/stored")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     public String showStoredForm(@PathVariable("repair") Repair repair, Model model) {
         model.addAttribute("repairStatusStoredDto", new RepairStatusStoredDto());
         model.addAttribute("repairStatusNoteDto", new RepairStatusNoteDto());
@@ -186,6 +198,7 @@ public class ManageRepairController {
     }
 
     @PostMapping("{repair}/stored")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     public String stored(
             @AuthenticationPrincipal EmployeePrincipal employeePrincipal,
             @PathVariable("repair") Repair repair,
@@ -215,12 +228,14 @@ public class ManageRepairController {
     }
 
     @GetMapping("{repair}/start-diagnostic")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'TECHNICIAN')")
     public String showStartDiagnostic(@PathVariable("repair") Repair repair, Model model) {
         model.addAttribute("repair", repair);
         return "repair/diagnostic-start";
     }
 
     @PostMapping("{repair}/start-diagnostic")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'TECHNICIAN')")
     public String startDiagnostic(
             @AuthenticationPrincipal EmployeePrincipal employeePrincipal,
             @PathVariable("repair") Repair repair,
@@ -238,6 +253,7 @@ public class ManageRepairController {
     }
 
     @GetMapping("{repair}/finish-diagnostic")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'TECHNICIAN')")
     public String showFinishDiagnostic(@PathVariable("repair") Repair repair, Model model) {
         boolean deviceWarranty = repair.isDeviceWarranty();
         if (deviceWarranty) model.addAttribute("messageInfo", "Įrenginiui galioja garantija. Nemokamas remontas.");
@@ -250,6 +266,7 @@ public class ManageRepairController {
     }
 
     @PostMapping("{repair}/finish-diagnostic")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'TECHNICIAN')")
     public String finishDiagnostic(
             @AuthenticationPrincipal EmployeePrincipal employeePrincipal,
             @PathVariable("repair") Repair repair,
@@ -286,12 +303,14 @@ public class ManageRepairController {
     }
 
     @GetMapping("{repair}/payment")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     public String confirmPaymentPage(@PathVariable("repair") Repair repair, Model model) {
         model.addAttribute("repair", repair);
         return "repair/payment";
     }
 
     @PostMapping("{repair}/payment-confirm")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     public String confirmPayment(
             @AuthenticationPrincipal EmployeePrincipal employeePrincipal,
             @PathVariable("repair") Repair repair,
@@ -309,6 +328,7 @@ public class ManageRepairController {
     }
 
     @PostMapping("{repair}/payment-cancel")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     public String cancelPayment(
             @AuthenticationPrincipal EmployeePrincipal employeePrincipal,
             @PathVariable("repair") Repair repair,
@@ -326,12 +346,14 @@ public class ManageRepairController {
     }
 
     @GetMapping("{repair}/start-repair")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'TECHNICIAN')")
     public String showStartRepair(@PathVariable("repair") Repair repair, Model model) {
         model.addAttribute("repair", repair);
         return "repair/repair-start";
     }
 
     @PostMapping("{repair}/start-repair")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'TECHNICIAN')")
     public String startRepair(
             @AuthenticationPrincipal EmployeePrincipal employeePrincipal,
             @PathVariable("repair") Repair repair,
@@ -349,6 +371,7 @@ public class ManageRepairController {
     }
 
     @GetMapping("{repair}/finish-repair")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'TECHNICIAN')")
     public String showFinishRepair(@PathVariable("repair") Repair repair, Model model) {
         model.addAttribute("repairStatusStoredDto", new RepairStatusStoredDto());
         model.addAttribute("repairStatusNoteDto", new RepairStatusNoteDto());
@@ -358,6 +381,7 @@ public class ManageRepairController {
     }
 
     @PostMapping("{repair}/finish-repair")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'TECHNICIAN')")
     public String finishRepair(
             @AuthenticationPrincipal EmployeePrincipal employeePrincipal,
             @PathVariable("repair") Repair repair,
@@ -392,6 +416,7 @@ public class ManageRepairController {
     }
 
     @GetMapping("{repair}/return")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     public String showCompleteForm(@PathVariable("repair") Repair repair, Model model) {
         boolean deviceWarranty = repair.isDeviceWarranty();
         if (deviceWarranty) model.addAttribute("messageInfo", "Įrenginiui galioja garantija. Nemokamas remontas.");
@@ -403,6 +428,7 @@ public class ManageRepairController {
     }
 
     @PostMapping("{repair}/return")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'MANAGER')")
     public String complete(
             @AuthenticationPrincipal EmployeePrincipal employeePrincipal,
             @PathVariable("repair") Repair repair,
