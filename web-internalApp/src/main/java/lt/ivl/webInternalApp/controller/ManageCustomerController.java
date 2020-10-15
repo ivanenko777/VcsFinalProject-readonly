@@ -20,14 +20,14 @@ public class ManageCustomerController {
     private InternalCustomerService internalCustomerService;
 
     @GetMapping("/list")
-    private String list(Model model) {
+    public String list(Model model) {
         List<Customer> customerList = internalCustomerService.findAll();
         model.addAttribute("customerList", customerList);
         return "manage-customer/list";
     }
 
     @GetMapping("/{customer}/view")
-    private String view(@PathVariable Customer customer, Model model) {
+    public String view(@PathVariable Customer customer, Model model) {
         model.addAttribute("customer", customer);
         return "manage-customer/view";
     }
