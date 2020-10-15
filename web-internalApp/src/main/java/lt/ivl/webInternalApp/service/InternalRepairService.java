@@ -205,7 +205,12 @@ public class InternalRepairService {
             String stored
     ) throws InvalidStatusException {
         componentRepairService.verifyNewStatus(currentStatus, newStatus);
-        repair.setConfirmedAt(new Timestamp(System.currentTimeMillis()));
+
+        if (newStatus == RepairStatus.CONFIRMED) {
+            repair.setConfirmedBy(employee);
+            repair.setConfirmedAt(new Timestamp(System.currentTimeMillis()));
+        }
+
         repair = componentRepairService.changeRepairStatus(repair, newStatus, employee, note, stored);
         return repair;
     }

@@ -42,11 +42,10 @@ public class RepairService {
         repair.setStatus(status);
         statusHistory.getRepair().setStatus(status);
 
-        repair.setConfirmedBy(employee);
-        statusHistory.getRepair().setConfirmedBy(employee);
-
         repair.setStored(stored);
         statusHistory.getRepair().setStored(stored);
+
+        repair.setUpdatedAt(statusHistory.getCreatedAt());
         repairStatusHistoryRepository.save(statusHistory);
 
         return repair;
