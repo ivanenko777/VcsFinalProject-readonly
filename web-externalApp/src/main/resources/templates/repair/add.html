@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en"
+      layout:decorate="~{_layouts/layout}"
+      th:with="pageName=${'Registruoti naują remontą'}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE" th:text="${pageName}">...</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="row justify-content-center align-items-center pt-2 pt-2">
+        <h4 th:text="${pageName}"></h4>
+    </div>
+
+    <div class="row justify-content-center align-items-center pt-2 pt-2">
+        <div class="col-9">
+
+            <div th:replace="_layouts/_fragments :: messages"></div>
+
+            <form action="#" autocomplete="off" method="post" th:action="@{/repair/add}"
+                  th:object="${repair}">
+                <div class="form-row">
+                    <div class="col-md-6 form-group">
+                        <label th:for="firstName">Įrenginio tipas</label>
+                        <input th:class="${#fields.errors('deviceType').isEmpty()} ? 'form-control' : 'form-control is-invalid'"
+                               th:field="*{deviceType}" type="text"/>
+                        <div class="invalid-feedback" th:each="error: ${#fields.errors('deviceType')}"
+                             th:text="${error}"></div>
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label th:for="firstName">Serijinis numeris</label>
+                        <input th:class="${#fields.errors('deviceSerialNo').isEmpty()} ? 'form-control' : 'form-control is-invalid'"
+                               th:field="*{deviceSerialNo}" type="text"/>
+                        <div class="invalid-feedback" th:each="error: ${#fields.errors('deviceSerialNo')}"
+                             th:text="${error}"></div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-6 form-group">
+                        <label th:for="firstName">Įrenginio gamintojas</label>
+                        <input th:class="${#fields.errors('deviceManufacturer').isEmpty()} ? 'form-control' : 'form-control is-invalid'"
+                               th:field="*{deviceManufacturer}" type="text"/>
+                        <div class="invalid-feedback" th:each="error: ${#fields.errors('deviceManufacturer')}"
+                             th:text="${error}"></div>
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label th:for="firstName">Įrenginio modelis</label>
+                        <input th:class="${#fields.errors('deviceModel').isEmpty()} ? 'form-control' : 'form-control is-invalid'"
+                               th:field="*{deviceModel}" type="text"/>
+                        <div class="invalid-feedback" th:each="error: ${#fields.errors('deviceModel')}"
+                             th:text="${error}"></div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group form-check">
+                        <input th:class="${#fields.errors('deviceWarranty').isEmpty()} ? 'form-check-label' : 'form-check-label is-invalid'"
+                               th:field="*{deviceWarranty}" type="checkbox"/>
+                        <label th:for="deviceWarranty1">Ar galioja garantija?</label>
+                        <div class="invalid-feedback" th:each="error: ${#fields.errors('deviceWarranty')}"
+                             th:text="${error}"></div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-12 form-group">
+                        <label th:for="description">Gedimo aprašymas</label>
+                        <textarea
+                                rows="3"
+                                th:class="${#fields.errors('description').isEmpty()} ? 'form-control' : 'form-control is-invalid'"
+                                th:field="*{description}"></textarea>
+                        <div class="invalid-feedback" th:each="error: ${#fields.errors('description')}"
+                             th:text="${error}"></div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="col-md-12 form-group">
+                        <div class="text-center">
+                            <a class="btn btn-outline-secondary font-weight-bold" th:href="@{/repair/index}">&laquo;
+                                Atgal</a>
+                            <input class="btn btn-success" type="submit" value="Išsaugoti">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>

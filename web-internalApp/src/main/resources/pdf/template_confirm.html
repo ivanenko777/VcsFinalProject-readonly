@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>
+    <title></title>
+    <style type='text/css'>
+        body {
+            font-family: 'Arial Unicode MS';
+            font-size: 12px;
+        }
+
+        @page {
+            margin-top: 2cm;
+            margin-left: 2cm;
+            margin-right: 2cm;
+            margin-bottom: 2cm;
+
+            size: A4 portrait;
+        }
+    </style>
+</head>
+<body>
+<h1>Užsakymas [[${data.repairId}]]</h1>
+<div>[[${data.confirmedAt}]]</div>
+<br/>
+
+<h5>Aprašymas</h5>
+<div>Tipas [[${data.deviceType}]]</div>
+<div>Gamintojas [[${data.deviceManufacturer}]]</div>
+<div>Modelis [[${data.deviceModel}]]</div>
+<div>Serijinis numeris [[${data.deviceSerialNo}]]</div>
+<div>Gedimo aprašymas [[${data.description}]]</div>
+<br/>
+
+<h5>Klientas</h5>
+<div>Vardas, pavardė [[${data.customerFullName}]]</div>
+<div>El. pašto adresas [[${data.customerEmail}]]</div>
+<div>Modelis [[${data.customerPhone}]]</div>
+<br/>
+
+<h5>Darbuotojas</h5>
+<div>Vardas, pavardė [[${data.confirmedByFullName}]]</div>
+<div>El. pašto adresas [[${data.confirmedByEmail}]]</div>
+<div>Modelis [[${data.confirmedByPhone}]]</div>
+
+</body>
+</html>

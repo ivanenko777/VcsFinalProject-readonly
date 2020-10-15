@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en"
+      layout:decorate="~{_layouts/layout-filter}"
+      th:with="pageName=${'#' + repair.id + ' istorija'}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE" th:text="${pageName}">...</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="row pt-2">
+        <div class="col-md-3">
+            <h3 class="pb-2" th:text="${pageName}"></h3>
+            <div th:replace="repair/_fragments :: repairNav"></div>
+        </div>
+
+        <div class="col-md-9">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Status</th>
+                    <th scope="col">Data</th>
+                    <th scope="col">Vartotojas</th>
+                    <th scope="col">Pastabos</th>
+                    <th scope="col">Saugomas</th>
+                </tr>
+                </thead>
+                <tbody th:each="statusHistory : ${statusHistoryList}">
+                <tr th:classappend="${statusHistory.status.name() == 'PAYMENT_CONFIRM_WAITING'} ? 'table-warning' : ''">
+                    <td th:text="${statusHistory.status.getMessageForEmployee()}"></td>
+                    <td th:text="${#dates.format(statusHistory.createdAt, 'yyyy-MM-dd HH:mm')}"></td>
+                    <td>
+                        <span th:text="${statusHistory.employee} ? ${statusHistory.employee.fullName} : '[ klientas ]'"></span>
+                    </td>
+                    <td th:utext="${#strings.replace(statusHistory.note, '&#10;', '&lt;br&gt;')}"></td>
+                    <td th:text="${statusHistory.stored}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>

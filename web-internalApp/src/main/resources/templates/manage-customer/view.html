@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en"
+      layout:decorate="~{_layouts/layout}"
+      th:with="pageName=${'Klientas: ' + customer.email}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE" th:text="${pageName}">...</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="row justify-content-center align-items-center pt-2 pt-2">
+        <h4 th:text="${pageName}"></h4>
+    </div>
+
+    <div class="row justify-content-center align-items-center pt-2 pt-2">
+        <div>
+            <a class="btn btn-outline-secondary font-weight-bold mr-auto" th:href="@{/manage-customer/list}">
+                &laquo; Atgal</a>
+            <a class="btn btn-primary font-weight-bold ml-auto"
+               th:href="@{/manage-customer/{customer}/edit(customer=${customer.id})}">
+                Redaguoti</a>
+        </div>
+    </div>
+
+    <div class="row justify-content-center align-items-center pt-2">
+        <div class="col-9">
+            <div class="row mb-1">
+                <div class="col-md-6 font-weight-bold text-right">Vardas</div>
+                <div class="col-md-6" th:text="${customer.firstName}"></div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-md-6 font-weight-bold text-right">Pavardė</div>
+                <div class="col-md-6" th:text="${customer.lastName}"></div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-md-6 font-weight-bold text-right">El. paštas</div>
+                <div class="col-md-6" th:text="${customer.email}"></div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-md-6 font-weight-bold text-right">Telefonas</div>
+                <div class="col-md-6" th:text="${customer.phone}"></div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-md-6 font-weight-bold text-right">El. vartotojas</div>
+                <div class="col-md-6" th:text="${customer.isAccount} ? 'Taip' : 'Ne'"></div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-md-6 font-weight-bold text-right">Aktyvus</div>
+                <div class="col-md-6" th:text="${customer.isAccountActive} ? 'Taip' : 'Ne'"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>

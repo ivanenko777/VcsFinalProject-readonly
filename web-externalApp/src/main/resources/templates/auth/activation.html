@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en"
+      layout:decorate="~{_layouts/layout}"
+      th:with="pageName=${'Vartotojo paskyros aktyvavimas'}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE" th:text="${pageName}">...</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+    <div class="row justify-content-center align-items-center pt-5">
+        <div class="col-9">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title" th:text="${pageName}">...</h4>
+
+                    <div th:replace="_layouts/_fragments :: messages"></div>
+
+                    <div class="text-center">
+                        <a class="card-link" th:href="@{/login}">Prisijungti</a>
+                        <a class="card-link" th:href="@{/registration}">Registruotis</a>
+                        <a class="card-link" th:href="@{/remember-password}">Priminti slaptažodį?</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>

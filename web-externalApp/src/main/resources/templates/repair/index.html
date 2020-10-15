@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en"
+      layout:decorate="~{_layouts/layout}"
+      th:with="pageName=${'Remontų sąrašas'}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE" th:text="${pageName}">...</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <div class="row pt-2" th:if="${repairList.size()}">
+        <div class="col-md-12 d-flex">
+            <h4 th:text="${pageName}"></h4>
+            <a class="btn btn-success font-weight-bold ml-auto" th:href="@{/repair/add}">Registruoti naują remontą</a>
+        </div>
+    </div>
+
+    <div class="row pt-2">
+        <div class="col-md-12" th:switch="${repairList.size()}">
+            <div class="jumbotron text-muted text-center" th:case="0">
+                <h1 class="display-4">Remontų sąrašas tuščias</h1>
+                <hr/>
+                <p class="lead">
+                    <a class="btn btn-success btn-lg ml-auto" th:href="@{/repair/add}">Registruoti naują remontą</a>
+                </p>
+            </div>
+
+            <table class="table" th:case="*">
+                <thead>
+                <tr>
+                    <th scope="col">&num;</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Patvirtinta</th>
+                    <th scope="col">Tipas</th>
+                    <th scope="col">Gamintojas</th>
+                    <th scope="col">Modelis</th>
+                    <th scope="col">Serijinis nr.</th>
+                    <th scope="col">Garantinis</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody th:each="repair : ${repairList}">
+                <tr th:classappend="${repair.status.name() == 'PAYMENT_CONFIRM_WAITING'} ? 'table-warning' : ''">
+                    <td scope="row" th:text="${repair.id}"></td>
+                    <td th:text="${repair.status.getMessageForCustomer()}"></td>
+                    <td th:text="${#dates.format(repair.confirmedAt, 'yyyy-MM-dd')}"></td>
+                    <td th:text="${repair.deviceType}"></td>
+                    <td th:text="${repair.deviceManufacturer}"></td>
+                    <td th:text="${repair.deviceModel}"></td>
+                    <td th:text="${repair.deviceSerialNo}"></td>
+                    <td th:text="${repair.deviceWarranty} ? 'Taip' : 'Ne'"></td>
+                    <td class="text-right">
+                        <a class="btn btn-sm btn-outline-primary font-weight-bold"
+                           th:href="@{/repair/{id}/view(id=${repair.id})}">Plačiau</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>

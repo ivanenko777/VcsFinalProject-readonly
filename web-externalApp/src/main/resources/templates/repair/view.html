@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en"
+      layout:decorate="~{_layouts/layout}"
+      th:with="pageName=${'Užsakymas #' + repair.id}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE" th:text="${pageName}">...</title>
+</head>
+<body>
+<div layout:fragment="content">
+
+    <div class="row justify-content-center align-items-center pt-2 pt-2">
+        <h4 th:text="${pageName}"></h4>
+    </div>
+
+    <div class="row justify-content-center align-items-center pt-2">
+        <div class="col-9">
+            <div class="row mb-1">
+                <div class="col-md-6 font-weight-bold text-right">Užsakymo numeris</div>
+                <div class="col-md-6" th:text="${'#' + repair.id}"></div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-md-6 font-weight-bold text-right">Sukūrimo data</div>
+                <div class="col-md-6" th:text="${#dates.format(repair.createdAt, 'yyyy-MM-dd HH:mm')}"></div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-md-6 font-weight-bold text-right">Parvirtinimo data</div>
+                <div class="col-md-6" th:text="${#dates.format(repair.confirmedAt, 'yyyy-MM-dd HH:mm')}"></div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-md-6 font-weight-bold text-right">Įrenginio tipas</div>
+                <div class="col-md-6" th:text="${repair.deviceType}"></div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-md-6 font-weight-bold text-right">Įrenginio gamintojas</div>
+                <div class="col-md-6" th:text="${repair.deviceManufacturer}"></div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-md-6 font-weight-bold text-right">Įrenginio modelis</div>
+                <div class="col-md-6" th:text="${repair.deviceModel}"></div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-md-6 font-weight-bold text-right">Įrenginio serijinis numeris</div>
+                <div class="col-md-6" th:text="${repair.deviceSerialNo}"></div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-md-6 font-weight-bold text-right">Ar galioja garantija?</div>
+                <div class="col-md-6" th:text="${repair.deviceWarranty} ? 'Taip' : 'Ne'"></div>
+            </div>
+            <div class="row mb-1">
+                <div class="col-md-6 font-weight-bold text-right">Gedimo aprašymas</div>
+                <div class="col-md-6"
+                     th:utext="${#strings.replace(repair.description, '&#10;', '&lt;br&gt;')}"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center align-items-center pt-2 pt-2">
+        <div>
+            <a class="btn btn-outline-secondary font-weight-bold mr-auto" th:href="@{/repair/index}">
+                &laquo; Atgal</a>
+            <a class="btn btn-danger font-weight-bold ml-auto" th:href="@{/repair/{id}/delete(id=${repair.id})}"
+               th:if="${repair.status.name() == 'PENDING'}">
+                Ištrinti remontą</a>
+            <a class="btn btn-success font-weight-bold ml-auto" th:href="@{/repair/{id}/payment(id=${repair.id})}"
+               th:if="${repair.status.name() == 'PAYMENT_CONFIRM_WAITING'}">
+                Mokėjimo patvirtinimas arba atšaukimas</a>
+        </div>
+    </div>
+</div>
+</body>
