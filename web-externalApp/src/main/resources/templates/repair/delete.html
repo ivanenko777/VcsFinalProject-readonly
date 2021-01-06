@@ -20,7 +20,7 @@
                 <div class="form-row">
                     <div class="col-md-12 form-group">
                         <div class="text-center">
-                            <h3 class="pt-5 pb-3" th:text="${'Ar tikrai norite ištrinti #' + repairId +'?'}"></h3>
+                            <h3 class="pt-5 pb-3" th:text="${'Ar norite ištrinti #' + repairId +'?'}"></h3>
                             <a class="btn btn-outline-secondary font-weight-bold"
                                th:href="@{/repair/{id}/view(id=${repairId})}">&nbsp;&nbsp;&nbsp;Ne&nbsp;&nbsp;&nbsp;</a>
                             <input class="btn btn-danger font-weight-bold" type="submit" value="Ištrinti">
