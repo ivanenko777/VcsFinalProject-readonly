@@ -3,14 +3,18 @@
 
 ## Technologies
 * Java 14
-* Spring Framework
+* Spring Framework 2.3.4
   * Spring Security - WebSecurityConfigurerAdapter, UserDetails, UserDetailsService
   * Mail - JavaMailSender, SimpleMailMessage
   * Validation
-* Thymeleaf
-    * Thymeleaf plugins: thymeleaf-layout-dialect, thymeleaf-extras-springsecurity5
-* SQL (MySQL)
-* Bootstrap -> [#12][i12]
+* Thymeleaf 3.0.11
+    * plugins: 
+      * thymeleaf-layout-dialect 2.5.1
+      * thymeleaf-extras-springsecurity5 3.0.4
+* MySQL 
+* Docker 20.10.0
+* Docker compose (Compose file format 3.7)
+* Bootstrap 5.0.0-beta1 -> [#12][i12]
 
 ## Processes
 WIP [#2][i2]
