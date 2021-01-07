@@ -1,5 +1,5 @@
 # Repair Service App (Vilnius Coding School Final Project)
-  > Buitinės technikos ir elektronikos serviso webapp'sas
+  > Home appliances and electronics service webapp
 
 ## Technologies
 * Java 14
@@ -11,13 +11,30 @@
     * plugins: 
       * thymeleaf-layout-dialect 2.5.1
       * thymeleaf-extras-springsecurity5 3.0.4
-* MySQL 
+* MySQL 5.8
 * Docker 20.10.0
-* Docker compose (Compose file format 3.7)
+  * Docker compose (Compose file format 3.7)
+  * [MailHog](https://github.com/mailhog/MailHog) 1.0.1
 * Bootstrap 5.0.0-beta1 -> [#12][i12]
 
-## Processes
-WIP [#2][i2]
+## Try it out with [Docker](https://www.docker.com/)
+You need Docker installed.
+
+    # Run app:
+    docker-compose up -d
+
+Open in browser:
+- External app http://localhost:8081/
+- Internal app http://localhost:8082/
+- MailHog http://localhost:8025/
+
+
+    # Stop app:
+    docker-compose down --volumes
+
+[comment]: <> (## Processes)
+
+[comment]: <> (WIP [#2][i2])
 
 ## Modules
 * components (Entities, Repositories, Services, Exceptions)
