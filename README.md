@@ -25,7 +25,11 @@ You need Docker installed.
 
 Open in browser:
 - External app http://localhost:8081/
+  - username: k1@demo.lt
+  - password: a
 - Internal app http://localhost:8082/
+  - username: admin@demo.lt
+  - password: a
 - MailHog http://localhost:8025/
 
 
@@ -37,9 +41,9 @@ Open in browser:
 [comment]: <> (WIP [#2][i2])
 
 ## Modules
-* components (Entities, Repositories, Services, Exceptions)
-* web-externalApp
-* web-internalApp
+* components (Entities, Repositories, Services, Exceptions, EmailTemplates)
+* web-externalApp (Controllers, Services, Dto, Auth, DataLoader)
+* web-internalApp (Controllers, Services, Dto, Auth, PdfGenerator, Dataloader)
 
 
 ### Module: web-externalApp
