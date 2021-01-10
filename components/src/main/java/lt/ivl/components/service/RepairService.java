@@ -39,15 +39,14 @@ public class RepairService {
         statusHistory.setEmployee(employee);
         statusHistory.setNote(note);
         statusHistory.setStored(stored);
-
-        repair.setStatus(status);
         statusHistory.getRepair().setStatus(status);
-
-        repair.setStored(stored);
         statusHistory.getRepair().setStored(stored);
-
         repair.setUpdatedAt(statusHistory.getCreatedAt());
         repairStatusHistoryRepository.save(statusHistory);
+
+        repair.setStatus(status);
+        repair.setStored(stored);
+        repairRepository.save(repair);
 
         return repair;
     }
