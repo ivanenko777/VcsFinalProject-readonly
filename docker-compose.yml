@@ -40,24 +40,24 @@ services:
 #      EMAIL_USER:
 #      EMAIL_PASSWORD:
 
-#  app-in:
-#    restart: on-failure
-#    build:
-#      context: .
-#      dockerfile: Dockerfile-webInternal
-#    command: java -jar app.jar
-#    ports:
-#      - "8082:8082"
-#    depends_on:
-#      - db
-#    links:
-#      - db
-#    environment:
-#      DB_USER: user
-#      DB_NAME: app
-#      DB_PASSWORD: password2
-#      DB_HOST: db
-#      EMAIL_HOST: mailhog
-#      EMAIL_PORT: 1025
+  app-in:
+    restart: on-failure
+    build:
+      context: .
+      dockerfile: Dockerfile-webInternal
+    command: java -jar app.jar
+    ports:
+      - "8082:8082"
+    depends_on:
+      - db
+    links:
+      - db
+    environment:
+      DB_USER: user
+      DB_NAME: app
+      DB_PASSWORD: password2
+      DB_HOST: db
+      EMAIL_HOST: mailhog
+      EMAIL_PORT: 1025
 #      EMAIL_USER:
 #      EMAIL_PASSWORD:
