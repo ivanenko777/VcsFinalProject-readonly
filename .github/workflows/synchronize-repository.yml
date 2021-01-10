@@ -1,0 +1,25 @@
+name: Synchronize repository
+on: 
+  push:
+    branches:
+      - main
+jobs:
+  repo-sync:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: '0'
+        ref: 'main'
+    - name: Install SSH key & run git actions
+      uses: shimataro/ssh-key-action@v2
+      with:
+         key: ${{ secrets.SSH_PRIVATE_KEY }}
+         name: id_rsa # optional
+         known_hosts: ${{ secrets.KNOWN_HOSTS }}
+    - run: |
+        git remote add github git@github.com:ivanenko777/repair_service-readonly.git
+        git config --global user.email "63673857+ivanenko777@users.noreply.github.com"
+        git config --global user.name "ivanenko777"
+        git checkout main
+        git push -u github main
