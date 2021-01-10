@@ -12,6 +12,14 @@ public class ResetPasswordDto {
     @NotEmpty(message = "Laukas negali būti tuščias.")
     private String passwordVerify;
 
+    public ResetPasswordDto() {
+    }
+
+    public ResetPasswordDto(String password, String passwordVerify) {
+        this.password = password;
+        this.passwordVerify = passwordVerify;
+    }
+
     public String getPassword() {
         return password;
     }
