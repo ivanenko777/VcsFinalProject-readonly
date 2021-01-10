@@ -6,6 +6,7 @@ import lt.ivl.components.exception.ItemNotFoundException;
 import lt.ivl.components.repository.RepairRepository;
 import lt.ivl.components.repository.RepairStatusHistoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +24,7 @@ public class RepairService {
     private RepairStatusHistoryRepository repairStatusHistoryRepository;
 
     public List<Repair> findAll() {
-        return (List<Repair>) repairRepository.findAll();
+        return (List<Repair>) repairRepository.findAllByOrderByIdDesc();
     }
 
     public Repair saveRepair(Repair repair) {
@@ -38,15 +39,14 @@ public class RepairService {
         statusHistory.setEmployee(employee);
         statusHistory.setNote(note);
         statusHistory.setStored(stored);
-
-        repair.setStatus(status);
         statusHistory.getRepair().setStatus(status);
-
-        repair.setStored(stored);
         statusHistory.getRepair().setStored(stored);
-
         repair.setUpdatedAt(statusHistory.getCreatedAt());
         repairStatusHistoryRepository.save(statusHistory);
+
+        repair.setStatus(status);
+        repair.setStored(stored);
+        repairRepository.save(repair);
 
         return repair;
     }

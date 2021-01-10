@@ -14,4 +14,6 @@ public interface RepairRepository extends CrudRepository<Repair, Integer> {
     List<Repair> findAllByCustomerOrderByCreatedAtDesc(Customer customer);
 
     Optional<Repair> findByIdAndCustomer(Integer integer, Customer customer);
+
+    List<Repair> findAllByOrderByIdDesc();
 }

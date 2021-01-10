@@ -1,0 +1,63 @@
+version: '3.7'
+services:
+
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: app
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password2
+    ports:
+      - "3307:3306"
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - 1025:1025 # smtp server
+      - 8025:8025 # web ui
+
+  app-ex:
+    restart: on-failure
+    build:
+      context: .
+      dockerfile: Dockerfile-webExternal
+    command: java -jar app.jar
+    ports:
+      - "8081:8081"
+    depends_on:
+      - db
+    links:
+      - db
+    environment:
+      DB_USER: user
+      DB_NAME: app
+      DB_PASSWORD: password2
+      DB_HOST: db
+      EMAIL_HOST: mailhog
+      EMAIL_PORT: 1025
+#      EMAIL_USER:
+#      EMAIL_PASSWORD:
+
+  app-in:
+    restart: on-failure
+    build:
+      context: .
+      dockerfile: Dockerfile-webInternal
+    command: java -jar app.jar
+    ports:
+      - "8082:8082"
+    depends_on:
+      - db
+    links:
+      - db
+    environment:
+      DB_USER: user
+      DB_NAME: app
+      DB_PASSWORD: password2
+      DB_HOST: db
+      EMAIL_HOST: mailhog
+      EMAIL_PORT: 1025
+#      EMAIL_USER:
+#      EMAIL_PASSWORD:
