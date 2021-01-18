@@ -20,8 +20,10 @@
 ## Try it out with [Docker](https://www.docker.com/)
 You need Docker installed.
 
-    # Run app:
-    docker-compose up -d
+```
+# Run app:
+docker-compose up -d
+```
 
 Open in browser:
 - External app http://localhost:8081/
@@ -32,9 +34,10 @@ Open in browser:
   - password: a
 - MailHog http://localhost:8025/
 
-
-    # Stop app:
-    docker-compose down --volumes
+```
+# Stop app:
+docker-compose down --volumes
+```
 
 [comment]: <> (## Processes)
 
