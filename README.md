@@ -55,19 +55,19 @@ docker-compose down --volumes
 * [x] Registration page -> [#1][i1]
   * [x] Validation (fields not empty, email unique, passwords match) -> [#4][i4]
   * [x] Account verification (email + token) -> [#8][i8]
-  * [x] Account activation (tocken: notfound, expired, valid) -> [#8][i8]
+  * [x] Account activation (token: notfound, expired, valid) -> [#8][i8]
 * [x] Login -> [#1][i1]
 * [x] Logoff -> [#1][i1]
 * [x] Remember password -> [#9][i9]
 * [x] Reset password -> [#9][i9]
 * [ ] Profile / Settings (change Personal info, password)
-* [ ] Repairs
+* [x] Repairs
   * [x] List -> [#5][i5]
   * [x] New (with status: pending) -> [#5][i5]
     * [x] Validation (fields not empty) -> [#5][i5]
   * [x] Delete (only mine repairs and with status: pending) -> [#5][i5]
   * [x] View -> [#5][i5]
-  * [ ] Confirm repair (if need confirm order)
+  * [x] Confirm repair (if need confirm order)
 
 
 ### Module: web-internalApp
